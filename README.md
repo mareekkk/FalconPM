@@ -29,7 +29,7 @@ It provides a **unified way to build, load, and manage plugins** inside your ser
 
 ## 🔧 Developer API (Preview)
 FalconPM exposes helper functions for plugin developers:
-'''c
+```c
 // Register your plugin
 falconpm_register_plugin("AutoPot", &plugin_info);
 
@@ -39,7 +39,7 @@ falconpm_set_config("AutoPot", "hp_threshold", 50);
 
 // Log to FalconPM’s unified system
 falconpm_log_event("AutoPot", "Player %d used potion", sd->bl.id);
-'''
+```
 📜 Roadmap
 - 🔄 Profile switching (different settings per scenario).
 - 🗺 Adaptive map behavior.
