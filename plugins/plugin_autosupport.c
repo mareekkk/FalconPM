@@ -5,16 +5,21 @@
 #include "map/unit.h"
 #include "map/party.h"
 
-extern void autosys_register(const char *name, void (*cb)(struct map_session_data*));
-extern void autosys_delay(int,int);
-extern bool autosys_skip(int);
+extern void falconpm_register(const char *name, void (*cb)(struct map_session_data*));
+extern void falconpm_delay(int,int);
+extern bool falconpm_skip(int);
 
 #define MAX_AUTOSKILLS 5
 
+// ------------------------------------------------------------
+// Auto-support main loop
+// ------------------------------------------------------------
 static void autosupport_tick(struct map_session_data *sd) {
     int enabled = pc_readaccountreg(sd, script->add_str("#auto_support_enabled"));
     if (!enabled) return;
-    autosys_delay(300, 800);
+
+    // Humanization: random delay between casts
+    falconpm_delay(300, 800);
 
     for (int i = 1; i <= MAX_AUTOSKILLS; i++) {
         char key[32];
@@ -28,14 +33,20 @@ static void autosupport_tick(struct map_session_data *sd) {
         if (skill_id <= 0 || skill_lv <= 0) continue;
         if (pc_checkskill(sd, skill_id) < skill_lv) continue;
 
+        // --------------------------------------------------------
+        // Context awareness: Self-buffs if not already active
+        // --------------------------------------------------------
         if (hp_th == 0) {
             if (!status->get_status_icon(skill_id, sd)) {
                 skill_castend_id(sd, skill_id, skill_lv, sd->bl.id, gettick(), 0);
-                clif->message(sd->fd, "[AutoSys] Self buff cast.");
+                clif->message(sd->fd, "[FalconPM] Self buff cast.");
             }
             continue;
         }
 
+        // --------------------------------------------------------
+        // Party support: Heal/buff members in range under HP threshold
+        // --------------------------------------------------------
         if (sd->status.party_id > 0) {
             struct party *p = party->search(sd->status.party_id);
             if (p) {
@@ -44,11 +55,15 @@ static void autosupport_tick(struct map_session_data *sd) {
                     if (!psd || psd == sd) continue;
                     if (psd->bl.m != sd->bl.m) continue;
                     if (distance_bl(&sd->bl, &psd->bl) > 9) continue;
+
                     int hp_percent = psd->status.hp * 100 / psd->status.max_hp;
                     if (hp_percent < hp_th) {
-                        if (autosys_skip(7)) return;
+                        // Humanization: skip chance + reaction delay
+                        if (falconpm_skip(7)) return;
+                        falconpm_delay(300, 900);
+
                         skill_castend_id(sd, skill_id, skill_lv, psd->bl.id, gettick(), 0);
-                        clif->message(sd->fd, "[AutoSys] Support skill used on party.");
+                        clif->message(sd->fd, "[FalconPM] Support skill used on party.");
                         return;
                     }
                 }
@@ -58,5 +73,5 @@ static void autosupport_tick(struct map_session_data *sd) {
 }
 
 HPExport void plugin_init(void) {
-    autosys_register("autosupport", autosupport_tick);
+    falconpm_register("autosupport", autosupport_tick);
 }
