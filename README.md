@@ -1,4 +1,4 @@
-# FalconPM – Open Plugin Manager for rAthena
+# FalconPM – Open-Source Plugin Manager for rAthena
 
 FalconPM is an **open-source automation framework and plugin manager** for [rAthena](https://rathena.org).  
 It provides a **unified way to build, load, and manage plugins** inside your server — inspired by Hercules’ plugin system but written for rAthena.
