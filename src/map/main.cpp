@@ -23,10 +23,19 @@
  */
 
 
-extern void falconpm_load_plugins();
-...
-int main(...) {
+int main(int argc, char** argv) {
+    /* some startup code */
+    char* conf_file = NULL;
     ...
+    Sql_Init();
+    ...
+    map_set_defaults();
+    ...
+    do_final_init();
+
+    /* Insert FalconPM loader here */
     falconpm_load_plugins();
-    ...
+
+    runserver();  // main loop
+    return 0;
 }
