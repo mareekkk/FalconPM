@@ -1,0 +1,6 @@
+prontera,156,191,izlude,128,92
+izlude,52,92,prontera,160,180
+izlude,134,87,aldebaran,140,124
+aldebaran,140,120,geffen,120,60
+geffen,120,65,prontera,150,180
+payon,180,100,prontera,160,200
