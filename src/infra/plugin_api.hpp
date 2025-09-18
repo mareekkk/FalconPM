@@ -8,37 +8,43 @@
  *  Copyright (C) 2025 Marek
  *  Contact: falconpm@canarybuilds.com
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *  Licensed under GNU General Public License v3 or later.
+ *  See <https://www.gnu.org/licenses/>.
  */
-
 
 #pragma once
 #include <cstdarg>
 #include <cstdio>
+#include <cstdint>
 
-// FalconPM API version
+// Bump this when you introduce breaking changes
 #define FALCONPM_API_VERSION 1
 
-// Forward declarations (expand later as needed)
+// Forward declarations for opaque handles you may expose later
 struct Player;
+struct Map;
 
-// Plugin API function table
+// Function pointer table exposed to plugins.
+// Keep this surface *small and stable*; expand carefully with versioning.
 struct PluginAPI {
+    // Logging
     void (*log_info)(const char* fmt, ...);
-    unsigned int (*gettick)();
-    void (*add_timer)(unsigned int tick, void(*cb)(void*), void* data);
+    // (Optional later)
+    // void (*log_warn)(const char* fmt, ...);
+    // void (*log_error)(const char* fmt, ...);
+
+    // Time / timers
+    uint32_t (*gettick)();  // server tick (ms)
+    void (*add_timer)(uint32_t tick, void(*cb)(void*), void* user);
+
+    // --- Future API candidates (commented until implemented) ---
+    // Player*   (*get_player_by_id)(int id);
+    // void      (*player_send_message)(Player* pl, const char* msg);
+    // void      (*register_command)(const char* cmd, void(*handler)(Player*, const char* args));
+    // int       (*sql_query)(const char* q, ...);
+    // void      (*register_event_hook)(int hook_id, void(*cb)(void* ctx));
 };
 
-// Global API pointer accessible by plugins
+// Global API pointer available to plugins after plugin_init().
+// Defined in the loader (compiled into map-server).
 extern PluginAPI* g_plugin_api;
