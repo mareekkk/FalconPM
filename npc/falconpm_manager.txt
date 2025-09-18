@@ -1,9 +1,292 @@
+// FalconPM NPC Manager
+// Provides menu interface for configuring FalconPM automation
+
+prontera,150,180,3	script	FalconPM Manager	89,{
+
+// -------------------------------------------
+// Main Menu (Dashboard)
+// -------------------------------------------
+mes "[FalconPM Manager]";
+mes "Current status:";
+mes "- Auto-Pots: " + (#auto_pots_enabled ? "Enabled (" + #auto_hp_threshold + "% / ID " + #auto_hp_item + ")" : "Disabled");
+mes "- Auto-Combat: " + (#auto_combat_enabled ? "Enabled" : "Disabled");
+mes "- Auto-Support: " + (#auto_support_enabled ? "Enabled" : "Disabled");
+mes "- Auto-Loot: " + (#auto_loot_enabled ? "Enabled" : "Disabled");
+mes "- Auto-Storage: " + (#auto_storage_enabled ? "Enabled" : "Disabled");
+next;
+
+switch(select("Auto-Pots:Auto-Combat:Auto-Support:Auto-Loot:Auto-Storage:Exit")) {
+case 1: callsub S_AutoPotsMenu; goto MainMenu;
+case 2: callsub S_AutoCombatMenu; goto MainMenu;
+case 3: callsub S_AutoSupportMenu; goto MainMenu;
+case 4: callsub S_AutoLootMenu; goto MainMenu;
+case 5: callsub S_AutoStorageMenu; goto MainMenu;
+case 6: close;
+}
+
+MainMenu:
+goto L_Start;
+
+L_Start:
+end;
+
+// -------------------------------------------
+// Auto-Pots Menu
+// -------------------------------------------
+S_AutoPotsMenu:
+mes "[Auto-Pots]";
+switch(select("Enable/Disable:Configure:View Current Settings:Reset Settings:Back")) {
+case 1:
+    #auto_pots_enabled = !#auto_pots_enabled;
+    mes "Auto-pots " + (#auto_pots_enabled ? "enabled." : "disabled.");
+    close;
+case 2:
+    input .@hp_th, "Enter HP threshold (%)";
+    input .@hp_item, "Enter item ID for HP potion";
+    #auto_hp_threshold = .@hp_th;
+    #auto_hp_item = .@hp_item;
+    #auto_pots_enabled = 1;
+    mes "Saved auto-potion settings.";
+    close;
+case 3:
+    mes "[Current Auto-Pots Settings]";
+    mes "Enabled: " + (#auto_pots_enabled ? "Yes" : "No");
+    if (#auto_hp_threshold > 0 && #auto_hp_item > 0)
+        mes "HP Threshold: " + #auto_hp_threshold + "% | Item: " + #auto_hp_item;
+    else
+        mes "No potion configured.";
+    close;
+case 4:
+    #auto_hp_threshold = 0;
+    #auto_hp_item = 0;
+    #auto_pots_enabled = 0;
+    mes "Auto-pots cleared and disabled.";
+    close;
+case 5: return;
+}
+
+// -------------------------------------------
+// Auto-Combat Menu
+// -------------------------------------------
+S_AutoCombatMenu:
+mes "[Auto-Combat]";
+switch(select("Enable/Disable:Configure Skills:Configure Mob Filter:Configure Escape Options:View Current Settings:Reset Settings:Back")) {
+case 1:
+    #auto_combat_enabled = !#auto_combat_enabled;
+    mes "Auto-combat " + (#auto_combat_enabled ? "enabled." : "disabled.");
+    close;
+case 2: callsub S_ConfigSkills; goto S_AutoCombatMenu;
+case 3: callsub S_ConfigMobs; goto S_AutoCombatMenu;
+case 4: callsub S_ConfigEscape; goto S_AutoCombatMenu;
+case 5: callsub S_ViewCombat; goto S_AutoCombatMenu;
+case 6: callsub S_ResetCombat; goto S_AutoCombatMenu;
+case 7: return;
+}
+
+// Configure Skill Rotation
+S_ConfigSkills:
+for (.@i = 1; .@i <= 5; .@i++) {
+    mes "Configure Slot " + .@i + ":";
+    input .@id, "Skill ID (0 to clear)";
+    input .@lv, "Skill Level";
+    input .@type, "Skill Type (0=Target, 1=Ground, 2=Self-Buff)";
+    setd "#auto_rot"+.@i+"_id", .@id;
+    setd "#auto_rot"+.@i+"_lv", .@lv;
+    setd "#auto_rot"+.@i+"_type", .@type;
+}
+mes "Saved skill rotation.";
+close;
+
+// Configure Mob Filter
+S_ConfigMobs:
+mes "[Mob Filter]";
+switch(select("Attack ALL monsters:Whitelist mode:Blacklist mode:Configure Monster List:Back")) {
+case 1: set #auto_combat_filter_mode, 0; mes "Filter disabled. Attacking all monsters."; close;
+case 2: set #auto_combat_filter_mode, 1; mes "Whitelist mode enabled."; close;
+case 3: set #auto_combat_filter_mode, 2; mes "Blacklist mode enabled."; close;
+case 4:
+    for (.@i = 1; .@i <= 5; .@i++) {
+        .@id = getd("#auto_combat_mob"+.@i);
+        if (.@id > 0)
+            mes "Slot " + .@i + ": " + getmonsterinfo(.@id,0) + " (ID " + .@id + ")";
+        else
+            mes "Slot " + .@i + ": [empty]";
+        input .@mob, "Enter new Mob ID (0 = clear)";
+        setd "#auto_combat_mob"+.@i, .@mob;
+    }
+    mes "Saved mob filter list.";
+    close;
+case 5: return;
+}
+
+// Configure Escape Options
+S_ConfigEscape:
+mes "[Escape Settings]";
+mes "Choose teleport method:";
+switch(select("Disabled:Teleport Skill:Fly Wing")) {
+case 1: set #auto_combat_teleport,0; break;
+case 2: set #auto_combat_teleport,1; break;
+case 3: set #auto_combat_teleport,2; break;
+}
+input .@hp, "Teleport if HP% below (0=off)";
+input .@mob, "Teleport if mob count ≥ (0=off)";
+mes "Teleport on dangerous boss? (1=Yes,0=No)";
+input .@boss;
+set #auto_combat_tp_hp, .@hp;
+set #auto_combat_tp_mob, .@mob;
+set #auto_combat_tp_boss, .@boss;
+mes "Escape options saved.";
+close;
+
+// View Auto-Combat Settings
+S_ViewCombat:
+mes "[Current Auto-Combat Settings]";
+mes "Enabled: " + (#auto_combat_enabled ? "Yes" : "No");
+for (.@i = 1; .@i <= 5; .@i++) {
+    .@id   = getd("#auto_rot"+.@i+"_id");
+    .@lv   = getd("#auto_rot"+.@i+"_lv");
+    .@type = getd("#auto_rot"+.@i+"_type");
+    if (.@id > 0)
+        mes "Slot " + .@i + ": Skill " + .@id + " Lv " + .@lv + " (Type " + .@type + ")";
+    else
+        mes "Slot " + .@i + ": [empty]";
+}
+mes "Escape: Mode " + #auto_combat_teleport + ", HP<" + #auto_combat_tp_hp + "%, Mob≥" + #auto_combat_tp_mob + ", Boss=" + #auto_combat_tp_boss;
+close;
+
+// Reset Auto-Combat
+S_ResetCombat:
+for (.@i = 1; .@i <= 5; .@i++) {
+    setd "#auto_rot"+.@i+"_id", 0;
+    setd "#auto_rot"+.@i+"_lv", 0;
+    setd "#auto_rot"+.@i+"_type", 0;
+    setd "#auto_combat_mob"+.@i, 0;
+}
+set #auto_combat_filter_mode, 0;
+set #auto_combat_enabled, 0;
+set #auto_combat_teleport, 0;
+set #auto_combat_tp_hp, 0;
+set #auto_combat_tp_mob, 0;
+set #auto_combat_tp_boss, 0;
+mes "Auto-combat reset and disabled.";
+close;
+
+// -------------------------------------------
+// Auto-Support Menu
+// -------------------------------------------
+S_AutoSupportMenu:
+mes "[Auto-Support]";
+switch(select("Enable/Disable:View Current Settings:Reset Settings:Back")) {
+case 1:
+    #auto_support_enabled = !#auto_support_enabled;
+    mes "Auto-support " + (#auto_support_enabled ? "enabled." : "disabled.");
+    close;
+case 2:
+    mes "[Current Auto-Support Settings]";
+    mes "Enabled: " + (#auto_support_enabled ? "Yes" : "No");
+    for (.@i = 1; .@i <= 5; .@i++) {
+        .@id = getd("#auto_supp"+.@i+"_id");
+        .@lv = getd("#auto_supp"+.@i+"_lv");
+        .@hp = getd("#auto_supp"+.@i+"_hp");
+        if (.@id > 0)
+            mes "Slot " + .@i + ": Skill " + .@id + " Lv " + .@lv + " (HP% " + .@hp + ")";
+        else
+            mes "Slot " + .@i + ": [empty]";
+    }
+    close;
+case 3:
+    for (.@i = 1; .@i <= 5; .@i++) {
+        setd "#auto_supp"+.@i+"_id", 0;
+        setd "#auto_supp"+.@i+"_lv", 0;
+        setd "#auto_supp"+.@i+"_hp", 0;
+    }
+    set #auto_support_enabled, 0;
+    mes "Auto-support reset and disabled.";
+    close;
+case 4: return;
+}
+
+// -------------------------------------------
+// Auto-Loot Menu
+// -------------------------------------------
+S_AutoLootMenu:
+mes "[Auto-Loot]";
+switch(select("Enable/Disable:Configure Weight Limit:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
+case 1:
+    #auto_loot_enabled = !#auto_loot_enabled;
+    mes "Auto-loot " + (#auto_loot_enabled ? "enabled." : "disabled.");
+    close;
+case 2:
+    input .@limit, "Enter weight limit % (default 90)";
+    #auto_loot_weight_limit = .@limit;
+    mes "Weight limit set to " + .@limit + "%.";
+    close;
+case 3: callsub S_ConfigLootFilter; goto S_AutoLootMenu;
+case 4: callsub S_ViewLoot; goto S_AutoLootMenu;
+case 5: callsub S_ResetLoot; goto S_AutoLootMenu;
+case 6: return;
+}
+end;
+
+// Configure Loot Filter
+S_ConfigLootFilter:
+mes "[Auto-Loot Filter]";
+switch(select("Loot ALL items:Whitelist mode:Blacklist mode:Configure Item List:Back")) {
+case 1: set #auto_loot_filter_mode, 0; mes "Looting all items."; close;
+case 2: set #auto_loot_filter_mode, 1; mes "Whitelist mode enabled."; close;
+case 3: set #auto_loot_filter_mode, 2; mes "Blacklist mode enabled."; close;
+case 4:
+    for (.@i = 1; .@i <= 5; .@i++) {
+        .@id = getd("#auto_loot_item"+.@i);
+        .@max = getd("#auto_loot_max"+.@i);
+        if (.@id > 0)
+            mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + .@max;
+        else
+            mes "Slot " + .@i + ": [empty]";
+        input .@itemid, "Enter Item ID (0 to clear)";
+        input .@maxcount, "Max count (0 = unlimited)";
+        setd "#auto_loot_item"+.@i, .@itemid;
+        setd "#auto_loot_max"+.@i, .@maxcount;
+    }
+    mes "Saved item filter list.";
+    close;
+case 5: return;
+}
+
+// View Auto-Loot Settings
+S_ViewLoot:
+mes "[Current Auto-Loot Settings]";
+mes "Enabled: " + (#auto_loot_enabled ? "Yes" : "No");
+mes "Weight Limit: " + (#auto_loot_weight_limit > 0 ? #auto_loot_weight_limit : 90) + "%";
+mes "Filter Mode: " + (#auto_loot_filter_mode == 1 ? "Whitelist" : #auto_loot_filter_mode == 2 ? "Blacklist" : "All");
+for (.@i = 1; .@i <= 5; .@i++) {
+    .@id = getd("#auto_loot_item"+.@i);
+    .@max = getd("#auto_loot_max"+.@i);
+    if (.@id > 0)
+        mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + (.@max > 0 ? .@max : 0);
+    else
+        mes "Slot " + .@i + ": [empty]";
+}
+close;
+
+// Reset Auto-Loot
+S_ResetLoot:
+for (.@i = 1; .@i <= 5; .@i++) {
+    setd "#auto_loot_item"+.@i, 0;
+    setd "#auto_loot_max"+.@i, 0;
+}
+set #auto_loot_filter_mode, 0;
+set #auto_loot_weight_limit, 90;
+set #auto_loot_enabled, 0;
+mes "Auto-loot reset and disabled.";
+close;
+
 // -------------------------------------------
 // Auto-Storage Menu
 // -------------------------------------------
 S_AutoStorageMenu:
 mes "[Auto-Storage]";
-switch(select("Enable/Disable:Configure Weight Trigger:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
+switch(select("Enable/Disable:Configure Weight Trigger:Configure Item Filter:Configure Return Option:View Current Settings:Reset Settings:Back")) {
 case 1:
     #auto_storage_enabled = !#auto_storage_enabled;
     mes "Auto-storage " + (#auto_storage_enabled ? "enabled." : "disabled.");
@@ -13,16 +296,11 @@ case 2:
     #auto_storage_weight = .@limit;
     mes "Trigger set to " + .@limit + "%.";
     close;
-case 3:
-    callsub S_ConfigStorageFilter;
-    goto S_AutoStorageMenu;
-case 4:
-    callsub S_ViewStorage;
-    goto S_AutoStorageMenu;
-case 5:
-    callsub S_ResetStorage;
-    goto S_AutoStorageMenu;
-case 6: return;
+case 3: callsub S_ConfigStorageFilter; goto S_AutoStorageMenu;
+case 4: callsub S_ConfigReturn; goto S_AutoStorageMenu;
+case 5: callsub S_ViewStorage; goto S_AutoStorageMenu;
+case 6: callsub S_ResetStorage; goto S_AutoStorageMenu;
+case 7: return;
 }
 end;
 
@@ -41,37 +319,24 @@ case 4:
             mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Keep " + .@keep;
         else
             mes "Slot " + .@i + ": [empty]";
-        switch(select("Enter ID manually:Search by name:Clear slot:Skip")) {
-        case 1:
-            input .@itemid, "Enter Item ID (0 to clear)";
-            input .@keep, "How many to keep in inventory (0 = none)";
-            setd "#auto_storage_item"+.@i, .@itemid;
-            setd "#auto_storage_max"+.@i, .@keep;
-            break;
-        case 2:
-            input .@iname$, "Enter Item Name:";
-            set .@itemid, itemdb_searchname(.@iname$);
-            if (.@itemid > 0) {
-                input .@keep, "How many to keep in inventory (0 = none)";
-                setd "#auto_storage_item"+.@i, .@itemid;
-                setd "#auto_storage_max"+.@i, .@keep;
-                mes "Set Slot " + .@i + " to " + .@iname$ + " (ID " + .@itemid + "), Keep " + .@keep;
-            } else {
-                mes "Item not found.";
-            }
-            break;
-        case 3:
-            setd "#auto_storage_item"+.@i, 0;
-            setd "#auto_storage_max"+.@i, 0;
-            break;
-        case 4: break;
-        }
+        input .@itemid, "Enter Item ID (0 to clear)";
+        input .@keep, "How many to keep in inventory (0 = none)";
+        setd "#auto_storage_item"+.@i, .@itemid;
+        setd "#auto_storage_max"+.@i, .@keep;
     }
     mes "Saved storage filter list.";
     close;
 case 5: return;
 }
-end;
+
+// Configure Return Option
+S_ConfigReturn:
+mes "[Return Settings]";
+switch(select("Walk normally:Use Butterfly Wing")) {
+case 1: set #auto_storage_return,0; mes "Will walk to storage."; break;
+case 2: set #auto_storage_return,1; mes "Will use Butterfly Wing."; break;
+}
+close;
 
 // View Auto-Storage Settings
 S_ViewStorage:
@@ -87,6 +352,7 @@ for (.@i = 1; .@i <= 5; .@i++) {
     else
         mes "Slot " + .@i + ": [empty]";
 }
+mes "Return Option: " + (#auto_storage_return == 1 ? "Butterfly Wing" : "Walk");
 close;
 
 // Reset Auto-Storage
@@ -98,5 +364,7 @@ for (.@i = 1; .@i <= 5; .@i++) {
 set #auto_storage_filter_mode, 0;
 set #auto_storage_weight, 80;
 set #auto_storage_enabled, 0;
+set #auto_storage_return, 0;
 mes "Auto-storage reset and disabled.";
 close;
+}
