@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/your-org/FalconPM/wiki
+    about: Please check the docs before opening a new issue.
+  - name: 💬 Discussions
+    url: https://github.com/your-org/FalconPM/discussions
+    about: For questions, ideas, or general chat about FalconPM.
