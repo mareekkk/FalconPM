@@ -3,8 +3,13 @@
 #include "map/script.h"
 #include "map/clif.h"
 #include "map/atcommand.h"
+#include <string.h>
+#include <stdio.h>
 
-static int atcommand_autostatus(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+// -------------------------------------------
+// Helper: show dashboard
+// -------------------------------------------
+static void show_status(const int fd, struct map_session_data* sd) {
     clif->message(fd, "[FalconPM Status]");
 
     // Auto-Pots
@@ -56,10 +61,94 @@ static int atcommand_autostatus(const int fd, struct map_session_data* sd, const
     } else {
         clif->message(fd, "Auto-Storage: Disabled");
     }
+}
+
+// -------------------------------------------
+// Core toggle handler
+// -------------------------------------------
+static void toggle_module(struct map_session_data* sd, const char* module, int enable) {
+    if (strcasecmp(module, "pots") == 0) {
+        pc_setaccountreg(sd, script->add_str("#auto_pots_enabled"), enable);
+        clif->message(sd->fd, enable ? "[FalconPM] Auto-Pots enabled." : "[FalconPM] Auto-Pots disabled.");
+    } else if (strcasecmp(module, "combat") == 0) {
+        pc_setaccountreg(sd, script->add_str("#auto_combat_enabled"), enable);
+        clif->message(sd->fd, enable ? "[FalconPM] Auto-Combat enabled." : "[FalconPM] Auto-Combat disabled.");
+    } else if (strcasecmp(module, "support") == 0 || strcasecmp(module, "sup") == 0) {
+        pc_setaccountreg(sd, script->add_str("#auto_support_enabled"), enable);
+        clif->message(sd->fd, enable ? "[FalconPM] Auto-Support enabled." : "[FalconPM] Auto-Support disabled.");
+    } else if (strcasecmp(module, "loot") == 0) {
+        pc_setaccountreg(sd, script->add_str("#auto_loot_enabled"), enable);
+        clif->message(sd->fd, enable ? "[FalconPM] Auto-Loot enabled." : "[FalconPM] Auto-Loot disabled.");
+    } else if (strcasecmp(module, "storage") == 0 || strcasecmp(module, "stor") == 0) {
+        pc_setaccountreg(sd, script->add_str("#auto_storage_enabled"), enable);
+        clif->message(sd->fd, enable ? "[FalconPM] Auto-Storage enabled." : "[FalconPM] Auto-Storage disabled.");
+    } else {
+        clif->message(sd->fd, "Unknown module. Options: pots, combat, support, loot, storage");
+    }
+}
+
+// -------------------------------------------
+// Main @autostatus command
+// -------------------------------------------
+static int atcommand_autostatus(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    if (message == NULL || strlen(message) == 0) {
+        show_status(fd, sd);
+        return 0;
+    }
+
+    char arg1[64], arg2[64];
+    if (sscanf(message, "%63s %63s", arg1, arg2) < 2) {
+        clif->message(fd, "Usage: @autostatus <module> <on|off>");
+        return 0;
+    }
+
+    int enable = (strcasecmp(arg2, "on") == 0) ? 1 : 0;
+    toggle_module(sd, arg1, enable);
 
     return 0;
 }
 
+// -------------------------------------------
+// Short aliases (@ap, @ac, @asup, @al, @ast)
+// -------------------------------------------
+static int atcommand_ap(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    int enable = (message && strcasecmp(message, "on") == 0) ? 1 : 0;
+    toggle_module(sd, "pots", enable);
+    return 0;
+}
+
+static int atcommand_ac(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    int enable = (message && strcasecmp(message, "on") == 0) ? 1 : 0;
+    toggle_module(sd, "combat", enable);
+    return 0;
+}
+
+static int atcommand_asup(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    int enable = (message && strcasecmp(message, "on") == 0) ? 1 : 0;
+    toggle_module(sd, "support", enable);
+    return 0;
+}
+
+static int atcommand_al(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    int enable = (message && strcasecmp(message, "on") == 0) ? 1 : 0;
+    toggle_module(sd, "loot", enable);
+    return 0;
+}
+
+static int atcommand_ast(const int fd, struct map_session_data* sd, const char* command, const char* message) {
+    int enable = (message && strcasecmp(message, "on") == 0) ? 1 : 0;
+    toggle_module(sd, "storage", enable);
+    return 0;
+}
+
+// -------------------------------------------
+// Plugin init
+// -------------------------------------------
 HPExport void plugin_init(void) {
     atcommand->add("autostatus", atcommand_autostatus);
+    atcommand->add("ap", atcommand_ap);
+    atcommand->add("ac", atcommand_ac);
+    atcommand->add("asup", atcommand_asup);
+    atcommand->add("al", atcommand_al);
+    atcommand->add("ast", atcommand_ast);
 }
