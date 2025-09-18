@@ -20,22 +20,6 @@ It provides a **unified way to build, load, and manage plugins** inside your ser
   - Drop any new plugin into `/plugins/` and register via FalconPM.
   - Developers can target FalconPM’s API instead of raw rAthena hooks.
 
-## 📂 Directory Layout
-/falconpm
-├── core/
-│   └── falconpm.c        # Plugin manager core
-├── plugins/
-│   ├── auto_pots.c
-│   ├── auto_combat.c
-│   └── auto_support.c
-├── npc/
-│   └── falconpm_manager.txt
-├── docs/
-│   ├── INSTALL.md
-│   ├── ROADMAP.md
-│   ├── ARCHITECTURE.md
-│   └── README.md
-
 ## 🚀 Getting Started
 1. Clone this repository into your rAthena `plugins/` folder.
 2. Compile using the rAthena plugin build system.
@@ -45,7 +29,7 @@ It provides a **unified way to build, load, and manage plugins** inside your ser
 
 ## 🔧 Developer API (Preview)
 FalconPM exposes helper functions for plugin developers:
-```c
+'''c
 // Register your plugin
 falconpm_register_plugin("AutoPot", &plugin_info);
 
@@ -55,7 +39,7 @@ falconpm_set_config("AutoPot", "hp_threshold", 50);
 
 // Log to FalconPM’s unified system
 falconpm_log_event("AutoPot", "Player %d used potion", sd->bl.id);
-
+'''
 📜 Roadmap
 - 🔄 Profile switching (different settings per scenario).
 - 🗺 Adaptive map behavior.
