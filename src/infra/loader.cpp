@@ -46,27 +46,44 @@ static void add_timer_impl(uint32_t tick, void(*cb)(void*), void* data) {
     }
 }
 
-// --- Loader implementation ---
+// --- loader implementation ---
 void falconpm_load_plugins() {
     // Fill API table
-    api.log_info  = log_info_impl;
-    api.gettick   = gettick_impl;
+    api.log_info = log_info_impl;
+    api.gettick  = gettick_impl;
     api.add_timer = add_timer_impl;
 
     std::string path = "plugins"; // runtime plugin folder
-    for (auto& entry : std::filesystem::directory_iterator(path)) {
-        if (entry.path().extension() == ".so") {
-            void* handle = dlopen(entry.path().c_str(), RTLD_NOW);
-            if (!handle) {
-                std::cerr << "[FalconPM] Failed to load: " << entry.path() << "\n";
-                continue;
-            }
-            auto init = (plugin_init_func)dlsym(handle, "plugin_init");
-            if (init) {
-                init(&api);
-                std::cout << "[FalconPM] Loaded plugin: "
+    std::cout << "[FalconPM] Loader starting...\n";
+    std::cout << "[FalconPM] Scanning directory: " << path << "\n";
+
+    try {
+        for (auto& entry : std::filesystem::directory_iterator(path)) {
+            std::cout << "[FalconPM] Found file: " << entry.path() << "\n";
+
+            if (entry.path().extension() == ".so") {
+                std::cout << "[FalconPM] Attempting to load: " 
                           << entry.path().filename().string() << "\n";
+
+                void* handle = dlopen(entry.path().c_str(), RTLD_NOW);
+                if (!handle) {
+                    std::cerr << "[FalconPM] Failed to load " 
+                              << entry.path() << ": " << dlerror() << "\n";
+                    continue;
+                }
+
+                auto init = (plugin_init_func)dlsym(handle, "plugin_init");
+                if (init) {
+                    init(&api);
+                    std::cout << "[FalconPM] Successfully initialized: " 
+                              << entry.path().filename().string() << "\n";
+                } else {
+                    std::cerr << "[FalconPM] Symbol 'plugin_init' missing in " 
+                              << entry.path().filename().string() << "\n";
+                }
             }
         }
+    } catch (std::filesystem::filesystem_error& e) {
+        std::cerr << "[FalconPM] Failed to scan directory: " << e.what() << "\n";
     }
 }
