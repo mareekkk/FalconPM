@@ -1,4 +1,18 @@
-#include "map/pc.h"
+/**
+ *  FalconPM - rAthena Plugin Infrastructure
+ *  https://github.com/mareekkk/FalconPM
+ *
+ *  File: autocombat.c
+ *  Description: FalconPM plugin — Auto-Combat (battle automation, teleport escape, mob filtering)
+ *
+ *  Copyright (C) 2025 Marek
+ *  Contact: falconpm@canarybuilds.com
+ *
+ *  Licensed under GNU General Public License v3 or later.
+ *  See <https://www.gnu.org/licenses/>.
+ */
+
+ #include "map/pc.h"
 #include "map/status.h"
 #include "map/script.h"
 #include "map/skill.h"

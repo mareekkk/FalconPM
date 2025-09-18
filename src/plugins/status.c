@@ -1,3 +1,17 @@
+/**
+ *  FalconPM - rAthena Plugin Infrastructure
+ *  https://github.com/mareekkk/FalconPM
+ *
+ *  File: status.c
+ *  Description: FalconPM plugin — Auto-Status (@autostatus + short aliases for toggling modules)
+ *
+ *  Copyright (C) 2025 Marek
+ *  Contact: falconpm@canarybuilds.com
+ *
+ *  Licensed under GNU General Public License v3 or later.
+ *  See <https://www.gnu.org/licenses/>.
+ */
+
 #include "common/hercules.h"
 #include "map/pc.h"
 #include "map/script.h"

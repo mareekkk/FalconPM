@@ -1,3 +1,17 @@
+/**
+ *  FalconPM - rAthena Plugin Infrastructure
+ *  https://github.com/mareekkk/FalconPM
+ *
+ *  File: partysupport.c
+ *  Description: FalconPM plugin — Auto-Support (buff/heal party members under threshold)
+ *
+ *  Copyright (C) 2025 Marek
+ *  Contact: falconpm@canarybuilds.com
+ *
+ *  Licensed under GNU General Public License v3 or later.
+ *  See <https://www.gnu.org/licenses/>.
+ */
+
 #include "map/pc.h"
 #include "map/status.h"
 #include "map/script.h"

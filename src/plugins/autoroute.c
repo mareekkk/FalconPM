@@ -1,3 +1,18 @@
+/**
+ *  FalconPM - rAthena Plugin Infrastructure
+ *  https://github.com/mareekkk/FalconPM
+ *
+ *  File: autoroute.c
+ *  Description: FalconPM plugin — Auto-Route system (@ar command, pathfinding via graph+portals)
+ *
+ *  Copyright (C) 2025 Marek
+ *  Contact: falconpm@canarybuilds.com
+ *
+ *  Licensed under GNU General Public License v3 or later.
+ *  See <https://www.gnu.org/licenses/>.
+ */
+
+
 // ============================================================
 // autoroute.c
 // FalconPM plugin: Auto-Route system (@ar command)
