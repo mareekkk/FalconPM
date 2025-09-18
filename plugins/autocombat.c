@@ -10,6 +10,25 @@ extern bool falconpm_skip(int);
 extern int falconpm_jitter(int,int);
 
 #define MAX_ROTATION 5
+#define MAX_FILTER   5
+
+// ------------------------------------------------------------
+// Helper: Check if mob is allowed by filter
+// ------------------------------------------------------------
+static bool mob_allowed(int mob_id, struct map_session_data *sd) {
+    int has_filter = 0;
+    for (int i = 1; i <= MAX_FILTER; i++) {
+        char key[32];
+        sprintf(key, "#auto_combat_mob%d", i);
+        int f = pc_readaccountreg(sd, script->add_str(key));
+        if (f > 0) {
+            has_filter = 1;
+            if (f == mob_id) return true;
+        }
+    }
+    // If no filters set, allow all
+    return has_filter ? false : true;
+}
 
 // ------------------------------------------------------------
 // Helper: Find nearest mob
@@ -20,32 +39,11 @@ static struct block_list* find_nearest_mob(struct map_session_data *sd, int rang
     for (bl = map->list[sd->bl.m].block.mobs; bl; bl = bl->next) {
         struct mob_data *md = BL_CAST(BL_MOB, bl);
         if (!md || md->status.hp <= 0) continue;
+        if (!mob_allowed(md->class_, sd)) continue;
         int dist = distance_bl(&sd->bl, &md->bl);
         if (dist < best_dist) { best_dist = dist; target = &md->bl; }
     }
     return target;
-}
-
-// ------------------------------------------------------------
-// Auto-potion tick
-// ------------------------------------------------------------
-static void autopots_tick(struct map_session_data *sd) {
-    int hp_th   = pc_readaccountreg(sd, script->add_str("#auto_hp_threshold"));
-    int hp_item = pc_readaccountreg(sd, script->add_str("#auto_hp_item"));
-
-    if (hp_th <= 0 || hp_item <= 0) return;
-    if (pc_isdead(sd) || pc_issit(sd)) return;
-
-    int hp_percent = sd->status.hp * 100 / sd->status.max_hp;
-    hp_th = falconpm_jitter(hp_th, 3);
-
-    if (hp_percent < hp_th) {
-        if (falconpm_skip(5)) return;
-        falconpm_delay(200, 600);
-
-        pc_useitem(sd, hp_item);
-        clif->message(sd->fd, "[FalconPM] Auto-potion used.");
-    }
 }
 
 // ------------------------------------------------------------
@@ -78,31 +76,47 @@ static void autocombat_tick(struct map_session_data *sd) {
     for (int k = 0; k < MAX_ROTATION; k++) {
         int i = order[k];
         char key[32];
+
+        // Skill ID & Level
         sprintf(key, "#auto_rot%d_id", i);
         int skill_id = pc_readaccountreg(sd, script->add_str(key));
         sprintf(key, "#auto_rot%d_lv", i);
         int skill_lv = pc_readaccountreg(sd, script->add_str(key));
+
+        // Type: 0=target, 1=ground, 2=self-buff
+        sprintf(key, "#auto_rot%d_type", i);
+        int skill_type = pc_readaccountreg(sd, script->add_str(key));
+
         if (skill_id <= 0 || skill_lv <= 0) continue;
         if (pc_checkskill(sd, skill_id) < skill_lv) continue;
         if (status->sp_required(sd, skill_id, skill_lv) > sd->status.sp) continue;
 
-        skill_castend_id(sd, skill_id, skill_lv, target->id, gettick(), 0);
-        clif->message(sd->fd, "[FalconPM] Rotation skill used.");
-        return;
+        switch (skill_type) {
+            case 1: // Ground skill
+                skill_castend_pos(sd, skill_id, skill_lv,
+                                  target->x, target->y,
+                                  gettick(), 0);
+                clif->message(sd->fd, "[FalconPM] Ground skill used.");
+                return;
+            case 2: // Self buff
+                if (!status->get_status_icon(skill_id, sd)) {
+                    skill_castend_id(sd, skill_id, skill_lv, sd->bl.id, gettick(), 0);
+                    clif->message(sd->fd, "[FalconPM] Self buff cast.");
+                    return;
+                }
+                break;
+            default: // Single-target
+                skill_castend_id(sd, skill_id, skill_lv, target->id, gettick(), 0);
+                clif->message(sd->fd, "[FalconPM] Rotation skill used.");
+                return;
+        }
     }
 
+    // Fallback: normal attack
     unit->attack(&sd->bl, target->id, 1);
     clif->message(sd->fd, "[FalconPM] Normal attack.");
 }
 
-// ------------------------------------------------------------
-// Combined Tick (Core loop)
-// ------------------------------------------------------------
-static void falconpm_core_tick(struct map_session_data *sd) {
-    autopots_tick(sd);
-    autocombat_tick(sd);
-}
-
 HPExport void plugin_init(void) {
-    falconpm_register("autocore", falconpm_core_tick);
+    falconpm_register("autocombat", autocombat_tick);
 }
