@@ -86,12 +86,4 @@ falconpm_log_event("AutoPot", "Player %d used potion", sd->bl.id);
 
 ---
 
-## 🗺 Roadmap
 
-- 🔄 Profile switching (different settings per scenario).  
-- 🗺 Adaptive map behavior.  
-- 📦 Inventory & consumable management.  
-- 🎉 Event mode awareness.  
-- 📊 Extended logging & monitoring.  
-
----

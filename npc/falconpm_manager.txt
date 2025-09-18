@@ -1,102 +1,102 @@
 // -------------------------------------------
-// Auto-Loot Menu
+// Auto-Storage Menu
 // -------------------------------------------
-S_AutoLootMenu:
-mes "[Auto-Loot]";
-switch(select("Enable/Disable:Configure Weight Limit:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
+S_AutoStorageMenu:
+mes "[Auto-Storage]";
+switch(select("Enable/Disable:Configure Weight Trigger:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
 case 1:
-    #auto_loot_enabled = !#auto_loot_enabled;
-    mes "Auto-loot " + (#auto_loot_enabled ? "enabled." : "disabled.");
+    #auto_storage_enabled = !#auto_storage_enabled;
+    mes "Auto-storage " + (#auto_storage_enabled ? "enabled." : "disabled.");
     close;
 case 2:
-    input .@limit, "Enter weight limit % (default 90)";
-    #auto_loot_weight_limit = .@limit;
-    mes "Weight limit set to " + .@limit + "%.";
+    input .@limit, "Enter weight trigger % (default 80)";
+    #auto_storage_weight = .@limit;
+    mes "Trigger set to " + .@limit + "%.";
     close;
 case 3:
-    callsub S_ConfigLootFilter;
-    goto S_AutoLootMenu;
+    callsub S_ConfigStorageFilter;
+    goto S_AutoStorageMenu;
 case 4:
-    callsub S_ViewLoot;
-    goto S_AutoLootMenu;
+    callsub S_ViewStorage;
+    goto S_AutoStorageMenu;
 case 5:
-    callsub S_ResetLoot;
-    goto S_AutoLootMenu;
+    callsub S_ResetStorage;
+    goto S_AutoStorageMenu;
 case 6: return;
 }
 end;
 
-// Configure Loot Filter
-S_ConfigLootFilter:
-mes "[Auto-Loot Filter]";
-switch(select("Loot ALL items:Whitelist mode:Blacklist mode:Configure Item List:Back")) {
-case 1: set #auto_loot_filter_mode, 0; mes "Looting all items."; close;
-case 2: set #auto_loot_filter_mode, 1; mes "Whitelist mode enabled."; close;
-case 3: set #auto_loot_filter_mode, 2; mes "Blacklist mode enabled."; close;
+// Configure Storage Filter
+S_ConfigStorageFilter:
+mes "[Storage Filter]";
+switch(select("Store ALL items:Whitelist mode:Blacklist mode:Configure Item List:Back")) {
+case 1: set #auto_storage_filter_mode, 0; mes "Storing all items."; close;
+case 2: set #auto_storage_filter_mode, 1; mes "Whitelist mode enabled."; close;
+case 3: set #auto_storage_filter_mode, 2; mes "Blacklist mode enabled."; close;
 case 4:
     for (.@i = 1; .@i <= 5; .@i++) {
-        .@id = getd("#auto_loot_item"+.@i);
-        .@max = getd("#auto_loot_max"+.@i);
+        .@id = getd("#auto_storage_item"+.@i);
+        .@keep = getd("#auto_storage_max"+.@i);
         if (.@id > 0)
-            mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + (.@max > 0 ? .@max : 0);
+            mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Keep " + .@keep;
         else
             mes "Slot " + .@i + ": [empty]";
         switch(select("Enter ID manually:Search by name:Clear slot:Skip")) {
         case 1:
             input .@itemid, "Enter Item ID (0 to clear)";
-            input .@maxcount, "Max count (0 = unlimited)";
-            setd "#auto_loot_item"+.@i, .@itemid;
-            setd "#auto_loot_max"+.@i, .@maxcount;
+            input .@keep, "How many to keep in inventory (0 = none)";
+            setd "#auto_storage_item"+.@i, .@itemid;
+            setd "#auto_storage_max"+.@i, .@keep;
             break;
         case 2:
             input .@iname$, "Enter Item Name:";
             set .@itemid, itemdb_searchname(.@iname$);
             if (.@itemid > 0) {
-                input .@maxcount, "Max count (0 = unlimited)";
-                setd "#auto_loot_item"+.@i, .@itemid;
-                setd "#auto_loot_max"+.@i, .@maxcount;
-                mes "Set Slot " + .@i + " to " + .@iname$ + " (ID " + .@itemid + "), Max " + (.@maxcount > 0 ? .@maxcount : 0);
+                input .@keep, "How many to keep in inventory (0 = none)";
+                setd "#auto_storage_item"+.@i, .@itemid;
+                setd "#auto_storage_max"+.@i, .@keep;
+                mes "Set Slot " + .@i + " to " + .@iname$ + " (ID " + .@itemid + "), Keep " + .@keep;
             } else {
                 mes "Item not found.";
             }
             break;
         case 3:
-            setd "#auto_loot_item"+.@i, 0;
-            setd "#auto_loot_max"+.@i, 0;
+            setd "#auto_storage_item"+.@i, 0;
+            setd "#auto_storage_max"+.@i, 0;
             break;
         case 4: break;
         }
     }
-    mes "Saved item filter list.";
+    mes "Saved storage filter list.";
     close;
 case 5: return;
 }
 end;
 
-// View Auto-Loot Settings
-S_ViewLoot:
-mes "[Current Auto-Loot Settings]";
-mes "Enabled: " + (#auto_loot_enabled ? "Yes" : "No");
-mes "Weight Limit: " + (#auto_loot_weight_limit > 0 ? #auto_loot_weight_limit : 90) + "%";
-mes "Filter Mode: " + (#auto_loot_filter_mode == 1 ? "Whitelist" : #auto_loot_filter_mode == 2 ? "Blacklist" : "All");
+// View Auto-Storage Settings
+S_ViewStorage:
+mes "[Current Auto-Storage Settings]";
+mes "Enabled: " + (#auto_storage_enabled ? "Yes" : "No");
+mes "Weight Trigger: " + (#auto_storage_weight > 0 ? #auto_storage_weight : 80) + "%";
+mes "Filter Mode: " + (#auto_storage_filter_mode == 1 ? "Whitelist" : #auto_storage_filter_mode == 2 ? "Blacklist" : "All");
 for (.@i = 1; .@i <= 5; .@i++) {
-    .@id = getd("#auto_loot_item"+.@i);
-    .@max = getd("#auto_loot_max"+.@i);
+    .@id = getd("#auto_storage_item"+.@i);
+    .@keep = getd("#auto_storage_max"+.@i);
     if (.@id > 0)
-        mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + (.@max > 0 ? .@max : 0);
+        mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Keep " + .@keep;
     else
         mes "Slot " + .@i + ": [empty]";
 }
 close;
 
-// Reset Auto-Loot
-S_ResetLoot:
+// Reset Auto-Storage
+S_ResetStorage:
 for (.@i = 1; .@i <= 5; .@i++) {
-    setd "#auto_loot_item"+.@i, 0;
-    setd "#auto_loot_max"+.@i, 0;
+    setd "#auto_storage_item"+.@i, 0;
+    setd "#auto_storage_max"+.@i, 0;
 }
-set #auto_loot_filter_mode, 0;
-set #auto_loot_weight_limit, 90;
-set #auto_loot_enabled, 0;
-mes "Auto-loot reset and disabled.";
+set #auto_storage_filter_mode, 0;
+set #auto_storage_weight, 80;
+set #auto_storage_enabled, 0;
+mes "Auto-storage reset and disabled.";
 close;
