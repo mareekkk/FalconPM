@@ -2,9 +2,11 @@
 // Provides menu interface for enabling/disabling automation
 
 prontera,150,180,3	script	FalconPM Manager	89,{
+
 	mes "[FalconPM Manager]";
 	mes "Configure your automation settings.";
 
+	mainmenu:
 	switch(select("Enable FalconPM:Disable FalconPM:Auto-Pots:Auto-Combat:Auto-Support:Exit")) {
 	case 1:
 		set #falconpm_enabled, 1;
@@ -14,22 +16,80 @@ prontera,150,180,3	script	FalconPM Manager	89,{
 		set #falconpm_enabled, 0;
 		mes "FalconPM disabled.";
 		close;
-	case 3:
-		input .@hp_th;
-		input .@hp_item;
+	case 3: // Auto-Pots
+		mes "Auto-Potion Settings";
+		input .@hp_th, "Enter HP threshold (%)";
+		input .@hp_item, "Enter item ID for HP potion";
 		set #auto_hp_threshold, .@hp_th;
 		set #auto_hp_item, .@hp_item;
 		mes "Saved auto-potion settings.";
 		close;
-	case 4:
-		set #auto_combat_enabled, 1;
-		mes "Auto-combat enabled. Configure rotation with NPC.";
-		close;
-	case 5:
+	case 4: // Auto-Combat
+		callsub S_AutoCombatMenu;
+		goto mainmenu;
+	case 5: // Auto-Support
 		set #auto_support_enabled, 1;
 		mes "Auto-support enabled. Configure support skills with NPC.";
 		close;
 	case 6:
 		close;
 	}
+
+	end;
+
+	// -------------------------------------------
+	// Submenu: Auto-Combat
+	// -------------------------------------------
+	S_AutoCombatMenu:
+	mes "[Auto-Combat]";
+	switch(select("Enable/Disable:Configure Skills:Configure Mob Filter:Back")) {
+	case 1:
+		if (#auto_combat_enabled) {
+			set #auto_combat_enabled, 0;
+			mes "Auto-combat disabled.";
+		} else {
+			set #auto_combat_enabled, 1;
+			mes "Auto-combat enabled.";
+		}
+		close;
+	case 2:
+		callsub S_ConfigSkills;
+		goto S_AutoCombatMenu;
+	case 3:
+		callsub S_ConfigMobs;
+		goto S_AutoCombatMenu;
+	case 4:
+		return;
+	}
+	end;
+
+	// -------------------------------------------
+	// Configure Skill Rotation
+	// -------------------------------------------
+	S_ConfigSkills:
+	mes "[Auto-Combat Skills]";
+	for (.@i = 1; .@i <= 5; .@i++) {
+		mes "Configure Rotation Slot " + .@i + ":";
+		input .@id, "Skill ID (0 to skip)";
+		input .@lv, "Skill Level";
+		input .@type, "Skill Type (0=Target, 1=Ground, 2=Self-Buff)";
+		setd "#auto_rot"+.@i+"_id", .@id;
+		setd "#auto_rot"+.@i+"_lv", .@lv;
+		setd "#auto_rot"+.@i+"_type", .@type;
+	}
+	mes "Saved skill rotation.";
+	close;
+
+	// -------------------------------------------
+	// Configure Mob Filter
+	// -------------------------------------------
+	S_ConfigMobs:
+	mes "[Mob Filter]";
+	for (.@i = 1; .@i <= 5; .@i++) {
+		mes "Enter Mob ID for slot " + .@i + " (0 to clear):";
+		input .@mob;
+		setd "#auto_combat_mob"+.@i, .@mob;
+	}
+	mes "Saved mob filter list.";
+	close;
 }
