@@ -3,6 +3,13 @@
 FalconPM is an **open-source automation framework and plugin manager** for [rAthena](https://rathena.org).  
 It provides a **unified way to build, load, and manage plugins** inside your server.
 
+FalconPM is an open-source automation framework for the rAthena emulator.
+
+- ⚡ Modular plugin system (auto-pots, auto-combat, auto-support)
+- 🎮 Unified NPC manager for players
+- 🔧 Stable API for developers
+- 📜 Free under GPLv3
+
 ## ✨ Features
 - **Plugin Manager Core** (`falconpm.c`)
   - Registers plugins dynamically (`/plugins/` folder).
@@ -19,6 +26,22 @@ It provides a **unified way to build, load, and manage plugins** inside your ser
 - **Extensible**
   - Drop any new plugin into `/plugins/` and register via FalconPM.
   - Developers can target FalconPM’s API instead of raw rAthena hooks.
+
+## Quickstart
+
+See [INSTALL.md](docs/INSTALL.md).
+
+## Documentation
+
+- [Installation](docs/INSTALL.md)
+- [Usage Guide](docs/USAGE.md)
+- [Plugin Catalog](docs/PLUGINS.md)
+- [Developer Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+
+## Contributing
+
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## 🚀 Getting Started
 1. Clone this repository into your rAthena `plugins/` folder.
