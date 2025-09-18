@@ -1,76 +1,88 @@
 // FalconPM NPC Manager
-// Provides menu interface for enabling/disabling automation
+// Provides menu interface for configuring FalconPM automation
 
 prontera,150,180,3	script	FalconPM Manager	89,{
 
+	// -------------------------------------------
+	// Main Menu (Dashboard)
+	// -------------------------------------------
 	mes "[FalconPM Manager]";
-	mes "Configure your automation settings.";
+	mes "Current status:";
+	mes "- Auto-Pots: " + (#auto_pots_enabled ? "Enabled (" + #auto_hp_threshold + "% / ID " + #auto_hp_item + ")" : "Disabled");
+	mes "- Auto-Combat: " + (#auto_combat_enabled ? "Enabled" : "Disabled");
+	mes "- Auto-Support: " + (#auto_support_enabled ? "Enabled" : "Disabled");
+	next;
 
-	mainmenu:
-	switch(select("Enable FalconPM:Disable FalconPM:Auto-Pots:Auto-Combat:Auto-Support:Exit")) {
-	case 1:
-		set #falconpm_enabled, 1;
-		mes "FalconPM enabled.";
-		close;
-	case 2:
-		set #falconpm_enabled, 0;
-		mes "FalconPM disabled.";
-		close;
-	case 3: // Auto-Pots
-		mes "Auto-Potion Settings";
-		input .@hp_th, "Enter HP threshold (%)";
-		input .@hp_item, "Enter item ID for HP potion";
-		set #auto_hp_threshold, .@hp_th;
-		set #auto_hp_item, .@hp_item;
-		mes "Saved auto-potion settings.";
-		close;
-	case 4: // Auto-Combat
-		callsub S_AutoCombatMenu;
-		goto mainmenu;
-	case 5: // Auto-Support
-		set #auto_support_enabled, 1;
-		mes "Auto-support enabled. Configure support skills with NPC.";
-		close;
-	case 6:
-		close;
+	switch(select("Auto-Pots:Auto-Combat:Auto-Support:Exit")) {
+	case 1: callsub S_AutoPotsMenu; goto MainMenu;
+	case 2: callsub S_AutoCombatMenu; goto MainMenu;
+	case 3: callsub S_AutoSupportMenu; goto MainMenu;
+	case 4: close;
 	}
 
+MainMenu:
+	goto L_Start;
+
+L_Start:
 	end;
 
 	// -------------------------------------------
-	// Submenu: Auto-Combat
+	// Auto-Pots Menu
+	// -------------------------------------------
+	S_AutoPotsMenu:
+	mes "[Auto-Pots]";
+	switch(select("Enable/Disable:Configure:View Current Settings:Reset Settings:Back")) {
+	case 1:
+		#auto_pots_enabled = !#auto_pots_enabled;
+		mes "Auto-pots " + (#auto_pots_enabled ? "enabled." : "disabled.");
+		close;
+	case 2:
+		input .@hp_th, "Enter HP threshold (%)";
+		input .@hp_item, "Enter item ID for HP potion";
+		#auto_hp_threshold = .@hp_th;
+		#auto_hp_item = .@hp_item;
+		#auto_pots_enabled = 1;
+		mes "Saved auto-potion settings.";
+		close;
+	case 3:
+		mes "[Current Auto-Pots Settings]";
+		mes "Enabled: " + (#auto_pots_enabled ? "Yes" : "No");
+		if (#auto_hp_threshold > 0 && #auto_hp_item > 0)
+			mes "HP Threshold: " + #auto_hp_threshold + "% | Item: " + #auto_hp_item;
+		else
+			mes "No potion configured.";
+		close;
+	case 4:
+		#auto_hp_threshold = 0;
+		#auto_hp_item = 0;
+		#auto_pots_enabled = 0;
+		mes "Auto-pots cleared and disabled.";
+		close;
+	case 5: return;
+	}
+
+	// -------------------------------------------
+	// Auto-Combat Menu
 	// -------------------------------------------
 	S_AutoCombatMenu:
 	mes "[Auto-Combat]";
-	switch(select("Enable/Disable:Configure Skills:Configure Mob Filter:Back")) {
+	switch(select("Enable/Disable:Configure Skills:Configure Mob Filter:View Current Settings:Reset Settings:Back")) {
 	case 1:
-		if (#auto_combat_enabled) {
-			set #auto_combat_enabled, 0;
-			mes "Auto-combat disabled.";
-		} else {
-			set #auto_combat_enabled, 1;
-			mes "Auto-combat enabled.";
-		}
+		#auto_combat_enabled = !#auto_combat_enabled;
+		mes "Auto-combat " + (#auto_combat_enabled ? "enabled." : "disabled.");
 		close;
-	case 2:
-		callsub S_ConfigSkills;
-		goto S_AutoCombatMenu;
-	case 3:
-		callsub S_ConfigMobs;
-		goto S_AutoCombatMenu;
-	case 4:
-		return;
+	case 2: callsub S_ConfigSkills; goto S_AutoCombatMenu;
+	case 3: callsub S_ConfigMobs; goto S_AutoCombatMenu;
+	case 4: callsub S_ViewCombat; goto S_AutoCombatMenu;
+	case 5: callsub S_ResetCombat; goto S_AutoCombatMenu;
+	case 6: return;
 	}
-	end;
 
-	// -------------------------------------------
 	// Configure Skill Rotation
-	// -------------------------------------------
 	S_ConfigSkills:
-	mes "[Auto-Combat Skills]";
 	for (.@i = 1; .@i <= 5; .@i++) {
-		mes "Configure Rotation Slot " + .@i + ":";
-		input .@id, "Skill ID (0 to skip)";
+		mes "Configure Slot " + .@i + ":";
+		input .@id, "Skill ID (0 to clear)";
 		input .@lv, "Skill Level";
 		input .@type, "Skill Type (0=Target, 1=Ground, 2=Self-Buff)";
 		setd "#auto_rot"+.@i+"_id", .@id;
@@ -80,16 +92,110 @@ prontera,150,180,3	script	FalconPM Manager	89,{
 	mes "Saved skill rotation.";
 	close;
 
-	// -------------------------------------------
 	// Configure Mob Filter
-	// -------------------------------------------
 	S_ConfigMobs:
 	mes "[Mob Filter]";
-	for (.@i = 1; .@i <= 5; .@i++) {
-		mes "Enter Mob ID for slot " + .@i + " (0 to clear):";
-		input .@mob;
-		setd "#auto_combat_mob"+.@i, .@mob;
+	switch(select("Attack ALL monsters:Whitelist mode:Blacklist mode:Configure Monster List:Back")) {
+	case 1: set #auto_combat_filter_mode, 0; mes "Filter disabled. Attacking all monsters."; close;
+	case 2: set #auto_combat_filter_mode, 1; mes "Whitelist mode enabled."; close;
+	case 3: set #auto_combat_filter_mode, 2; mes "Blacklist mode enabled."; close;
+	case 4:
+		for (.@i = 1; .@i <= 5; .@i++) {
+			mes "Slot " + .@i + " (Current: " + getd("#auto_combat_mob"+.@i) + ")";
+			switch(select("Enter ID manually:Search by name:Clear slot:Skip")) {
+			case 1:
+				input .@mobid, "Enter Monster ID (0 to clear)";
+				setd "#auto_combat_mob"+.@i, .@mobid;
+				break;
+			case 2:
+				input .@name$, "Enter Monster Name:";
+				set .@mobid, mobdb_searchname(.@name$);
+				if (.@mobid > 0) {
+					setd "#auto_combat_mob"+.@i, .@mobid;
+					mes "Set Slot " + .@i + " to " + .@name$ + " (ID " + .@mobid + ")";
+				} else {
+					mes "Monster not found.";
+				}
+				break;
+			case 3:
+				setd "#auto_combat_mob"+.@i, 0;
+				break;
+			case 4: break;
+			}
+		}
+		mes "Saved mob filter list.";
+		close;
+	case 5: return;
 	}
-	mes "Saved mob filter list.";
+
+	// View Auto-Combat Settings
+	S_ViewCombat:
+	mes "[Current Auto-Combat Settings]";
+	mes "Enabled: " + (#auto_combat_enabled ? "Yes" : "No");
+	for (.@i = 1; .@i <= 5; .@i++) {
+		.@id = getd("#auto_rot"+.@i+"_id");
+		.@lv = getd("#auto_rot"+.@i+"_lv");
+		.@type = getd("#auto_rot"+.@i+"_type");
+		if (.@id > 0)
+			mes "Slot " + .@i + ": Skill " + .@id + " Lv " + .@lv + " (Type " + .@type + ")";
+		else
+			mes "Slot " + .@i + ": [empty]";
+	}
+	mes "Filter Mode: " + (#auto_combat_filter_mode == 1 ? "Whitelist" : #auto_combat_filter_mode == 2 ? "Blacklist" : "All");
+	for (.@i = 1; .@i <= 5; .@i++) {
+		.@mob = getd("#auto_combat_mob"+.@i);
+		if (.@mob > 0)
+			mes "Mob Slot " + .@i + ": ID " + .@mob;
+		else
+			mes "Mob Slot " + .@i + ": [empty]";
+	}
 	close;
+
+	// Reset Auto-Combat
+	S_ResetCombat:
+	for (.@i = 1; .@i <= 5; .@i++) {
+		setd "#auto_rot"+.@i+"_id", 0;
+		setd "#auto_rot"+.@i+"_lv", 0;
+		setd "#auto_rot"+.@i+"_type", 0;
+		setd "#auto_combat_mob"+.@i, 0;
+	}
+	set #auto_combat_filter_mode, 0;
+	set #auto_combat_enabled, 0;
+	mes "Auto-combat reset and disabled.";
+	close;
+
+	// -------------------------------------------
+	// Auto-Support Menu
+	// -------------------------------------------
+	S_AutoSupportMenu:
+	mes "[Auto-Support]";
+	switch(select("Enable/Disable:View Current Settings:Reset Settings:Back")) {
+	case 1:
+		#auto_support_enabled = !#auto_support_enabled;
+		mes "Auto-support " + (#auto_support_enabled ? "enabled." : "disabled.");
+		close;
+	case 2:
+		mes "[Current Auto-Support Settings]";
+		mes "Enabled: " + (#auto_support_enabled ? "Yes" : "No");
+		for (.@i = 1; .@i <= 5; .@i++) {
+			.@id = getd("#auto_supp"+.@i+"_id");
+			.@lv = getd("#auto_supp"+.@i+"_lv");
+			.@hp = getd("#auto_supp"+.@i+"_hp");
+			if (.@id > 0)
+				mes "Slot " + .@i + ": Skill " + .@id + " Lv " + .@lv + " (HP% " + .@hp + ")";
+			else
+				mes "Slot " + .@i + ": [empty]";
+		}
+		close;
+	case 3:
+		for (.@i = 1; .@i <= 5; .@i++) {
+			setd "#auto_supp"+.@i+"_id", 0;
+			setd "#auto_supp"+.@i+"_lv", 0;
+			setd "#auto_supp"+.@i+"_hp", 0;
+		}
+		set #auto_support_enabled, 0;
+		mes "Auto-support reset and disabled.";
+		close;
+	case 4: return;
+	}
 }
