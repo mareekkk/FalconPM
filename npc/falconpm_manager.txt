@@ -1,126 +1,102 @@
-// FalconPM NPC Manager
-// Provides menu interface for configuring FalconPM automation
-
-prontera,150,180,3	script	FalconPM Manager	89,{
-
-	// -------------------------------------------
-	// Main Menu (Dashboard)
-	// -------------------------------------------
-	mes "[FalconPM Manager]";
-	mes "Current status:";
-	mes "- Auto-Pots: " + (#auto_pots_enabled ? "Enabled (" + #auto_hp_threshold + "% / ID " + #auto_hp_item + ")" : "Disabled");
-	mes "- Auto-Combat: " + (#auto_combat_enabled ? "Enabled" : "Disabled");
-	mes "- Auto-Support: " + (#auto_support_enabled ? "Enabled" : "Disabled");
-	mes "- Auto-Loot: " + (#auto_loot_enabled ? "Enabled" : "Disabled");
-	next;
-
-	switch(select("Auto-Pots:Auto-Combat:Auto-Support:Auto-Loot:Exit")) {
-	case 1: callsub S_AutoPotsMenu; goto MainMenu;
-	case 2: callsub S_AutoCombatMenu; goto MainMenu;
-	case 3: callsub S_AutoSupportMenu; goto MainMenu;
-	case 4: callsub S_AutoLootMenu; goto MainMenu;
-	case 5: close;
-	}
-
-MainMenu:
-	goto L_Start;
-
-L_Start:
-	end;
-
-	// -------------------------------------------
-	// Auto-Loot Menu
-	// -------------------------------------------
-	S_AutoLootMenu:
-	mes "[Auto-Loot]";
-	switch(select("Enable/Disable:Configure Range:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
-	case 1:
-		#auto_loot_enabled = !#auto_loot_enabled;
-		mes "Auto-loot " + (#auto_loot_enabled ? "enabled." : "disabled.");
-		close;
-	case 2:
-		input .@range, "Enter pickup range (cells)";
-		#auto_loot_range = .@range;
-		mes "Range set to " + .@range + " cells.";
-		close;
-	case 3:
-		callsub S_ConfigLootFilter;
-		goto S_AutoLootMenu;
-	case 4:
-		callsub S_ViewLoot;
-		goto S_AutoLootMenu;
-	case 5:
-		callsub S_ResetLoot;
-		goto S_AutoLootMenu;
-	case 6: return;
-	}
-	end;
-
-	// Configure Loot Filter
-	S_ConfigLootFilter:
-	mes "[Auto-Loot Filter]";
-	switch(select("Loot ALL items:Whitelist mode:Blacklist mode:Configure Item List:Back")) {
-	case 1: set #auto_loot_filter_mode, 0; mes "Looting all items."; close;
-	case 2: set #auto_loot_filter_mode, 1; mes "Whitelist mode enabled."; close;
-	case 3: set #auto_loot_filter_mode, 2; mes "Blacklist mode enabled."; close;
-	case 4:
-		for (.@i = 1; .@i <= 5; .@i++) {
-			.@id = getd("#auto_loot_item"+.@i);
-			if (.@id > 0) {
-				set .@iname$, getitemname(.@id);
-				mes "Slot " + .@i + ": " + .@iname$ + " (ID " + .@id + ")";
-			} else {
-				mes "Slot " + .@i + ": [empty]";
-			}
-			switch(select("Enter ID manually:Search by name:Clear slot:Skip")) {
-			case 1:
-				input .@itemid, "Enter Item ID (0 to clear)";
-				setd "#auto_loot_item"+.@i, .@itemid;
-				break;
-			case 2:
-				input .@iname$, "Enter Item Name:";
-				set .@itemid, itemdb_searchname(.@iname$);
-				if (.@itemid > 0) {
-					setd "#auto_loot_item"+.@i, .@itemid;
-					mes "Set Slot " + .@i + " to " + .@iname$ + " (ID " + .@itemid + ")";
-				} else {
-					mes "Item not found.";
-				}
-				break;
-			case 3:
-				setd "#auto_loot_item"+.@i, 0;
-				break;
-			case 4: break;
-			}
-		}
-		mes "Saved item filter list.";
-		close;
-	case 5: return;
-	}
-	end;
-
-	// View Auto-Loot Settings
-	S_ViewLoot:
-	mes "[Current Auto-Loot Settings]";
-	mes "Enabled: " + (#auto_loot_enabled ? "Yes" : "No");
-	mes "Range: " + (#auto_loot_range > 0 ? #auto_loot_range : 3) + " cells";
-	mes "Filter Mode: " + (#auto_loot_filter_mode == 1 ? "Whitelist" : #auto_loot_filter_mode == 2 ? "Blacklist" : "All");
-	for (.@i = 1; .@i <= 5; .@i++) {
-		.@id = getd("#auto_loot_item"+.@i);
-		if (.@id > 0)
-			mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + ")";
-		else
-			mes "Slot " + .@i + ": [empty]";
-	}
-	close;
-
-	// Reset Auto-Loot
-	S_ResetLoot:
-	for (.@i = 1; .@i <= 5; .@i++) {
-		setd "#auto_loot_item"+.@i, 0;
-	}
-	set #auto_loot_filter_mode, 0;
-	set #auto_loot_enabled, 0;
-	mes "Auto-loot reset and disabled.";
-	close;
+// -------------------------------------------
+// Auto-Loot Menu
+// -------------------------------------------
+S_AutoLootMenu:
+mes "[Auto-Loot]";
+switch(select("Enable/Disable:Configure Weight Limit:Configure Item Filter:View Current Settings:Reset Settings:Back")) {
+case 1:
+    #auto_loot_enabled = !#auto_loot_enabled;
+    mes "Auto-loot " + (#auto_loot_enabled ? "enabled." : "disabled.");
+    close;
+case 2:
+    input .@limit, "Enter weight limit % (default 90)";
+    #auto_loot_weight_limit = .@limit;
+    mes "Weight limit set to " + .@limit + "%.";
+    close;
+case 3:
+    callsub S_ConfigLootFilter;
+    goto S_AutoLootMenu;
+case 4:
+    callsub S_ViewLoot;
+    goto S_AutoLootMenu;
+case 5:
+    callsub S_ResetLoot;
+    goto S_AutoLootMenu;
+case 6: return;
 }
+end;
+
+// Configure Loot Filter
+S_ConfigLootFilter:
+mes "[Auto-Loot Filter]";
+switch(select("Loot ALL items:Whitelist mode:Blacklist mode:Configure Item List:Back")) {
+case 1: set #auto_loot_filter_mode, 0; mes "Looting all items."; close;
+case 2: set #auto_loot_filter_mode, 1; mes "Whitelist mode enabled."; close;
+case 3: set #auto_loot_filter_mode, 2; mes "Blacklist mode enabled."; close;
+case 4:
+    for (.@i = 1; .@i <= 5; .@i++) {
+        .@id = getd("#auto_loot_item"+.@i);
+        .@max = getd("#auto_loot_max"+.@i);
+        if (.@id > 0)
+            mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + (.@max > 0 ? .@max : 0);
+        else
+            mes "Slot " + .@i + ": [empty]";
+        switch(select("Enter ID manually:Search by name:Clear slot:Skip")) {
+        case 1:
+            input .@itemid, "Enter Item ID (0 to clear)";
+            input .@maxcount, "Max count (0 = unlimited)";
+            setd "#auto_loot_item"+.@i, .@itemid;
+            setd "#auto_loot_max"+.@i, .@maxcount;
+            break;
+        case 2:
+            input .@iname$, "Enter Item Name:";
+            set .@itemid, itemdb_searchname(.@iname$);
+            if (.@itemid > 0) {
+                input .@maxcount, "Max count (0 = unlimited)";
+                setd "#auto_loot_item"+.@i, .@itemid;
+                setd "#auto_loot_max"+.@i, .@maxcount;
+                mes "Set Slot " + .@i + " to " + .@iname$ + " (ID " + .@itemid + "), Max " + (.@maxcount > 0 ? .@maxcount : 0);
+            } else {
+                mes "Item not found.";
+            }
+            break;
+        case 3:
+            setd "#auto_loot_item"+.@i, 0;
+            setd "#auto_loot_max"+.@i, 0;
+            break;
+        case 4: break;
+        }
+    }
+    mes "Saved item filter list.";
+    close;
+case 5: return;
+}
+end;
+
+// View Auto-Loot Settings
+S_ViewLoot:
+mes "[Current Auto-Loot Settings]";
+mes "Enabled: " + (#auto_loot_enabled ? "Yes" : "No");
+mes "Weight Limit: " + (#auto_loot_weight_limit > 0 ? #auto_loot_weight_limit : 90) + "%";
+mes "Filter Mode: " + (#auto_loot_filter_mode == 1 ? "Whitelist" : #auto_loot_filter_mode == 2 ? "Blacklist" : "All");
+for (.@i = 1; .@i <= 5; .@i++) {
+    .@id = getd("#auto_loot_item"+.@i);
+    .@max = getd("#auto_loot_max"+.@i);
+    if (.@id > 0)
+        mes "Slot " + .@i + ": " + getitemname(.@id) + " (ID " + .@id + "), Max " + (.@max > 0 ? .@max : 0);
+    else
+        mes "Slot " + .@i + ": [empty]";
+}
+close;
+
+// Reset Auto-Loot
+S_ResetLoot:
+for (.@i = 1; .@i <= 5; .@i++) {
+    setd "#auto_loot_item"+.@i, 0;
+    setd "#auto_loot_max"+.@i, 0;
+}
+set #auto_loot_filter_mode, 0;
+set #auto_loot_weight_limit, 90;
+set #auto_loot_enabled, 0;
+mes "Auto-loot reset and disabled.";
+close;
