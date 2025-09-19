@@ -1,0 +1,4 @@
+/home/marek/FalconPM/build/CMakeFiles/falconpm_loader.dir
+/home/marek/FalconPM/build/CMakeFiles/hello_plugin.dir
+/home/marek/FalconPM/build/CMakeFiles/edit_cache.dir
+/home/marek/FalconPM/build/CMakeFiles/rebuild_cache.dir

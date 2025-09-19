@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared  -o plugins/hello_plugin.so CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.o 

@@ -4,8 +4,9 @@
 #include "plugin_api.h"
 #include <stdio.h>
 
-// Required entrypoint
+static PluginAPI* g_api = NULL;
+
 void plugin_init(PluginAPI* api) {
-    g_plugin_api = api; // hook the global pointer
-    g_plugin_api->log_info("[HelloPlugin] Initialized!\n");
+    g_api = api;
+    g_api->log_info("[HelloPlugin] Initialized!\n");
 }
