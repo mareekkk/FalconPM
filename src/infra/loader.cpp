@@ -1,89 +1,86 @@
-/**
- *  FalconPM - rAthena Plugin Infrastructure
- *  https://github.com/mareekkk/FalconPM
- *
- *  File: loader.cpp
- *  Description: FalconPM dynamic plugin loader — loads .so plugins at runtime
- *
- *  Copyright (C) 2025 Marek
- *  Contact: falconpm@canarybuilds.com
- *
- *  Licensed under GNU General Public License v3 or later.
- *  See <https://www.gnu.org/licenses/>.
- */
+// loader.cpp
+// FalconPM loader - bridges rAthena symbols to plugins
+// Compiles into falconpm_loader.so / dll
 
-#include "plugin_api.hpp"
-#include <dlfcn.h>
-#include <filesystem>
+#include <dlfcn.h>       // dlopen/dlsym (Linux/macOS)
+#include <dirent.h>      // scanning plugins/ dir
+#include <stdio.h>
+#include <string.h>
+#include <vector>
 #include <string>
 #include <iostream>
 
-// Global API table
-PluginAPI api;
+#include "plugin_api.h"
+
+// -----------------------------------------------------------
+// Global API struct
+// -----------------------------------------------------------
+static PluginAPI api;
 PluginAPI* g_plugin_api = &api;
 
-// Plugin entrypoint type
-using plugin_init_func = void(*)(PluginAPI*);
+// -----------------------------------------------------------
+// Symbol binding: find rAthena's functions at runtime
+// -----------------------------------------------------------
+static void bind_rathena_symbols(void* handle) {
+    // Look up ShowInfo, ShowError, gettick, add_timer
+    api.log_info  = (void (*)(const char*, ...)) dlsym(handle, "ShowInfo");
+    api.log_error = (void (*)(const char*, ...)) dlsym(handle, "ShowError");
+    api.gettick   = (uint32_t (*)(void)) dlsym(handle, "gettick");
+    api.add_timer = (void (*)(uint32_t, void(*)(void*), void*)) dlsym(handle, "add_timer");
 
-// --- Stub implementations (replace with real rAthena hooks later) ---
-static void log_info_impl(const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    vprintf(fmt, args);
-    va_end(args);
-}
-
-static uint32_t gettick_impl() {
-    // TODO: replace with rAthena's gettick()
-    return 12345;
-}
-
-static void add_timer_impl(uint32_t tick, void(*cb)(void*), void* data) {
-    // TODO: replace with rAthena's timer system
-    printf("[FalconPM] Timer scheduled at %u\n", tick);
-    if (cb) {
-        cb(data); // fire immediately for demo
+    if (!api.log_info || !api.log_error) {
+        fprintf(stderr, "[FalconPM] Failed to bind rAthena symbols.\n");
     }
 }
 
-// --- loader implementation ---
-void falconpm_load_plugins() {
-    // Fill API table
-    api.log_info = log_info_impl;
-    api.gettick  = gettick_impl;
-    api.add_timer = add_timer_impl;
+// -----------------------------------------------------------
+// Plugin entrypoint typedef
+// -----------------------------------------------------------
+typedef void (*plugin_init_t)(PluginAPI* api);
 
-    std::string path = "plugins"; // runtime plugin folder
-    std::cout << "[FalconPM] Loader starting...\n";
-    std::cout << "[FalconPM] Scanning directory: " << path << "\n";
+// -----------------------------------------------------------
+// Load all plugins from ./plugins/ directory
+// -----------------------------------------------------------
+static void load_plugins() {
+    DIR* dir = opendir("plugins");
+    if (!dir) {
+        std::cerr << "[FalconPM] No plugins directory found.\n";
+        return;
+    }
 
-    try {
-        for (auto& entry : std::filesystem::directory_iterator(path)) {
-            std::cout << "[FalconPM] Found file: " << entry.path() << "\n";
+    struct dirent* ent;
+    while ((ent = readdir(dir)) != nullptr) {
+        std::string fname = ent->d_name;
+        if (fname.size() > 3 && fname.substr(fname.size() - 3) == ".so") {
+            std::string fullpath = "plugins/" + fname;
+            void* phandle = dlopen(fullpath.c_str(), RTLD_NOW);
+            if (!phandle) {
+                std::cerr << "[FalconPM] Failed to load " << fname << "\n";
+                continue;
+            }
 
-            if (entry.path().extension() == ".so") {
-                std::cout << "[FalconPM] Attempting to load: " 
-                          << entry.path().filename().string() << "\n";
-
-                void* handle = dlopen(entry.path().c_str(), RTLD_NOW);
-                if (!handle) {
-                    std::cerr << "[FalconPM] Failed to load " 
-                              << entry.path() << ": " << dlerror() << "\n";
-                    continue;
-                }
-
-                auto init = (plugin_init_func)dlsym(handle, "plugin_init");
-                if (init) {
-                    init(&api);
-                    std::cout << "[FalconPM] Successfully initialized: " 
-                              << entry.path().filename().string() << "\n";
-                } else {
-                    std::cerr << "[FalconPM] Symbol 'plugin_init' missing in " 
-                              << entry.path().filename().string() << "\n";
-                }
+            plugin_init_t init = (plugin_init_t)dlsym(phandle, "plugin_init");
+            if (init) {
+                init(&api); // give plugin the API
+                std::cout << "[FalconPM] Loaded plugin: " << fname << "\n";
             }
         }
-    } catch (std::filesystem::filesystem_error& e) {
-        std::cerr << "[FalconPM] Failed to scan directory: " << e.what() << "\n";
+    }
+    closedir(dir);
+}
+
+// -----------------------------------------------------------
+// Bootstrap called from preload
+// -----------------------------------------------------------
+extern "C" void falconpm_startup() {
+    // Bind to already-loaded rAthena map-server
+    void* self = dlopen(nullptr, RTLD_NOW); // handle to main binary
+    bind_rathena_symbols(self);
+
+    // Now load all plugins
+    load_plugins();
+
+    if (api.log_info) {
+        api.log_info("[FalconPM] Startup complete, plugins ready.\n");
     }
 }

@@ -1,50 +1,33 @@
-/**
- *  FalconPM - rAthena Plugin Infrastructure
- *  https://github.com/mareekkk/FalconPM
- *
- *  File: plugin_api.hpp
- *  Description: FalconPM Plugin API — defines the interface exposed to plugins
- *
- *  Copyright (C) 2025 Marek
- *  Contact: falconpm@canarybuilds.com
- *
- *  Licensed under GNU General Public License v3 or later.
- *  See <https://www.gnu.org/licenses/>.
- */
+// plugin_api.h
+// FalconPM Plugin API (pure C ABI)
+// This file is included by plugin developers.
 
-#pragma once
-#include <cstdarg>
-#include <cstdio>
-#include <cstdint>
+#ifndef FALCONPM_PLUGIN_API_H
+#define FALCONPM_PLUGIN_API_H
 
-// Bump this when you introduce breaking changes
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Versioning: lets plugins check compatibility
 #define FALCONPM_API_VERSION 1
 
-// Forward declarations for opaque handles you may expose later
-struct Player;
-struct Map;
+// Forward declaration
+typedef struct PluginAPI PluginAPI;
 
-// Function pointer table exposed to plugins.
-// Keep this surface *small and stable*; expand carefully with versioning.
+// Function table definition (C ABI)
 struct PluginAPI {
-    // Logging
-    void (*log_info)(const char* fmt, ...);
-    // (Optional later)
-    // void (*log_warn)(const char* fmt, ...);
-    // void (*log_error)(const char* fmt, ...);
-
-    // Time / timers
-    uint32_t (*gettick)();  // server tick (ms)
-    void (*add_timer)(uint32_t tick, void(*cb)(void*), void* user);
-
-    // --- Future API candidates (commented until implemented) ---
-    // Player*   (*get_player_by_id)(int id);
-    // void      (*player_send_message)(Player* pl, const char* msg);
-    // void      (*register_command)(const char* cmd, void(*handler)(Player*, const char* args));
-    // int       (*sql_query)(const char* q, ...);
-    // void      (*register_event_hook)(int hook_id, void(*cb)(void* ctx));
+    void (*log_info)(const char* fmt, ...);   // pointer to rAthena's ShowInfo
+    void (*log_error)(const char* fmt, ...);  // pointer to rAthena's ShowError
+    uint32_t (*gettick)(void);                // pointer to rAthena's gettick
+    void (*add_timer)(uint32_t tick, void (*cb)(void*), void* user);
 };
 
-// Global API pointer available to plugins after plugin_init().
-// Defined in the loader (compiled into map-server).
+// Global pointer (populated by FalconPM loader)
 extern PluginAPI* g_plugin_api;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // FALCONPM_PLUGIN_API_H
