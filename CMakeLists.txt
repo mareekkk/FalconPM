@@ -1,10 +1,27 @@
-# FalconPM CMake — builds plugins only (loader is compiled into map-server)
+cmake_minimum_required(VERSION 3.10)
+project(falconpm)
 
-# Include API header for plugins
-include_directories(${CMAKE_SOURCE_DIR}/plugins/falconpm/src/infra)
+set(CMAKE_CXX_STANDARD 17)
 
-# Hello World plugin
-add_library(hello_plugin MODULE src/plugins/hello/hello_plugin.cpp)
+# 🔹 1. Build the FalconPM loader (shared lib)
+add_library(falconpm_loader SHARED
+    src/infra/loader.cpp
+)
+
+target_include_directories(falconpm_loader PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+)
+
+set_target_properties(falconpm_loader PROPERTIES
+    PREFIX ""                      # no "lib" prefix
+    OUTPUT_NAME "falconpm_loader"  # output filename
+)
+
+# 🔹 2. Build ONLY hello_plugin
+add_library(hello_plugin MODULE src/plugins/hello_plugin.c)
+
+target_include_directories(hello_plugin PUBLIC src/infra)
+
 set_target_properties(hello_plugin PROPERTIES
     PREFIX ""
     SUFFIX ".so"
