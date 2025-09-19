@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/marek/FalconPM/src/plugins/hello_plugin.c" "CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.o" "gcc" "CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.o.d"
+  "/home/marek/FalconPM/src/plugins/autoroute.cpp" "CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o" "gcc" "CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o.d"
   )
 
 # Targets to which this target links.

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o plugins/falconpm_base.so CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o 

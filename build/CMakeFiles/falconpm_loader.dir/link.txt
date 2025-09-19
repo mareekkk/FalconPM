@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC -shared -Wl,-soname,falconpm_loader.so -o falconpm_loader.so CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o 
+/usr/bin/c++ -fPIC -shared -Wl,-soname,falconpm_loader.so -o plugins/falconpm_loader.so CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o 

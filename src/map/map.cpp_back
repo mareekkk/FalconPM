@@ -1,0 +1,53 @@
+#include <dlfcn.h>   // for dlopen / dlsym
+#include <stdio.h>   // for printf
+
+// ----------------------------------------------------------
+// FalconPM loader - dynamic attach
+// ----------------------------------------------------------
+
+// This is the function pointer type we expect from the .so
+typedef void (*falconpm_loader_fn)(void);
+
+// ----------------------------------------------------------
+// NEW: declare the bridge setter signature from FalconPM
+// ----------------------------------------------------------
+// Inside try_load_falconpm()
+static void try_load_falconpm() {
+    const char* so_path = "../FalconPM/build/falconpm_loader.so";
+
+    void* handle = dlopen(so_path, RTLD_NOW);
+    if (!handle) {
+        ShowError("[FalconPM] Failed to load %s: %s\n", so_path, dlerror());
+        return;
+    }
+
+    typedef void (*falconpm_loader_fn)(void);
+    falconpm_loader_fn loader = (falconpm_loader_fn)dlsym(handle, "falconpm_load_plugins");
+    if (!loader) {
+        ShowError("[FalconPM] Failed to resolve falconpm_load_plugins: %s\n", dlerror());
+        dlclose(handle);
+        return;
+    }
+
+    // Bind API, supplying correct functions
+    extern "C" void falconpm_bind_api(
+        void (*)(const char*, ...),
+        void (*)(const char*, ...),
+        uint32_t (*)(void),
+        int (*)(uint32_t, void (*)(void*), void*),
+        int (*)(const char*, int (*)(int, void*, const char*, const char*)),
+        struct map_session_data *(*)(int)
+    );
+
+    falconpm_bind_api(
+        ShowInfo,
+        ShowError,
+        gettick,
+        add_timer,
+        atcommand_add,
+        mapid2sd  // matches struct map_session_data *(*)(int)
+    );
+
+    ShowInfo("[FalconPM] Loader found, initializing plugins...\n");
+    loader();
+}

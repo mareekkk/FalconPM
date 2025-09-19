@@ -1,63 +1,63 @@
 cmake_minimum_required(VERSION 3.10)
-project(falconpm)
-
+project(FalconPM)
 set(CMAKE_CXX_STANDARD 17)
 
-# ------------------------------------------------------
-# 1. Build the FalconPM loader (shared lib)
-# ------------------------------------------------------
+# rAthena source root
+set(RA_ROOT "/home/marek/rathena")
+set(RA_SRC  "${RA_ROOT}/src")
+set(RA_3P_RYML "${RA_ROOT}/3rdparty/rapidyaml/src")
+set(RA_3P_C4   "${RA_ROOT}/3rdparty/rapidyaml/ext/c4core/src")
+
+# 1) Loader (shared, preloaded by map-server via your tiny shim)
 add_library(falconpm_loader SHARED
     src/infra/loader.cpp
+    src/infra/plugin_api.h
 )
-
 target_include_directories(falconpm_loader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
 )
 
 set_target_properties(falconpm_loader PROPERTIES
-    PREFIX ""                      # no "lib" prefix
-    OUTPUT_NAME "falconpm_loader"  # output filename
-)
-
-# ------------------------------------------------------
-# 2. Build hello_plugin (example plugin)
-# ------------------------------------------------------
-add_library(hello_plugin MODULE
-    src/plugins/hello_plugin.c
-)
-
-target_include_directories(hello_plugin PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
-)
-
-set_target_properties(hello_plugin PROPERTIES
     PREFIX ""
-    SUFFIX ".so"
-    OUTPUT_NAME "hello_plugin"
+    OUTPUT_NAME "falconpm_loader"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
 
-# ------------------------------------------------------
-# 3. Build randomwalk plugin (test bot)
-# ------------------------------------------------------
-add_library(randomwalk MODULE
-    src/plugins/randomwalk.c
+# 2) FalconPM base (MODULE .so loaded by loader)
+add_library(falconpm_base MODULE
+    src/core/falconpm.cpp
+    src/infra/plugin_api.h
 )
-
-target_include_directories(randomwalk PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+target_include_directories(falconpm_base PUBLIC
+    ${RA_SRC}            # for common/showmsg.hpp
 )
-
-set_target_properties(randomwalk PROPERTIES
+set_target_properties(falconpm_base PROPERTIES
     PREFIX ""
     SUFFIX ".so"
-    OUTPUT_NAME "randomwalk"
+    OUTPUT_NAME "falconpm_base"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
 
+# -------------------------------
+# 3) Autoroute plugin
+# -------------------------------
+add_library(autoroute MODULE
+    src/plugins/autoroute.cpp
+)
 
-# ------------------------------------------------------
-# (Optional) If you add more plugins later:
-#   add_library(my_plugin MODULE src/plugins/my_plugin.c)
-#   set_target_properties(my_plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
-# ------------------------------------------------------
+target_include_directories(autoroute PUBLIC
+    ${RA_SRC}
+    ${RA_SRC}/map
+    ${RA_SRC}/common
+    ${RA_3P_RYML}
+    ${RA_3P_C4}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+    /usr/include/mariadb
+)
+
+set_target_properties(autoroute PROPERTIES
+    PREFIX ""
+    SUFFIX ".so"
+    OUTPUT_NAME "autoroute"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
+)

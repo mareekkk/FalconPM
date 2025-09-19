@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o"
   "CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o.d"
-  "falconpm_loader.pdb"
-  "falconpm_loader.so"
+  "plugins/falconpm_loader.pdb"
+  "plugins/falconpm_loader.so"
 )
 
 # Per-language clean rules from dependency scanning.

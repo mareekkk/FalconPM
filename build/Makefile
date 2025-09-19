@@ -130,17 +130,54 @@ falconpm_loader/fast:
 .PHONY : falconpm_loader/fast
 
 #=============================================================================
-# Target rules for targets named hello_plugin
+# Target rules for targets named falconpm_base
 
 # Build rule for target.
-hello_plugin: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 hello_plugin
-.PHONY : hello_plugin
+falconpm_base: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 falconpm_base
+.PHONY : falconpm_base
 
 # fast build rule for target.
-hello_plugin/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_plugin.dir/build.make CMakeFiles/hello_plugin.dir/build
-.PHONY : hello_plugin/fast
+falconpm_base/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/build
+.PHONY : falconpm_base/fast
+
+#=============================================================================
+# Target rules for targets named autoroute
+
+# Build rule for target.
+autoroute: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 autoroute
+.PHONY : autoroute
+
+# fast build rule for target.
+autoroute/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/build
+.PHONY : autoroute/fast
+
+src/core/falconpm.o: src/core/falconpm.cpp.o
+.PHONY : src/core/falconpm.o
+
+# target to build an object file
+src/core/falconpm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
+.PHONY : src/core/falconpm.cpp.o
+
+src/core/falconpm.i: src/core/falconpm.cpp.i
+.PHONY : src/core/falconpm.i
+
+# target to preprocess a source file
+src/core/falconpm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i
+.PHONY : src/core/falconpm.cpp.i
+
+src/core/falconpm.s: src/core/falconpm.cpp.s
+.PHONY : src/core/falconpm.s
+
+# target to generate assembly for a file
+src/core/falconpm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s
+.PHONY : src/core/falconpm.cpp.s
 
 src/infra/loader.o: src/infra/loader.cpp.o
 .PHONY : src/infra/loader.o
@@ -166,29 +203,29 @@ src/infra/loader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.s
 .PHONY : src/infra/loader.cpp.s
 
-src/plugins/hello_plugin.o: src/plugins/hello_plugin.c.o
-.PHONY : src/plugins/hello_plugin.o
+src/plugins/autoroute.o: src/plugins/autoroute.cpp.o
+.PHONY : src/plugins/autoroute.o
 
 # target to build an object file
-src/plugins/hello_plugin.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_plugin.dir/build.make CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.o
-.PHONY : src/plugins/hello_plugin.c.o
+src/plugins/autoroute.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o
+.PHONY : src/plugins/autoroute.cpp.o
 
-src/plugins/hello_plugin.i: src/plugins/hello_plugin.c.i
-.PHONY : src/plugins/hello_plugin.i
+src/plugins/autoroute.i: src/plugins/autoroute.cpp.i
+.PHONY : src/plugins/autoroute.i
 
 # target to preprocess a source file
-src/plugins/hello_plugin.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_plugin.dir/build.make CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.i
-.PHONY : src/plugins/hello_plugin.c.i
+src/plugins/autoroute.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.i
+.PHONY : src/plugins/autoroute.cpp.i
 
-src/plugins/hello_plugin.s: src/plugins/hello_plugin.c.s
-.PHONY : src/plugins/hello_plugin.s
+src/plugins/autoroute.s: src/plugins/autoroute.cpp.s
+.PHONY : src/plugins/autoroute.s
 
 # target to generate assembly for a file
-src/plugins/hello_plugin.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_plugin.dir/build.make CMakeFiles/hello_plugin.dir/src/plugins/hello_plugin.c.s
-.PHONY : src/plugins/hello_plugin.c.s
+src/plugins/autoroute.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.s
+.PHONY : src/plugins/autoroute.cpp.s
 
 # Help Target
 help:
@@ -198,14 +235,18 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... autoroute"
+	@echo "... falconpm_base"
 	@echo "... falconpm_loader"
-	@echo "... hello_plugin"
+	@echo "... src/core/falconpm.o"
+	@echo "... src/core/falconpm.i"
+	@echo "... src/core/falconpm.s"
 	@echo "... src/infra/loader.o"
 	@echo "... src/infra/loader.i"
 	@echo "... src/infra/loader.s"
-	@echo "... src/plugins/hello_plugin.o"
-	@echo "... src/plugins/hello_plugin.i"
-	@echo "... src/plugins/hello_plugin.s"
+	@echo "... src/plugins/autoroute.o"
+	@echo "... src/plugins/autoroute.i"
+	@echo "... src/plugins/autoroute.s"
 .PHONY : help
 
 

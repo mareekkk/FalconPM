@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o plugins/autoroute.so CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o 

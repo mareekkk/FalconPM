@@ -148,7 +148,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=falconpm
+CMAKE_PROJECT_NAME:STATIC=FalconPM
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -213,13 +213,13 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-falconpm_BINARY_DIR:STATIC=/home/marek/FalconPM/build
+FalconPM_BINARY_DIR:STATIC=/home/marek/FalconPM/build
 
 //Value Computed by CMake
-falconpm_IS_TOP_LEVEL:STATIC=ON
+FalconPM_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-falconpm_SOURCE_DIR:STATIC=/home/marek/FalconPM
+FalconPM_SOURCE_DIR:STATIC=/home/marek/FalconPM
 
 
 ########################

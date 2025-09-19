@@ -1,107 +1,127 @@
-// ------------------------------------------------------
-// FalconPM Loader - bridges rAthena symbols to plugins
-// ------------------------------------------------------
-
+#include "plugin_api.h"
 #include <dlfcn.h>
 #include <dirent.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <iostream>
+#include <cstdarg>
+#include <cstdio>
+#include <unordered_map>
 #include <string>
-#include "plugin_api.h"
+#include <cstring>  // for strstr
 
-// ------------------------------------------------------
-// FalconPM API instance (shared with plugins via pointer)
-// ------------------------------------------------------
-static PluginAPI api;
+// rAthena functions (resolved at link time)
+extern "C" {
+    uint32_t gettick(void);
+    int add_timer_interval(uint32_t when,
+                           int (*cb)(int, uint32_t, int, intptr_t),
+                           int id, intptr_t data, uint32_t interval);
+    map_session_data* map_id2sd(int aid);
+    void clif_displaymessage(int fd, const char* msg);
 
-// ------------------------------------------------------
-// Bind rAthena symbols dynamically
-// ------------------------------------------------------
-static void bind_rathena_symbols(void* handle) {
-    std::cout << "[FalconPM] Binding rAthena symbols..." << std::endl;
-
-    api.log_info  = (void (*)(const char*, ...)) dlsym(handle, "ShowInfo");
-    api.log_error = (void (*)(const char*, ...)) dlsym(handle, "ShowError");
-    api.gettick   = (uint32_t (*)(void)) dlsym(handle, "gettick");
-    api.add_timer = (int (*)(uint32_t, void (*)(void*), void*)) dlsym(handle, "add_timer");
-
-    if (!api.log_info)   std::cerr << "[FalconPM] Failed to bind ShowInfo" << std::endl;
-    if (!api.log_error)  std::cerr << "[FalconPM] Failed to bind ShowError" << std::endl;
-    if (!api.gettick)    std::cerr << "[FalconPM] Failed to bind gettick" << std::endl;
-    if (!api.add_timer)  std::cerr << "[FalconPM] Failed to bind add_timer" << std::endl;
-
-    std::cout << "[FalconPM] Symbol binding complete." << std::endl;
+    int pc_readregistry(map_session_data* sd, int id);
+    void pc_setregistry(map_session_data* sd, int id, int val);
 }
 
-// ------------------------------------------------------
-// Load all .so plugins from ./plugins
-// ------------------------------------------------------
+// ----------------------
+// Logging
+// ----------------------
+static void log_info_impl(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vfprintf(stdout, fmt, args);
+    fprintf(stdout, "\n");
+    va_end(args);
+}
+static void log_error_impl(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vfprintf(stderr, fmt, args);
+    fprintf(stderr, "\n");
+    va_end(args);
+}
+
+// ----------------------
+// Atcommand registration
+// ----------------------
+using AtCmdHandler = int (*)(int, map_session_data*, const char*, const char*);
+extern void atcommand_add(const char*, AtCmdHandler);
+static void register_atcommand_impl(const char* name, AtCmdHandler h) {
+    atcommand_add(name, h);
+}
+
+// ----------------------
+// Account variable emulation
+// ----------------------
+static std::unordered_map<std::string, int> var_map;
+static int next_regid = 100000;
+
+static int regid_from_name(const char* name) {
+    auto it = var_map.find(name);
+    if (it != var_map.end()) return it->second;
+    int new_id = next_regid++;
+    var_map[name] = new_id;
+    return new_id;
+}
+
+static int accountvar_get_impl(map_session_data* sd, const char* name) {
+    int id = regid_from_name(name);
+    return pc_readregistry(sd, id);
+}
+static void accountvar_set_impl(map_session_data* sd, const char* name, int val) {
+    int id = regid_from_name(name);
+    pc_setregistry(sd, id, val);
+}
+
+// ----------------------
+// Global API
+// ----------------------
+static PluginAPI API = {
+    log_info_impl,
+    log_error_impl,
+    gettick,
+    add_timer_interval,
+    map_id2sd,
+    register_atcommand_impl,
+    clif_displaymessage,
+    accountvar_get_impl,
+    accountvar_set_impl,
+};
+PluginAPI* g_plugin_api = &API;
+
+// ----------------------
+// Plugin discovery
+// ----------------------
+static void init_plugin(void* so) {
+    auto bind = (void(*)(const PluginAPI*))dlsym(so, "plugin_bind_api");
+    auto init = (void(*)())dlsym(so, "plugin_init");
+    if (!bind || !init) return;
+    bind(&API);
+    init();
+}
+
 static void load_plugins() {
-    DIR* dir = opendir("./plugins");
-    if (!dir) {
-        std::cerr << "[FalconPM] Could not open ./plugins directory" << std::endl;
-        return;
-    }
+    DIR* dir = opendir("plugins");
+    if (!dir) return;
 
-    int count_loaded = 0;
     struct dirent* ent;
-
     while ((ent = readdir(dir)) != nullptr) {
         if (strstr(ent->d_name, ".so")) {
-            // Skip the loader itself
-            if (strcmp(ent->d_name, "falconpm_loader.so") == 0) {
-                std::cout << "[FalconPM] Skipping loader file: " << ent->d_name << std::endl;
-                continue;
+            char path[256];
+            snprintf(path, sizeof(path), "plugins/%s", ent->d_name);
+            void* so = dlopen(path, RTLD_NOW);
+            if (so) {
+                log_info_impl("[FalconPM] Loaded plugin: %s", ent->d_name);
+                init_plugin(so);
+            } else {
+                log_error_impl("[FalconPM] Failed to load %s: %s", ent->d_name, dlerror());
             }
-
-            std::string path = std::string("./plugins/") + ent->d_name;
-            std::cout << "[FalconPM] Found plugin: " << path << std::endl;
-
-            void* handle = dlopen(path.c_str(), RTLD_NOW);
-            if (!handle) {
-                std::cerr << "[FalconPM] dlopen failed: " << dlerror() << std::endl;
-                continue;
-            }
-
-            auto init = (void (*)(PluginAPI*)) dlsym(handle, "plugin_init");
-            if (!init) {
-                std::cerr << "[FalconPM] dlsym failed in " << ent->d_name
-                          << ": " << dlerror() << std::endl;
-                dlclose(handle);
-                continue;
-            }
-
-            // Initialize the plugin
-            init(&api);
-            std::cout << "[FalconPM] Initialized " << ent->d_name << std::endl;
-            count_loaded++;
         }
     }
-
     closedir(dir);
-
-    if (count_loaded == 0)
-        std::cerr << "[FalconPM] WARNING: No plugins were initialized." << std::endl;
-    else
-        std::cout << "[FalconPM] " << count_loaded << " plugin(s) initialized." << std::endl;
 }
 
-// ------------------------------------------------------
-// Entry point (called inside map-server startup)
-// ------------------------------------------------------
-extern "C" void falconpm_load_plugins(void) {
-    std::cout << "[FalconPM] Loader activated." << std::endl;
-
-    void* self = dlopen(nullptr, RTLD_NOW | RTLD_GLOBAL);
-    if (!self) {
-        std::cerr << "[FalconPM] dlopen(nullptr) failed: " << dlerror() << std::endl;
-        return;
-    }
-
-    bind_rathena_symbols(self);
+// ----------------------
+// Entry called by shim (map-server)
+// ----------------------
+extern "C" void falconpm_loader_init() {
+    log_info_impl("[FalconPM] falconpm_loader_init called");
     load_plugins();
-
-    std::cout << "[FalconPM] Startup complete, plugins ready." << std::endl;
 }

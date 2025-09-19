@@ -124,5 +124,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/falconpm_loader.dir/DependInfo.cmake"
-  "CMakeFiles/hello_plugin.dir/DependInfo.cmake"
+  "CMakeFiles/falconpm_base.dir/DependInfo.cmake"
+  "CMakeFiles/autoroute.dir/DependInfo.cmake"
   )
