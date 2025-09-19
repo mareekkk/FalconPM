@@ -38,6 +38,25 @@ set_target_properties(hello_plugin PROPERTIES
 )
 
 # ------------------------------------------------------
+# 3. Build randomwalk plugin (test bot)
+# ------------------------------------------------------
+add_library(randomwalk MODULE
+    src/plugins/randomwalk.c
+)
+
+target_include_directories(randomwalk PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+)
+
+set_target_properties(randomwalk PROPERTIES
+    PREFIX ""
+    SUFFIX ".so"
+    OUTPUT_NAME "randomwalk"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
+)
+
+
+# ------------------------------------------------------
 # (Optional) If you add more plugins later:
 #   add_library(my_plugin MODULE src/plugins/my_plugin.c)
 #   set_target_properties(my_plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
