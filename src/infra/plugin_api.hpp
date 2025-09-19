@@ -1,6 +1,5 @@
 // plugin_api.h
 // FalconPM Plugin API (pure C ABI)
-// This file is included by plugin developers.
 
 #ifndef FALCONPM_PLUGIN_API_H
 #define FALCONPM_PLUGIN_API_H
@@ -15,15 +14,15 @@ extern "C" {
 // Forward declaration
 typedef struct PluginAPI PluginAPI;
 
-// Function table definition (C ABI)
+// Function table definition
 struct PluginAPI {
-    void (*log_info)(const char* fmt, ...);   // pointer to rAthena's ShowInfo
-    void (*log_error)(const char* fmt, ...);  // pointer to rAthena's ShowError
-    uint32_t (*gettick)(void);                // pointer to rAthena's gettick
+    void (*log_info)(const char* fmt, ...);
+    void (*log_error)(const char* fmt, ...);
+    uint32_t (*gettick)(void);
     void (*add_timer)(uint32_t tick, void (*cb)(void*), void* user);
 };
 
-// Global pointer (populated by FalconPM loader)
+// Global pointer (set by loader)
 extern PluginAPI* g_plugin_api;
 
 #ifdef __cplusplus
