@@ -19,9 +19,6 @@ typedef struct PluginAPI {
     int      (*add_timer)(uint32_t tick, void (*cb)(void*), void* data);
 } PluginAPI;
 
-// Exported global pointer (provided by falconpm_loader)
-extern PluginAPI* g_plugin_api;
-
 #ifdef __cplusplus
 }
 #endif

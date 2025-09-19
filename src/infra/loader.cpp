@@ -1,25 +1,20 @@
 // ------------------------------------------------------
 // FalconPM Loader - bridges rAthena symbols to plugins
-// Compiles into falconpm_loader.so
 // ------------------------------------------------------
 
-#include <dlfcn.h>      // dlopen, dlsym, dlerror
-#include <dirent.h>     // scanning plugins/ dir
-#include <stdio.h>      // fprintf
-#include <string.h>     // strcmp, strstr
-#include <stdint.h>     // uint32_t
-#include <iostream>     // std::cout, std::cerr
-#include <string>       // std::string
+#include <dlfcn.h>
+#include <dirent.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <iostream>
+#include <string>
 #include "plugin_api.h"
 
 // ------------------------------------------------------
-// Global API contract (shared with plugins)
+// FalconPM API instance (shared with plugins via pointer)
 // ------------------------------------------------------
 static PluginAPI api;
-
-extern "C" {
-    PluginAPI* g_plugin_api = &api;   // exported symbol
-}
 
 // ------------------------------------------------------
 // Bind rAthena symbols dynamically
@@ -55,6 +50,12 @@ static void load_plugins() {
 
     while ((ent = readdir(dir)) != nullptr) {
         if (strstr(ent->d_name, ".so")) {
+            // Skip the loader itself
+            if (strcmp(ent->d_name, "falconpm_loader.so") == 0) {
+                std::cout << "[FalconPM] Skipping loader file: " << ent->d_name << std::endl;
+                continue;
+            }
+
             std::string path = std::string("./plugins/") + ent->d_name;
             std::cout << "[FalconPM] Found plugin: " << path << std::endl;
 
@@ -72,11 +73,13 @@ static void load_plugins() {
                 continue;
             }
 
+            // Initialize the plugin
             init(&api);
             std::cout << "[FalconPM] Initialized " << ent->d_name << std::endl;
             count_loaded++;
         }
     }
+
     closedir(dir);
 
     if (count_loaded == 0)

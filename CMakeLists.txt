@@ -3,7 +3,9 @@ project(falconpm)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# 🔹 1. Build the FalconPM loader (shared lib)
+# ------------------------------------------------------
+# 1. Build the FalconPM loader (shared lib)
+# ------------------------------------------------------
 add_library(falconpm_loader SHARED
     src/infra/loader.cpp
 )
@@ -17,10 +19,16 @@ set_target_properties(falconpm_loader PROPERTIES
     OUTPUT_NAME "falconpm_loader"  # output filename
 )
 
-# 🔹 2. Build ONLY hello_plugin
-add_library(hello_plugin MODULE src/plugins/hello_plugin.c)
+# ------------------------------------------------------
+# 2. Build hello_plugin (example plugin)
+# ------------------------------------------------------
+add_library(hello_plugin MODULE
+    src/plugins/hello_plugin.c
+)
 
-target_include_directories(hello_plugin PUBLIC src/infra)
+target_include_directories(hello_plugin PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+)
 
 set_target_properties(hello_plugin PROPERTIES
     PREFIX ""
@@ -28,3 +36,9 @@ set_target_properties(hello_plugin PROPERTIES
     OUTPUT_NAME "hello_plugin"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
+
+# ------------------------------------------------------
+# (Optional) If you add more plugins later:
+#   add_library(my_plugin MODULE src/plugins/my_plugin.c)
+#   set_target_properties(my_plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
+# ------------------------------------------------------
