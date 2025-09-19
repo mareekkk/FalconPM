@@ -1,28 +1,26 @@
 #include "plugin_api.h"
 #include <dlfcn.h>
-#include <dirent.h>
-#include <cstdarg>
-#include <cstdio>
 #include <unordered_map>
 #include <string>
-#include <cstring>  // for strstr
+#include <cstdarg>
+#include <cstdio>
 
-// rAthena functions (resolved at link time)
+// rAthena symbols we need
 extern "C" {
     uint32_t gettick(void);
-    int add_timer_interval(uint32_t when,
-                           int (*cb)(int, uint32_t, int, intptr_t),
-                           int id, intptr_t data, uint32_t interval);
+    int add_timer_interval(uint32_t when, int (*cb)(int, uint32_t, int, intptr_t), int id, intptr_t data, uint32_t interval);
     map_session_data* map_id2sd(int aid);
     void clif_displaymessage(int fd, const char* msg);
-
-    int pc_readregistry(map_session_data* sd, int id);
-    void pc_setregistry(map_session_data* sd, int id, int val);
 }
 
-// ----------------------
+// Atcommand registration hook
+using AtCmdHandler = int (*)(int, map_session_data*, const char*, const char*);
+extern void atcommand_add(const char*, AtCmdHandler);
+static void register_atcommand_impl(const char* name, AtCmdHandler h) {
+    atcommand_add(name, h);
+}
+
 // Logging
-// ----------------------
 static void log_info_impl(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -38,18 +36,7 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
-// ----------------------
-// Atcommand registration
-// ----------------------
-using AtCmdHandler = int (*)(int, map_session_data*, const char*, const char*);
-extern void atcommand_add(const char*, AtCmdHandler);
-static void register_atcommand_impl(const char* name, AtCmdHandler h) {
-    atcommand_add(name, h);
-}
-
-// ----------------------
-// Account variable emulation
-// ----------------------
+// Fallback var registry
 static std::unordered_map<std::string, int> var_map;
 static int next_regid = 100000;
 
@@ -61,6 +48,10 @@ static int regid_from_name(const char* name) {
     return new_id;
 }
 
+extern "C" int pc_readregistry(map_session_data* sd, int id);
+extern "C" void pc_setregistry(map_session_data* sd, int id, int val);
+
+// Account variable API
 static int accountvar_get_impl(map_session_data* sd, const char* name) {
     int id = regid_from_name(name);
     return pc_readregistry(sd, id);
@@ -70,9 +61,7 @@ static void accountvar_set_impl(map_session_data* sd, const char* name, int val)
     pc_setregistry(sd, id, val);
 }
 
-// ----------------------
-// Global API
-// ----------------------
+// ✅ Only ONE API struct
 static PluginAPI API = {
     log_info_impl,
     log_error_impl,
@@ -84,44 +73,13 @@ static PluginAPI API = {
     accountvar_get_impl,
     accountvar_set_impl,
 };
-PluginAPI* g_plugin_api = &API;
 
-// ----------------------
-// Plugin discovery
-// ----------------------
+
+// Plugin binding
 static void init_plugin(void* so) {
     auto bind = (void(*)(const PluginAPI*))dlsym(so, "plugin_bind_api");
     auto init = (void(*)())dlsym(so, "plugin_init");
     if (!bind || !init) return;
     bind(&API);
     init();
-}
-
-static void load_plugins() {
-    DIR* dir = opendir("plugins");
-    if (!dir) return;
-
-    struct dirent* ent;
-    while ((ent = readdir(dir)) != nullptr) {
-        if (strstr(ent->d_name, ".so")) {
-            char path[256];
-            snprintf(path, sizeof(path), "plugins/%s", ent->d_name);
-            void* so = dlopen(path, RTLD_NOW);
-            if (so) {
-                log_info_impl("[FalconPM] Loaded plugin: %s", ent->d_name);
-                init_plugin(so);
-            } else {
-                log_error_impl("[FalconPM] Failed to load %s: %s", ent->d_name, dlerror());
-            }
-        }
-    }
-    closedir(dir);
-}
-
-// ----------------------
-// Entry called by shim (map-server)
-// ----------------------
-extern "C" void falconpm_loader_init() {
-    log_info_impl("[FalconPM] falconpm_loader_init called");
-    load_plugins();
 }

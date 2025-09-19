@@ -23,7 +23,7 @@ static int atcommand_ar(int fd, struct map_session_data *sd, const char *command
 }
 
 // @wander on|off
-static int atcommand_wander(int fd, struct map_session_data* sd, const char* command, const char* message) {
+static int atcommand_wander(int fd, struct map_session_data *sd, const char *command, const char *message) {
     if (strcmp(message, "on") == 0) {
         g_plugin_api->accountvar_set(sd, VAR_WANDER_ENABLED, 1);
         g_plugin_api->send_message(fd, "[autoroute] Wander mode enabled.");
@@ -36,10 +36,11 @@ static int atcommand_wander(int fd, struct map_session_data* sd, const char* com
     return 0;
 }
 
-static void autoroute_tick(struct map_session_data* sd) {
+// Tick callback
+static void autoroute_tick(struct map_session_data *sd) {
     int wander = g_plugin_api->accountvar_get(sd, VAR_WANDER_ENABLED);
     if (wander) {
-        g_plugin_api->log_info("[autoroute] Wander tick for %s\n", sd->status.name);
+        ShowInfo("[autoroute] Wander tick for %s\n", sd->status.name);
     }
 }
 
