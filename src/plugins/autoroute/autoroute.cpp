@@ -1,32 +1,34 @@
 // /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp
 //
 // FalconPM Autoroute plugin
-// Provides @ar <x> <y> command to walk the player to a target cell.
-// Extended: if no args, chooses a random cell on the current map.
-//
+// Extended: @ar on/off to enable continuous random roaming.
 
-#include "../../infra/plugin_api.h"   // FalconPM API
+#include "../../infra/plugin_api.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-// rAthena headers (modern C++ .hpp style)
-#include "map.hpp"     // defines map_session_data and map_data (xs, ys, name)
-#include "pc.hpp"      // player character functions
-#include "unit.hpp"    // unit movement helpers
-
-extern struct map_data map[];   // declared in map.hpp
+// rAthena headers
+#include "map.hpp"
+#include "pc.hpp"
+#include "unit.hpp"
 
 // ----------------------------------------------------
-// Access FalconPM context from base
+// Access FalconPM context
 // ----------------------------------------------------
 extern "C" const PluginContext* falconpm_get_context(void);
 static const PluginContext* ctx = nullptr;
 
-// Forward declare path executor (from fpm_path.c)
+// Forward declare path executor
 extern "C" bool fpm_path_execute(struct map_session_data* sd,
                                  int x1, int y1, int x2, int y2,
                                  const PluginContext* ctx);
+
+// ----------------------------------------------------
+// Roaming state
+// ----------------------------------------------------
+static bool roaming_enabled = false;
+static map_session_data* roaming_sd = nullptr;
 
 // ----------------------------------------------------
 // Helper: choose random destination
@@ -37,7 +39,6 @@ static void autoroute_random(map_session_data* sd) {
     int sx = sd->x;
     int sy = sd->y;
 
-    // Map bounds from global map[]
     int maxx = map[sd->m].xs;
     int maxy = map[sd->m].ys;
 
@@ -53,23 +54,51 @@ static void autoroute_random(map_session_data* sd) {
 }
 
 // ----------------------------------------------------
+// Timer callback (fires every 5s if roaming is enabled)
+// ----------------------------------------------------
+static int roaming_timer_cb(int tid, uint64_t tick, int id, intptr_t data) {
+    if (roaming_enabled && roaming_sd) {
+        autoroute_random(roaming_sd);
+        // reschedule after 5s
+        ctx->timer->add_timer(ctx->timer->gettick() + 5000,
+                              roaming_timer_cb, 0, 0);
+    }
+    return 0;
+}
+
+// ----------------------------------------------------
 // Command handler for @ar
 // ----------------------------------------------------
 static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
     if (!sd) return -1;
 
+    if (strcmp(args, "on") == 0) {
+        roaming_enabled = true;
+        roaming_sd = sd;
+        ctx->log->info("[autoroute] roaming enabled");
+        ctx->timer->add_timer(ctx->timer->gettick() + 5000,
+                              roaming_timer_cb, 0, 0);
+        return 0;
+    }
+
+    if (strcmp(args, "off") == 0) {
+        roaming_enabled = false;
+        roaming_sd = nullptr;
+        ctx->log->info("[autoroute] roaming disabled");
+        return 0;
+    }
+
     int x, y;
     if (sscanf(args, "%d %d", &x, &y) < 2) {
-        // No args → random mode
+        // No coords, single random walk
         autoroute_random(sd);
         return 0;
     }
 
-    // Explicit target
     ctx->log->info("[autoroute] @ar walking to (%d,%d)", x, y);
 
     if (!fpm_path_execute(sd, sd->x, sd->y, x, y, ctx)) {
-    ctx->log->error("[autoroute] failed to walk explicit path");
+        ctx->log->error("[autoroute] failed to walk explicit path");
     }
     return 0;
 }
@@ -85,19 +114,22 @@ static bool init(const PluginContext* c) {
     }
 
     ctx->atcommand->add("ar", at_ar);
-    fprintf(stdout, "[autoroute] init OK\n");
+
+    fprintf(stdout, "[autoroute] init OK (use @ar on/off)\n");
     return true;
 }
 
 static void shutdown(void) {
+    roaming_enabled = false;
+    roaming_sd = nullptr;
     fprintf(stdout, "[autoroute] shutdown\n");
 }
 
 extern "C" {
 PluginDescriptor PLUGIN = {
     "autoroute",
-    "0.7",
-    nullptr,   // required modules
+    "0.9",
+    nullptr,
     init,
     shutdown
 };

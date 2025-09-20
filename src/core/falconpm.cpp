@@ -30,6 +30,21 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
+// ----------------------------------------------
+// Timer
+//-----------------------------------------------
+extern "C" {
+    int fpm_add_timer(uint64_t tick, int (*func)(int, uint64_t, int, intptr_t), int id, intptr_t data);
+    uint64_t fpm_gettick(void);
+}
+
+static TimerAPI timer_api = {
+    { sizeof(TimerAPI), {1,0} },
+    fpm_add_timer,
+    fpm_gettick
+};
+
+
 // ----------------------------------------------------
 // Dummy stubs
 // ----------------------------------------------------
@@ -137,7 +152,8 @@ PluginContext g_ctx = {
     &player_api,
     &rnd_api,
     &atcommand_api,
-    &movement_api
+    &movement_api,
+    &timer_api
 };
 
 // ----------------------------------------------------

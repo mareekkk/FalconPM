@@ -89,6 +89,17 @@ typedef struct {
 } AtcommandAPI;
 
 // -----------------------------
+// Timer
+// -----------------------------
+typedef int (*FpmTimerFunc)(int tid, uint64_t tick, int id, intptr_t data);
+
+typedef struct {
+    FpmTableHeader _;
+    int (*add_timer)(uint64_t tick, FpmTimerFunc func, int id, intptr_t data);
+    uint64_t (*gettick)(void);
+} TimerAPI;
+
+// -----------------------------
 // Module IDs
 // -----------------------------
 typedef enum {
@@ -98,6 +109,7 @@ typedef enum {
     FPM_MOD_RANDOM,
     FPM_MOD_ATCOMMAND,
     FPM_MOD_MOVEMENT,
+    FPM_MOD_TIMER,
     FPM_MOD__COUNT
 } FpmModuleId;
 
@@ -112,6 +124,7 @@ typedef struct {
     RandomAPI*         rnd;
     AtcommandAPI*      atcommand;
     PlayerMovementAPI* movement;
+    TimerAPI*          timer; 
 } PluginContext;
 
 // -----------------------------
