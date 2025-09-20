@@ -69,28 +69,28 @@ include CMakeFiles/autoroute.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/autoroute.dir/flags.make
 
-CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o: CMakeFiles/autoroute.dir/flags.make
-CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o: /home/marek/FalconPM/src/plugins/autoroute.cpp
-CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o: CMakeFiles/autoroute.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o -MF CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o.d -o CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o -c /home/marek/FalconPM/src/plugins/autoroute.cpp
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o -MF CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o.d -o CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o -c /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp
 
-CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/plugins/autoroute.cpp > CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.i
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp > CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.i
 
-CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/plugins/autoroute.cpp -o CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.s
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp -o CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s
 
 # Object files for target autoroute
 autoroute_OBJECTS = \
-"CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o"
+"CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o"
 
 # External object files for target autoroute
 autoroute_EXTERNAL_OBJECTS =
 
-plugins/autoroute.so: CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/build.make
 plugins/autoroute.so: CMakeFiles/autoroute.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared module plugins/autoroute.so"

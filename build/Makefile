@@ -203,29 +203,29 @@ src/infra/loader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.s
 .PHONY : src/infra/loader.cpp.s
 
-src/plugins/autoroute.o: src/plugins/autoroute.cpp.o
-.PHONY : src/plugins/autoroute.o
+src/plugins/autoroute/autoroute.o: src/plugins/autoroute/autoroute.cpp.o
+.PHONY : src/plugins/autoroute/autoroute.o
 
 # target to build an object file
-src/plugins/autoroute.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o
-.PHONY : src/plugins/autoroute.cpp.o
+src/plugins/autoroute/autoroute.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o
+.PHONY : src/plugins/autoroute/autoroute.cpp.o
 
-src/plugins/autoroute.i: src/plugins/autoroute.cpp.i
-.PHONY : src/plugins/autoroute.i
+src/plugins/autoroute/autoroute.i: src/plugins/autoroute/autoroute.cpp.i
+.PHONY : src/plugins/autoroute/autoroute.i
 
 # target to preprocess a source file
-src/plugins/autoroute.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.i
-.PHONY : src/plugins/autoroute.cpp.i
+src/plugins/autoroute/autoroute.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.i
+.PHONY : src/plugins/autoroute/autoroute.cpp.i
 
-src/plugins/autoroute.s: src/plugins/autoroute.cpp.s
-.PHONY : src/plugins/autoroute.s
+src/plugins/autoroute/autoroute.s: src/plugins/autoroute/autoroute.cpp.s
+.PHONY : src/plugins/autoroute/autoroute.s
 
 # target to generate assembly for a file
-src/plugins/autoroute.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.s
-.PHONY : src/plugins/autoroute.cpp.s
+src/plugins/autoroute/autoroute.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s
+.PHONY : src/plugins/autoroute/autoroute.cpp.s
 
 # Help Target
 help:
@@ -244,9 +244,9 @@ help:
 	@echo "... src/infra/loader.o"
 	@echo "... src/infra/loader.i"
 	@echo "... src/infra/loader.s"
-	@echo "... src/plugins/autoroute.o"
-	@echo "... src/plugins/autoroute.i"
-	@echo "... src/plugins/autoroute.s"
+	@echo "... src/plugins/autoroute/autoroute.o"
+	@echo "... src/plugins/autoroute/autoroute.i"
+	@echo "... src/plugins/autoroute/autoroute.s"
 .PHONY : help
 
 

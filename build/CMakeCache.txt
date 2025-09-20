@@ -221,6 +221,9 @@ FalconPM_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 FalconPM_SOURCE_DIR:STATIC=/home/marek/FalconPM
 
+//Dependencies for the target
+falconpm_loader_LIB_DEPENDS:STATIC=general;dl;
+
 
 ########################
 # INTERNAL cache entries

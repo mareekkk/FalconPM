@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o"
-  "CMakeFiles/autoroute.dir/src/plugins/autoroute.cpp.o.d"
+  "CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o"
+  "CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o.d"
   "plugins/autoroute.pdb"
   "plugins/autoroute.so"
 )

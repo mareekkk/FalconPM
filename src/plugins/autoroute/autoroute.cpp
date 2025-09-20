@@ -1,53 +1,52 @@
-// src/plugins/autoroute.cpp
+#include "plugin_api.h"
+#include <cstdio>
+#include <cstdlib>
 
-#include "map/pc.hpp"
-#include "map/map.hpp"
-#include "map/clif.hpp"
-#include "common/showmsg.hpp"
-#include "plugin_api.h"    // FalconPM API
+// Local state
+static const PlayerAPI* pc = nullptr;
+static const UnitAPI*   unit = nullptr;
 
-#define VAR_AR_ENABLED     "#ar_enabled"
-#define VAR_WANDER_ENABLED "#wander_enabled"
+// Example tick function
+static void autoroute_tick(map_session_data* sd) {
+    if (!sd) return;
 
-// @ar <x> <y>
-static int atcommand_ar(int fd, struct map_session_data *sd, const char *command, const char *message) {
-    int x, y;
-    if (sscanf(message, "%d %d", &x, &y) != 2) {
-        g_plugin_api->send_message(fd, "Usage: @ar <x> <y>");
-        return -1;
-    }
+    // Pick random destination
+    int x = rand() % 100;
+    int y = rand() % 100;
 
-    g_plugin_api->accountvar_set(sd, VAR_AR_ENABLED, 1);
-    ShowInfo("[autoroute] Target set (%d,%d)\n", x, y);
-    return 0;
+    // Future: move player with UnitAPI
+    // unit->walktoxy(sd->bl, x, y, 0);
+    fprintf(stdout, "[autoroute] walking to (%d,%d)\n", x, y);
 }
 
-// @wander on|off
-static int atcommand_wander(int fd, struct map_session_data *sd, const char *command, const char *message) {
-    if (strcmp(message, "on") == 0) {
-        g_plugin_api->accountvar_set(sd, VAR_WANDER_ENABLED, 1);
-        g_plugin_api->send_message(fd, "[autoroute] Wander mode enabled.");
-    } else if (strcmp(message, "off") == 0) {
-        g_plugin_api->accountvar_set(sd, VAR_WANDER_ENABLED, 0);
-        g_plugin_api->send_message(fd, "[autoroute] Wander mode disabled.");
-    } else {
-        g_plugin_api->send_message(fd, "Usage: @wander on|off");
-    }
-    return 0;
+// Declare required modules
+static const FpmModuleId* required_modules(size_t* count) {
+    static const FpmModuleId deps[] = { FPM_MOD_PLAYER, FPM_MOD_UNIT };
+    *count = sizeof(deps) / sizeof(deps[0]);
+    return deps;
 }
 
-// Tick callback
-static void autoroute_tick(struct map_session_data *sd) {
-    int wander = g_plugin_api->accountvar_get(sd, VAR_WANDER_ENABLED);
-    if (wander) {
-        ShowInfo("[autoroute] Wander tick for %s\n", sd->status.name);
-    }
+// Init
+static bool init(const PluginContext* ctx) {
+    pc   = ctx->player;
+    unit = ctx->unit;
+    if (!pc || !unit) return false;
+
+    fprintf(stdout, "[autoroute] init OK\n");
+    return true;
 }
 
-// plugin_init
-extern "C" void plugin_init(void) {
-    ShowInfo("[autoroute] plugin_init\n");
-    g_plugin_api->register_atcommand("ar", atcommand_ar);
-    g_plugin_api->register_atcommand("wander", atcommand_wander);
-    falconpm_register("autoroute", autoroute_tick);
+static void shutdown(void) {
+    fprintf(stdout, "[autoroute] shutdown\n");
+}
+
+// Export descriptor (⚠️ no extra extern keyword!)
+extern "C" {
+PluginDescriptor PLUGIN = {
+    "autoroute",
+    "0.1",
+    required_modules,
+    init,
+    shutdown
+};
 }

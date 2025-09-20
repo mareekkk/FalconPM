@@ -1,6 +1,6 @@
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: \
- /home/marek/FalconPM/src/core/falconpm.cpp /usr/include/stdc-predef.h \
- /home/marek/FalconPM/src/core/../infra/plugin_api.h \
+CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: \
+ /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp \
+ /usr/include/stdc-predef.h /home/marek/FalconPM/src/infra/plugin_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/aarch64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -61,4 +61,4 @@ CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: \
  /usr/include/aarch64-linux-gnu/bits/struct_mutex.h \
  /usr/include/aarch64-linux-gnu/bits/struct_rwlock.h \
  /usr/include/alloca.h /usr/include/aarch64-linux-gnu/bits/stdlib-float.h \
- /usr/include/c++/12/bits/std_abs.h /usr/include/c++/12/cstdarg
+ /usr/include/c++/12/bits/std_abs.h

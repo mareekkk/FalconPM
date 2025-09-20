@@ -18,6 +18,8 @@ add_library(falconpm_loader MODULE
 target_include_directories(falconpm_loader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
 )
+target_link_libraries(falconpm_loader PRIVATE dl)
+
 set_target_properties(falconpm_loader PROPERTIES
     PREFIX ""
     SUFFIX ".so"
@@ -26,14 +28,15 @@ set_target_properties(falconpm_loader PROPERTIES
 )
 
 # -------------------------------
-# 2) FalconPM base
+# 2) FalconPM base (MODULE, loaded by loader)
 # -------------------------------
 add_library(falconpm_base MODULE
-    src/core/falconpm.cpp
+    src/core/falconpm.cpp   # your "heart" file
     src/infra/plugin_api.h
 )
 target_include_directories(falconpm_base PUBLIC
-    ${RA_SRC}            # for common/showmsg.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
+    ${RA_SRC}
 )
 set_target_properties(falconpm_base PROPERTIES
     PREFIX ""
@@ -43,18 +46,18 @@ set_target_properties(falconpm_base PROPERTIES
 )
 
 # -------------------------------
-# 3) Autoroute plugin
+# 3) Autoroute plugin (MODULE, loaded by loader)
 # -------------------------------
 add_library(autoroute MODULE
     src/plugins/autoroute/autoroute.cpp
 )
 target_include_directories(autoroute PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
     ${RA_SRC}
     ${RA_SRC}/map
     ${RA_SRC}/common
     ${RA_3P_RYML}
     ${RA_3P_C4}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/infra
     /usr/include/mariadb
 )
 set_target_properties(autoroute PROPERTIES
