@@ -2,6 +2,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
+#include <unordered_map>
+#include <string>
+#include <dlfcn.h>
+
+// Forward from rAthena
+#include "atcommand.hpp"
 
 // ----------------------------------------------------
 // Logging
@@ -23,7 +29,7 @@ static void log_error_impl(const char* fmt, ...) {
 }
 
 // ----------------------------------------------------
-// Dummy stubs (replace with rAthena bindings later)
+// Dummy stubs (will be replaced by rAthena hooks later)
 // ----------------------------------------------------
 static struct block_list* dummy_get_target(void* u) {
     (void)u;
@@ -55,25 +61,57 @@ static int32_t rnd_impl(void) {
 }
 
 // ----------------------------------------------------
-// Atcommand wrappers (stubs for now)
+// FalconPM Atcommand registry
 // ----------------------------------------------------
-static int atcommand_stub(struct map_session_data* sd, const char* cmd, const char* msg) {
-    (void)sd; (void)cmd; (void)msg;
-    fprintf(stdout, "[falconpm_base] atcommand called: %s\n", cmd);
-    return 0;
+static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;
+
+// Pointer to original rAthena dispatcher
+using is_atcommand_t = bool(*)(const int32, map_session_data*, const char*, int32);
+static is_atcommand_t orig_is_atcommand = nullptr;
+
+// Hooked dispatcher
+bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int32 type) {
+    // Strip leading symbol (@/#)
+    if (message && (message[0] == '@' || message[0] == '#')) {
+        std::string cmd = message + 1; // skip symbol
+        auto it = fpm_atcmds.find(cmd);
+        if (it != fpm_atcmds.end()) {
+            fprintf(stdout, "[falconpm_base] plugin atcommand: %s\n", cmd.c_str());
+            it->second(sd, cmd.c_str(), ""); // call plugin handler
+            return true;
+        }
+    }
+
+    // Fallback to original dispatcher if available
+    if (!orig_is_atcommand) {
+        orig_is_atcommand = (is_atcommand_t)dlsym(RTLD_NEXT, "is_atcommand");
+    }
+    if (orig_is_atcommand) {
+        return orig_is_atcommand(fd, sd, message, type);
+    }
+
+    return false; // no handler found
 }
 
+// ----------------------------------------------------
+// Atcommand wrappers for FalconPM plugins
+// ----------------------------------------------------
 static bool at_add_wrapper(const char* name, AtCmdFunc func) {
-    // TODO: hook into real rAthena atcommand_add later
-    fprintf(stdout, "[falconpm_base] registering atcommand: %s\n", name);
-    (void)func;
+    if (!name || !func) return false;
+    fpm_atcmds[name] = func;
+    fprintf(stdout, "[falconpm_base] registered plugin atcommand: %s\n", name);
     return true;
 }
 
 static bool at_remove_wrapper(const char* name) {
-    // TODO: hook into real rAthena atcommand_remove later
-    fprintf(stdout, "[falconpm_base] removing atcommand: %s\n", name);
-    return true;
+    if (!name) return false;
+    auto it = fpm_atcmds.find(name);
+    if (it != fpm_atcmds.end()) {
+        fpm_atcmds.erase(it);
+        fprintf(stdout, "[falconpm_base] removed plugin atcommand: %s\n", name);
+        return true;
+    }
+    return false;
 }
 
 // ----------------------------------------------------
@@ -118,7 +156,7 @@ static PluginContext g_ctx = {
     &unit_api,
     &player_api,
     &rnd_api,
-    &atcommand_api   // ✅ only this, no &atc_api
+    &atcommand_api
 };
 
 // ----------------------------------------------------
@@ -137,6 +175,7 @@ static bool init(const PluginContext* ctx) {
 
 static void shutdown(void) {
     log_api.info("[falconpm_base] shutdown");
+    fpm_atcmds.clear();
 }
 
 extern "C" {
