@@ -71,14 +71,12 @@ typedef struct {
 // -----------------------------
 // Atcommand
 // -----------------------------
-typedef int (*AtCmdFunc)(struct map_session_data* sd,
-                         const char* command,
-                         const char* message);
+typedef int (*AtCmdFunc)(struct map_session_data* sd, const char* command, const char* message);
 
 typedef struct {
     FpmTableHeader _;
-    void (*add)(const char* cmd, AtCmdFunc func);
-    void (*remove)(const char* cmd);
+    bool (*add)(const char* name, AtCmdFunc func);
+    bool (*remove)(const char* name);
 } AtcommandAPI;
 
 // -----------------------------

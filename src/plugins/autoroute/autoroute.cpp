@@ -48,7 +48,6 @@ static bool init(const PluginContext* ctx) {
     pc   = ctx->player;
     unit = ctx->unit;
     atc  = ctx->atcommand;
-
     if (!pc || !unit || !atc) return false;
 
     atc->add("ar", atcommand_ar);

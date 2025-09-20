@@ -54,20 +54,26 @@ static int32_t rnd_impl(void) {
     return rand();
 }
 
-// Atcommand wrappers
+// ----------------------------------------------------
+// Atcommand wrappers (stubs for now)
+// ----------------------------------------------------
 static int atcommand_stub(struct map_session_data* sd, const char* cmd, const char* msg) {
     (void)sd; (void)cmd; (void)msg;
     fprintf(stdout, "[falconpm_base] atcommand called: %s\n", cmd);
     return 0;
 }
 
-static void at_add_wrapper(const char* name, AtCmdFunc func) {
-    fprintf(stdout, "[falconpm_base] atcommand registered: %s\n", name);
+static bool at_add_wrapper(const char* name, AtCmdFunc func) {
+    // TODO: hook into real rAthena atcommand_add later
+    fprintf(stdout, "[falconpm_base] registering atcommand: %s\n", name);
     (void)func;
+    return true;
 }
 
-static void at_remove_wrapper(const char* name) {
-    fprintf(stdout, "[falconpm_base] atcommand removed: %s\n", name);
+static bool at_remove_wrapper(const char* name) {
+    // TODO: hook into real rAthena atcommand_remove later
+    fprintf(stdout, "[falconpm_base] removing atcommand: %s\n", name);
+    return true;
 }
 
 // ----------------------------------------------------
@@ -97,7 +103,7 @@ static RandomAPI rnd_api = {
     rnd_impl
 };
 
-static AtcommandAPI atc_api = {
+static AtcommandAPI atcommand_api = {
     { sizeof(AtcommandAPI), {1,0} },
     at_add_wrapper,
     at_remove_wrapper
@@ -112,7 +118,7 @@ static PluginContext g_ctx = {
     &unit_api,
     &player_api,
     &rnd_api,
-    &atc_api
+    &atcommand_api   // ✅ only this, no &atc_api
 };
 
 // ----------------------------------------------------
