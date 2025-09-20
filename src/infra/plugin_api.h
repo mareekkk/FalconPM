@@ -20,17 +20,26 @@ typedef struct {
     uint16_t minor;
 } FpmApiVersion;
 
-// Forward decls
+// Forward declarations
 struct map_session_data;
 struct block_list;
 
 // -----------------------------
-// Common header
+// Common header for all API tables
 // -----------------------------
 typedef struct {
-    uint32_t size;        // sizeof(struct)
+    size_t size;          // sizeof(struct)
     FpmApiVersion ver;    // ABI version
 } FpmTableHeader;
+
+// ----------------------------------------------------
+// Player movement API
+// ----------------------------------------------------
+typedef struct {
+    FpmTableHeader _;
+    int (*pc_walktoxy)(struct map_session_data* sd, short x, short y, int type);
+    int (*unit_walktoxy)(struct block_list* bl, short x, short y, unsigned char flag);
+} PlayerMovementAPI;
 
 // -----------------------------
 // Logging
@@ -88,6 +97,7 @@ typedef enum {
     FPM_MOD_UNIT,
     FPM_MOD_RANDOM,
     FPM_MOD_ATCOMMAND,
+    FPM_MOD_MOVEMENT,
     FPM_MOD__COUNT
 } FpmModuleId;
 
@@ -96,11 +106,12 @@ typedef enum {
 // -----------------------------
 typedef struct {
     FpmApiVersion api;
-    LogAPI*       log;
-    UnitAPI*      unit;
-    PlayerAPI*    player;
-    RandomAPI*    rnd;
-    AtcommandAPI* atcommand;
+    LogAPI*            log;
+    UnitAPI*           unit;
+    PlayerAPI*         player;
+    RandomAPI*         rnd;
+    AtcommandAPI*      atcommand;
+    PlayerMovementAPI* movement;
 } PluginContext;
 
 // -----------------------------

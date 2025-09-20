@@ -39,6 +39,9 @@ target_include_directories(falconpm_base PUBLIC
     ${RA_SRC}
     ${RA_SRC}/map
     ${RA_SRC}/common
+    ${RA_ROOT}/3rdparty/rapidyaml/src
+    ${RA_ROOT}/3rdparty/rapidyaml/ext/c4core/src
+    /usr/include/mariadb    
 )
 set_target_properties(falconpm_base PROPERTIES
     PREFIX ""
@@ -64,6 +67,7 @@ target_include_directories(autoroute PUBLIC
     ${RA_SRC}/common   # <-- for common/ headers
     ${RA_3P_RYML}
     ${RA_3P_C4}
+    /usr/include/mariadb    
 )
 set_target_properties(autoroute PROPERTIES
     PREFIX ""
@@ -72,3 +76,4 @@ set_target_properties(autoroute PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
 
+target_link_options(falconpm_base PRIVATE -Wl,--export-dynamic)

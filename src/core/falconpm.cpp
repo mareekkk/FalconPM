@@ -1,12 +1,14 @@
+// falconpm.cpp
+// FalconPM base module: provides API tables to plugins
+
 #include "../infra/plugin_api.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
 #include <unordered_map>
 #include <string>
-#include <dlfcn.h>
-
-// Forward from rAthena
+#include "pc.hpp"
+#include "unit.hpp"
 #include "atcommand.hpp"
 
 // ----------------------------------------------------
@@ -29,48 +31,23 @@ static void log_error_impl(const char* fmt, ...) {
 }
 
 // ----------------------------------------------------
-// Dummy stubs (will be replaced by rAthena hooks later)
+// Dummy stubs
 // ----------------------------------------------------
-static struct block_list* dummy_get_target(void* u) {
-    (void)u;
-    return nullptr;
-}
-
-static int dummy_get_id(struct block_list* bl) {
-    (void)bl;
-    return 0;
-}
-
-static int dummy_get_type(struct block_list* bl) {
-    (void)bl;
-    return 0;
-}
-
-static struct map_session_data* dummy_map_id2sd(int aid) {
-    (void)aid;
-    return nullptr;
-}
-
-static void dummy_send_message(int fd, const char* msg) {
-    (void)fd;
-    printf("[MSG] %s\n", msg);
-}
-
-static int32_t rnd_impl(void) {
-    return rand();
-}
+static struct block_list* dummy_get_target(void* u) { (void)u; return nullptr; }
+static int dummy_get_id(struct block_list* bl) { (void)bl; return 0; }
+static int dummy_get_type(struct block_list* bl) { (void)bl; return 0; }
+static struct map_session_data* dummy_map_id2sd(int aid) { (void)aid; return nullptr; }
+static void dummy_send_message(int fd, const char* msg) { (void)fd; printf("[MSG] %s\n", msg); }
+static int32_t rnd_impl(void) { return rand(); }
 
 // ----------------------------------------------------
-// FalconPM Atcommand registry (shadow storage)
+// Atcommand registry
 // ----------------------------------------------------
-static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;  // [EDIT] we’ll keep this for local fallback
+static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;
 
-// Pointer to original rAthena dispatcher
 using is_atcommand_t = bool(*)(const int32, map_session_data*, const char*, int32);
 static is_atcommand_t orig_is_atcommand = nullptr;
 
-// Hooked dispatcher (optional fallback if we keep symbol interpose)
-// ----------------------------------------------------
 bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int32 type) {
     if (message && (message[0] == '@' || message[0] == '#')) {
         std::string cmd = message + 1;
@@ -81,34 +58,26 @@ bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int
             return true;
         }
     }
-    if (!orig_is_atcommand) {
-        orig_is_atcommand = (is_atcommand_t)dlsym(RTLD_NEXT, "is_atcommand");
-    }
-    if (orig_is_atcommand) {
-        return orig_is_atcommand(fd, sd, message, type);
-    }
+    if (orig_is_atcommand) return orig_is_atcommand(fd, sd, message, type);
     return false;
 }
 
 // ----------------------------------------------------
-// Atcommand wrappers for FalconPM plugins
+// Atcommand wrappers
 // ----------------------------------------------------
-using AtCmdFunc = int(*)(map_session_data*, const char*, const char*);
-
-// [EDIT] Changed names to avoid collision with rAthena built-in
 extern "C" bool fpm_atcommand_register(const char* name, AtCmdFunc func);
 extern "C" bool fpm_atcommand_unregister(const char* name);
 
 static bool at_add_wrapper(const char* name, AtCmdFunc func) {
     if (!name || !func) return false;
-    fpm_atcommand_register(name, func);   // [EDIT] call renamed function
+    fpm_atcommand_register(name, func);
     fprintf(stdout, "[falconpm_base] registered atcommand: %s\n", name);
     return true;
 }
 
 static bool at_remove_wrapper(const char* name) {
     if (!name) return false;
-    if (fpm_atcommand_unregister && fpm_atcommand_unregister(name)) {  // [EDIT] call renamed function
+    if (fpm_atcommand_unregister && fpm_atcommand_unregister(name)) {
         fprintf(stdout, "[falconpm_base] removed atcommand: %s\n", name);
         return true;
     }
@@ -148,16 +117,27 @@ static AtcommandAPI atcommand_api = {
     at_remove_wrapper
 };
 
+// Direct externs from bootstrap
+extern "C" int fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
+extern "C" int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
+
+static PlayerMovementAPI movement_api = {
+    { sizeof(PlayerMovementAPI), {1,0} },
+    fpm_pc_walktoxy,
+    fpm_unit_walktoxy
+};
+
 // ----------------------------------------------------
-// Context given to plugins
+// PluginContext
 // ----------------------------------------------------
-static PluginContext g_ctx = {
+PluginContext g_ctx = {
     {1,0}, // ABI version
     &log_api,
     &unit_api,
     &player_api,
     &rnd_api,
-    &atcommand_api
+    &atcommand_api,
+    &movement_api
 };
 
 // ----------------------------------------------------
@@ -182,13 +162,13 @@ static void shutdown(void) {
 extern "C" {
 PluginDescriptor PLUGIN = {
     "falconpm",
-    "0.1",
+    "0.2",
     required_modules,
     init,
     shutdown
 };
 
-extern "C" const PluginContext* fpm_get_context(void) {  // allow loader to pass ctx to other plugins
+extern "C" const PluginContext* falconpm_get_context(void) {
     return &g_ctx;
 }
 

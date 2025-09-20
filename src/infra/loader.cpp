@@ -1,4 +1,3 @@
-// /home/marek/FalconPM/src/infra/loader.cpp
 #include <dlfcn.h>
 #include <cstdio>
 #include <vector>
@@ -10,14 +9,18 @@ extern "C" {
 static void* g_base = nullptr;
 static std::vector<void*> g_others;
 
-static void* open_plugin(const char* path) {
-    void* h = dlopen(path, RTLD_NOW | RTLD_LOCAL);
-    if (!h) std::fprintf(stderr, "[FalconPM] dlopen failed for %s: %s\n", path, dlerror());
-    else    std::fprintf(stderr, "[FalconPM] loaded %s\n", path);
+static void* open_plugin(const char* path, int flags) {
+    void* h = dlopen(path, flags);
+    if (!h) {
+        std::fprintf(stderr, "[FalconPM] dlopen failed for %s: %s\n", path, dlerror());
+    } else {
+        std::fprintf(stderr, "[FalconPM] loaded %s\n", path);
+    }
     return h;
 }
 
 static PluginDescriptor* get_desc(void* h) {
+    if (!h) return nullptr;
     void* sym = dlsym(h, "PLUGIN");
     if (!sym) {
         std::fprintf(stderr, "[FalconPM] missing PLUGIN symbol: %s\n", dlerror());
@@ -26,18 +29,17 @@ static PluginDescriptor* get_desc(void* h) {
     return reinterpret_cast<PluginDescriptor*>(sym);
 }
 
-// exported by falconpm_base.so (we add this export there)
+// exported by falconpm_base.so
 using get_ctx_t = const PluginContext* (*)();
 
 int falconpm_loader_init(void) {
-    // 1) load base
-    g_base = open_plugin("plugins/falconpm_base.so");
+    // 1) Load base with RTLD_GLOBAL so its symbols are visible to others
+    g_base = open_plugin("plugins/falconpm_base.so", RTLD_NOW | RTLD_GLOBAL);
     if (!g_base) return 0;
 
     auto* base = get_desc(g_base);
     if (!base) return 0;
 
-    // init base first (it logs “initialized”)
     if (!base->init(nullptr)) {
         std::fprintf(stderr, "[FalconPM] base init failed\n");
         return 0;
@@ -45,11 +47,12 @@ int falconpm_loader_init(void) {
 
     // fetch runtime context for other plugins
     const PluginContext* ctx = nullptr;
-    if (auto get_ctx = (get_ctx_t)dlsym(g_base, "fpm_get_context"))
+    if (auto get_ctx = (get_ctx_t)dlsym(g_base, "falconpm_get_context")) {
         ctx = get_ctx();
+    }
 
-    // 2) load autoroute and init with ctx
-    if (void* h = open_plugin("plugins/autoroute.so")) {
+    // 2) Load autoroute with RTLD_LOCAL (doesn’t need to export further)
+    if (void* h = open_plugin("plugins/autoroute.so", RTLD_NOW | RTLD_LOCAL)) {
         if (auto* desc = get_desc(h)) {
             if (!desc->init(ctx)) {
                 std::fprintf(stderr, "[FalconPM] autoroute init failed\n");
