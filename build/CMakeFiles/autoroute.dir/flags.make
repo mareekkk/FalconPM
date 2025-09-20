@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = -Dautoroute_EXPORTS
 
-C_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
+C_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/FalconPM/src/AI -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
 
 C_FLAGS = -fPIC
 
 CXX_DEFINES = -Dautoroute_EXPORTS
 
-CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
+CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/FalconPM/src/AI -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
 
 CXX_FLAGS = -fPIC -std=gnu++17
 

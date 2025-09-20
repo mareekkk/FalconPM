@@ -155,6 +155,137 @@ autoroute/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/build
 .PHONY : autoroute/fast
 
+#=============================================================================
+# Target rules for targets named gat_test
+
+# Build rule for target.
+gat_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gat_test
+.PHONY : gat_test
+
+# fast build rule for target.
+gat_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/build
+.PHONY : gat_test/fast
+
+#=============================================================================
+# Target rules for targets named path_test
+
+# Build rule for target.
+path_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 path_test
+.PHONY : path_test
+
+# fast build rule for target.
+path_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/build
+.PHONY : path_test/fast
+
+src/AI/peregrine_gat.o: src/AI/peregrine_gat.c.o
+.PHONY : src/AI/peregrine_gat.o
+
+# target to build an object file
+src/AI/peregrine_gat.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.o
+.PHONY : src/AI/peregrine_gat.c.o
+
+src/AI/peregrine_gat.i: src/AI/peregrine_gat.c.i
+.PHONY : src/AI/peregrine_gat.i
+
+# target to preprocess a source file
+src/AI/peregrine_gat.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.i
+.PHONY : src/AI/peregrine_gat.c.i
+
+src/AI/peregrine_gat.s: src/AI/peregrine_gat.c.s
+.PHONY : src/AI/peregrine_gat.s
+
+# target to generate assembly for a file
+src/AI/peregrine_gat.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.s
+.PHONY : src/AI/peregrine_gat.c.s
+
+src/AI/peregrine_path.o: src/AI/peregrine_path.c.o
+.PHONY : src/AI/peregrine_path.o
+
+# target to build an object file
+src/AI/peregrine_path.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.o
+.PHONY : src/AI/peregrine_path.c.o
+
+src/AI/peregrine_path.i: src/AI/peregrine_path.c.i
+.PHONY : src/AI/peregrine_path.i
+
+# target to preprocess a source file
+src/AI/peregrine_path.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.i
+.PHONY : src/AI/peregrine_path.c.i
+
+src/AI/peregrine_path.s: src/AI/peregrine_path.c.s
+.PHONY : src/AI/peregrine_path.s
+
+# target to generate assembly for a file
+src/AI/peregrine_path.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.s
+.PHONY : src/AI/peregrine_path.c.s
+
+src/AI/tests/main_gat_test.o: src/AI/tests/main_gat_test.c.o
+.PHONY : src/AI/tests/main_gat_test.o
+
+# target to build an object file
+src/AI/tests/main_gat_test.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/tests/main_gat_test.c.o
+.PHONY : src/AI/tests/main_gat_test.c.o
+
+src/AI/tests/main_gat_test.i: src/AI/tests/main_gat_test.c.i
+.PHONY : src/AI/tests/main_gat_test.i
+
+# target to preprocess a source file
+src/AI/tests/main_gat_test.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/tests/main_gat_test.c.i
+.PHONY : src/AI/tests/main_gat_test.c.i
+
+src/AI/tests/main_gat_test.s: src/AI/tests/main_gat_test.c.s
+.PHONY : src/AI/tests/main_gat_test.s
+
+# target to generate assembly for a file
+src/AI/tests/main_gat_test.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/tests/main_gat_test.c.s
+.PHONY : src/AI/tests/main_gat_test.c.s
+
+src/AI/tests/main_path_test.o: src/AI/tests/main_path_test.c.o
+.PHONY : src/AI/tests/main_path_test.o
+
+# target to build an object file
+src/AI/tests/main_path_test.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/tests/main_path_test.c.o
+.PHONY : src/AI/tests/main_path_test.c.o
+
+src/AI/tests/main_path_test.i: src/AI/tests/main_path_test.c.i
+.PHONY : src/AI/tests/main_path_test.i
+
+# target to preprocess a source file
+src/AI/tests/main_path_test.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/tests/main_path_test.c.i
+.PHONY : src/AI/tests/main_path_test.c.i
+
+src/AI/tests/main_path_test.s: src/AI/tests/main_path_test.c.s
+.PHONY : src/AI/tests/main_path_test.s
+
+# target to generate assembly for a file
+src/AI/tests/main_path_test.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/tests/main_path_test.c.s
+.PHONY : src/AI/tests/main_path_test.c.s
+
 src/core/falconpm.o: src/core/falconpm.cpp.o
 .PHONY : src/core/falconpm.o
 
@@ -334,6 +465,20 @@ help:
 	@echo "... autoroute"
 	@echo "... falconpm_base"
 	@echo "... falconpm_loader"
+	@echo "... gat_test"
+	@echo "... path_test"
+	@echo "... src/AI/peregrine_gat.o"
+	@echo "... src/AI/peregrine_gat.i"
+	@echo "... src/AI/peregrine_gat.s"
+	@echo "... src/AI/peregrine_path.o"
+	@echo "... src/AI/peregrine_path.i"
+	@echo "... src/AI/peregrine_path.s"
+	@echo "... src/AI/tests/main_gat_test.o"
+	@echo "... src/AI/tests/main_gat_test.i"
+	@echo "... src/AI/tests/main_gat_test.s"
+	@echo "... src/AI/tests/main_path_test.o"
+	@echo "... src/AI/tests/main_path_test.i"
+	@echo "... src/AI/tests/main_path_test.s"
 	@echo "... src/core/falconpm.o"
 	@echo "... src/core/falconpm.i"
 	@echo "... src/core/falconpm.s"

@@ -139,13 +139,43 @@ CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/core/fpm_portals.c -o CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s
 
+CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o: /home/marek/FalconPM/src/AI/peregrine_gat.c
+CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o -MF CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o.d -o CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o -c /home/marek/FalconPM/src/AI/peregrine_gat.c
+
+CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/peregrine_gat.c > CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.i
+
+CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/peregrine_gat.c -o CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.s
+
+CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o: /home/marek/FalconPM/src/AI/peregrine_path.c
+CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o -MF CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o.d -o CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o -c /home/marek/FalconPM/src/AI/peregrine_path.c
+
+CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/peregrine_path.c > CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.i
+
+CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/peregrine_path.c -o CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.s
+
 # Object files for target autoroute
 autoroute_OBJECTS = \
 "CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o" \
 "CMakeFiles/autoroute.dir/src/core/fpm_path.c.o" \
 "CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o" \
 "CMakeFiles/autoroute.dir/src/core/fpm_route.c.o" \
-"CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o"
+"CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o" \
+"CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o" \
+"CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o"
 
 # External object files for target autoroute
 autoroute_EXTERNAL_OBJECTS =
@@ -155,9 +185,11 @@ plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_path.c.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_route.c.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/build.make
 plugins/autoroute.so: CMakeFiles/autoroute.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared module plugins/autoroute.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX shared module plugins/autoroute.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/autoroute.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -1,0 +1,6 @@
+[submodule "deps/openkore"]
+	path = deps/openkore
+	url = https://github.com/OpenKore/openkore.git
+[submodule "openkore"]
+	path = openkore
+	url = https://github.com/OpenKore/openkore.git

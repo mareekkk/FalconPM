@@ -66,6 +66,8 @@ CMAKE_BINARY_DIR = /home/marek/FalconPM/build
 all: CMakeFiles/falconpm_loader.dir/all
 all: CMakeFiles/falconpm_base.dir/all
 all: CMakeFiles/autoroute.dir/all
+all: CMakeFiles/gat_test.dir/all
+all: CMakeFiles/path_test.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -76,6 +78,8 @@ preinstall:
 clean: CMakeFiles/falconpm_loader.dir/clean
 clean: CMakeFiles/falconpm_base.dir/clean
 clean: CMakeFiles/autoroute.dir/clean
+clean: CMakeFiles/gat_test.dir/clean
+clean: CMakeFiles/path_test.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,7 +89,7 @@ clean: CMakeFiles/autoroute.dir/clean
 CMakeFiles/falconpm_loader.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=9,10 "Built target falconpm_loader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=11,12 "Built target falconpm_loader"
 .PHONY : CMakeFiles/falconpm_loader.dir/all
 
 # Build rule for subdir invocation for target.
@@ -111,7 +115,7 @@ CMakeFiles/falconpm_loader.dir/clean:
 CMakeFiles/falconpm_base.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=7,8 "Built target falconpm_base"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=9,10 "Built target falconpm_base"
 .PHONY : CMakeFiles/falconpm_base.dir/all
 
 # Build rule for subdir invocation for target.
@@ -137,12 +141,12 @@ CMakeFiles/falconpm_base.dir/clean:
 CMakeFiles/autoroute.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target autoroute"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target autoroute"
 .PHONY : CMakeFiles/autoroute.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/autoroute.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/autoroute.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
 .PHONY : CMakeFiles/autoroute.dir/rule
@@ -155,6 +159,58 @@ autoroute: CMakeFiles/autoroute.dir/rule
 CMakeFiles/autoroute.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/clean
 .PHONY : CMakeFiles/autoroute.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/gat_test.dir
+
+# All Build rule for target.
+CMakeFiles/gat_test.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=13,14,15 "Built target gat_test"
+.PHONY : CMakeFiles/gat_test.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/gat_test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/gat_test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
+.PHONY : CMakeFiles/gat_test.dir/rule
+
+# Convenience name for target.
+gat_test: CMakeFiles/gat_test.dir/rule
+.PHONY : gat_test
+
+# clean rule for target.
+CMakeFiles/gat_test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/clean
+.PHONY : CMakeFiles/gat_test.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/path_test.dir
+
+# All Build rule for target.
+CMakeFiles/path_test.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=16,17,18,19 "Built target path_test"
+.PHONY : CMakeFiles/path_test.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/path_test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/path_test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
+.PHONY : CMakeFiles/path_test.dir/rule
+
+# Convenience name for target.
+path_test: CMakeFiles/path_test.dir/rule
+.PHONY : path_test
+
+# clean rule for target.
+CMakeFiles/path_test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/clean
+.PHONY : CMakeFiles/path_test.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
