@@ -144,8 +144,12 @@ CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o: /home/marek/FalconPM/src/
   /usr/include/asm-generic/errno-base.h \
   /usr/include/aarch64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/12/bits/charconv.h \
-  /usr/include/c++/12/bits/basic_string.tcc
+  /usr/include/c++/12/bits/basic_string.tcc \
+  /home/marek/FalconPM/src/infra/plugin_api.h \
+  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h
 
+
+/usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h:
 
 /usr/include/c++/12/bits/charconv.h:
 
@@ -176,6 +180,8 @@ CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o: /home/marek/FalconPM/src/
 /usr/include/c++/12/bits/exception.h:
 
 /usr/include/c++/12/bits/stl_iterator.h:
+
+/home/marek/FalconPM/src/infra/plugin_api.h:
 
 /usr/include/c++/12/bits/utility.h:
 

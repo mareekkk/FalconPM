@@ -1,73 +1,64 @@
-#include "../../infra/plugin_api.h"
+// /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp
+//
+// FalconPM Autoroute plugin
+// Provides @ar <x> <y> command to walk the player to a target cell.
+//
+
+#include "../../infra/plugin_api.h"   // FalconPM API
+#include "map/mmo.hpp"                // struct map_session_data
+#include "map/clif.hpp"               // clif_displaymessage
+#include "map/unit.hpp"               // unit_walktoxy
+#include "map/block.hpp"              // struct block_list
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 // ----------------------------------------------------
-// Local state
+// Command handler for @ar
 // ----------------------------------------------------
-static const PlayerAPI*   pc   = nullptr;
-static const UnitAPI*     unit = nullptr;
-static const AtcommandAPI* atc = nullptr;
+static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
+    if (!sd) return -1;
 
-// ----------------------------------------------------
-// Tick function — move randomly
-// ----------------------------------------------------
-static void autoroute_tick(map_session_data* sd) {
-    if (!sd) return;
+    int x, y;
+    if (sscanf(args, "%d %d", &x, &y) < 2) {
+        clif_displaymessage(sd->fd, "Usage: @ar <x> <y>");
+        return -1;
+    }
 
-    int x = rand() % 100;
-    int y = rand() % 100;
-
-    // In the future, call unit->walktoxy()
-    fprintf(stdout, "[autoroute] walking to (%d,%d)\n", x, y);
-}
-
-// ----------------------------------------------------
-// Atcommand handler
-// ----------------------------------------------------
-static int atcommand_ar(map_session_data* sd, const char* command, const char* message) {
-    (void)command; (void)message;
+    // Logging
     fprintf(stdout, "[autoroute] @ar used\n");
-    autoroute_tick(sd);
+    fprintf(stdout, "[autoroute] walking to (%d,%d)\n", x, y);
+
+    // Issue movement command
+    unit_walktoxy(&sd->bl, (short)x, (short)y, 0, 0);
+
     return 0;
 }
 
 // ----------------------------------------------------
-// Required modules
-// ----------------------------------------------------
-static const FpmModuleId* required_modules(size_t* count) {
-    static const FpmModuleId deps[] = { FPM_MOD_PLAYER, FPM_MOD_UNIT, FPM_MOD_ATCOMMAND };
-    *count = sizeof(deps)/sizeof(deps[0]);
-    return deps;
-}
-
-// ----------------------------------------------------
-// Init / Shutdown
+// FalconPM plugin boilerplate
 // ----------------------------------------------------
 static bool init(const PluginContext* ctx) {
-    pc   = ctx->player;
-    unit = ctx->unit;
-    atc  = ctx->atcommand;
-    if (!pc || !unit || !atc) return false;
+    if (!ctx || !ctx->atcommand) {
+        fprintf(stderr, "[autoroute] missing AtcommandAPI\n");
+        return false;
+    }
 
-    atc->add("ar", atcommand_ar);
+    // Register @ar
+    ctx->atcommand->add("ar", at_ar);
     fprintf(stdout, "[autoroute] init OK\n");
     return true;
 }
 
 static void shutdown(void) {
-    if (atc) atc->remove("ar");
     fprintf(stdout, "[autoroute] shutdown\n");
 }
 
-// ----------------------------------------------------
-// Exported descriptor
-// ----------------------------------------------------
 extern "C" {
 PluginDescriptor PLUGIN = {
     "autoroute",
-    "0.1",
-    required_modules,
+    "0.3",
+    nullptr,   // required modules
     init,
     shutdown
 };

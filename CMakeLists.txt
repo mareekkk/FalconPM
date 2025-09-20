@@ -50,15 +50,18 @@ set_target_properties(falconpm_base PROPERTIES
 # -------------------------------
 # 3) Autoroute plugin (test plugin)
 # -------------------------------
+# -------------------------------
+# 3) Autoroute plugin (test plugin)
+# -------------------------------
 add_library(autoroute MODULE
     src/plugins/autoroute/autoroute.cpp
     src/infra/plugin_api.h
 )
 target_include_directories(autoroute PUBLIC
     ${CMAKE_SOURCE_DIR}/src/infra
-    ${RA_SRC}
-    ${RA_SRC}/map
-    ${RA_SRC}/common
+    ${RA_SRC}          # <-- rAthena src root
+    ${RA_SRC}/map      # <-- for map/ headers
+    ${RA_SRC}/common   # <-- for common/ headers
     ${RA_3P_RYML}
     ${RA_3P_C4}
 )
@@ -68,3 +71,4 @@ set_target_properties(autoroute PROPERTIES
     OUTPUT_NAME "autoroute"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
+
