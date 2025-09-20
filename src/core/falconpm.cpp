@@ -187,4 +187,9 @@ PluginDescriptor PLUGIN = {
     init,
     shutdown
 };
+
+extern "C" const PluginContext* fpm_get_context(void) {  // allow loader to pass ctx to other plugins
+    return &g_ctx;
+}
+
 }
