@@ -1,56 +1,69 @@
-#include "../infra/plugin_api.h"
+#include "../../infra/plugin_api.h"
 #include <cstdio>
 #include <cstdlib>
 
+// ----------------------------------------------------
 // Local state
-static const PlayerAPI* pc   = nullptr;
-static const UnitAPI*   unit = nullptr;
+// ----------------------------------------------------
+static const PlayerAPI*   pc   = nullptr;
+static const UnitAPI*     unit = nullptr;
+static const AtcommandAPI* atc = nullptr;
 
-// Tick function — simulate walking
+// ----------------------------------------------------
+// Tick function — move randomly
+// ----------------------------------------------------
 static void autoroute_tick(map_session_data* sd) {
     if (!sd) return;
 
-    // Pick random destination
     int x = rand() % 100;
     int y = rand() % 100;
 
-    // Future: real movement once UnitAPI exposes walktoxy
-    fprintf(stdout, "[autoroute] would walk to (%d,%d)\n", x, y);
+    // In the future, call unit->walktoxy()
+    fprintf(stdout, "[autoroute] walking to (%d,%d)\n", x, y);
 }
 
-// Atcommand handler (future expansion)
-// For now just call autoroute_tick and stub player name
+// ----------------------------------------------------
+// Atcommand handler
+// ----------------------------------------------------
 static int atcommand_ar(map_session_data* sd, const char* command, const char* message) {
     (void)command; (void)message;
-    const char* name = "(unknown)"; // TODO: expose via PlayerAPI
-    fprintf(stdout, "[autoroute] @ar used by %s\n", name);
+    fprintf(stdout, "[autoroute] @ar used\n");
     autoroute_tick(sd);
     return 0;
 }
 
-// Required deps
+// ----------------------------------------------------
+// Required modules
+// ----------------------------------------------------
 static const FpmModuleId* required_modules(size_t* count) {
-    static const FpmModuleId deps[] = { FPM_MOD_PLAYER, FPM_MOD_UNIT };
-    *count = sizeof(deps) / sizeof(deps[0]);
+    static const FpmModuleId deps[] = { FPM_MOD_PLAYER, FPM_MOD_UNIT, FPM_MOD_ATCOMMAND };
+    *count = sizeof(deps)/sizeof(deps[0]);
     return deps;
 }
 
-// Init
+// ----------------------------------------------------
+// Init / Shutdown
+// ----------------------------------------------------
 static bool init(const PluginContext* ctx) {
     pc   = ctx->player;
     unit = ctx->unit;
-    if (!pc || !unit) return false;
+    atc  = ctx->atcommand;
 
-    // TODO: add real ctx->atcommand once AtcommandAPI exists
+    if (!pc || !unit || !atc) return false;
+
+    atc->add("ar", atcommand_ar);
     fprintf(stdout, "[autoroute] init OK\n");
     return true;
 }
 
 static void shutdown(void) {
+    if (atc) atc->remove("ar");
     fprintf(stdout, "[autoroute] shutdown\n");
 }
 
-// Export descriptor (⚠️ no extra extern keyword!)
+// ----------------------------------------------------
+// Exported descriptor
+// ----------------------------------------------------
 extern "C" {
 PluginDescriptor PLUGIN = {
     "autoroute",

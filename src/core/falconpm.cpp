@@ -4,7 +4,7 @@
 #include <cstdarg>
 
 // ----------------------------------------------------
-// Concrete implementations (adapt to real rAthena later)
+// Logging
 // ----------------------------------------------------
 static void log_info_impl(const char* fmt, ...) {
     va_list args;
@@ -22,6 +22,9 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
+// ----------------------------------------------------
+// Dummy stubs (replace with rAthena bindings later)
+// ----------------------------------------------------
 static struct block_list* dummy_get_target(void* u) {
     (void)u;
     return nullptr;
@@ -51,6 +54,22 @@ static int32_t rnd_impl(void) {
     return rand();
 }
 
+// Atcommand wrappers
+static int atcommand_stub(struct map_session_data* sd, const char* cmd, const char* msg) {
+    (void)sd; (void)cmd; (void)msg;
+    fprintf(stdout, "[falconpm_base] atcommand called: %s\n", cmd);
+    return 0;
+}
+
+static void at_add_wrapper(const char* name, AtCmdFunc func) {
+    fprintf(stdout, "[falconpm_base] atcommand registered: %s\n", name);
+    (void)func;
+}
+
+static void at_remove_wrapper(const char* name) {
+    fprintf(stdout, "[falconpm_base] atcommand removed: %s\n", name);
+}
+
 // ----------------------------------------------------
 // API tables
 // ----------------------------------------------------
@@ -78,6 +97,12 @@ static RandomAPI rnd_api = {
     rnd_impl
 };
 
+static AtcommandAPI atc_api = {
+    { sizeof(AtcommandAPI), {1,0} },
+    at_add_wrapper,
+    at_remove_wrapper
+};
+
 // ----------------------------------------------------
 // Context given to plugins
 // ----------------------------------------------------
@@ -86,33 +111,28 @@ static PluginContext g_ctx = {
     &log_api,
     &unit_api,
     &player_api,
-    &rnd_api
+    &rnd_api,
+    &atc_api
 };
 
 // ----------------------------------------------------
-// Required module list for base (none)
+// Base plugin descriptor
 // ----------------------------------------------------
 static const FpmModuleId* required_modules(size_t* count) {
     *count = 0;
     return nullptr;
 }
 
-// ----------------------------------------------------
-// Init / Shutdown
-// ----------------------------------------------------
 static bool init(const PluginContext* ctx) {
-    (void)ctx; // base has nothing extra
-    log_api.info("[falconpm] initialized");
+    (void)ctx;
+    log_api.info("[falconpm_base] initialized");
     return true;
 }
 
 static void shutdown(void) {
-    log_api.info("[falconpm] shutdown");
+    log_api.info("[falconpm_base] shutdown");
 }
 
-// ----------------------------------------------------
-// Exported descriptor (⚠️ no extra extern keyword!)
-// ----------------------------------------------------
 extern "C" {
 PluginDescriptor PLUGIN = {
     "falconpm",

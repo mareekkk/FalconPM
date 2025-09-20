@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dfalconpm_base_EXPORTS
 
-CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src
+CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common
 
 CXX_FLAGS = -fPIC -std=gnu++17
 
