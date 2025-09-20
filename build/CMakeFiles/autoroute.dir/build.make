@@ -83,17 +83,81 @@ CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp -o CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.s
 
+CMakeFiles/autoroute.dir/src/core/fpm_path.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/core/fpm_path.c.o: /home/marek/FalconPM/src/core/fpm_path.c
+CMakeFiles/autoroute.dir/src/core/fpm_path.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/autoroute.dir/src/core/fpm_path.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/core/fpm_path.c.o -MF CMakeFiles/autoroute.dir/src/core/fpm_path.c.o.d -o CMakeFiles/autoroute.dir/src/core/fpm_path.c.o -c /home/marek/FalconPM/src/core/fpm_path.c
+
+CMakeFiles/autoroute.dir/src/core/fpm_path.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/core/fpm_path.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/core/fpm_path.c > CMakeFiles/autoroute.dir/src/core/fpm_path.c.i
+
+CMakeFiles/autoroute.dir/src/core/fpm_path.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/core/fpm_path.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/core/fpm_path.c -o CMakeFiles/autoroute.dir/src/core/fpm_path.c.s
+
+CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o: /home/marek/FalconPM/src/core/fpm_graph.c
+CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o -MF CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o.d -o CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o -c /home/marek/FalconPM/src/core/fpm_graph.c
+
+CMakeFiles/autoroute.dir/src/core/fpm_graph.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/core/fpm_graph.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/core/fpm_graph.c > CMakeFiles/autoroute.dir/src/core/fpm_graph.c.i
+
+CMakeFiles/autoroute.dir/src/core/fpm_graph.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/core/fpm_graph.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/core/fpm_graph.c -o CMakeFiles/autoroute.dir/src/core/fpm_graph.c.s
+
+CMakeFiles/autoroute.dir/src/core/fpm_route.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/core/fpm_route.c.o: /home/marek/FalconPM/src/core/fpm_route.c
+CMakeFiles/autoroute.dir/src/core/fpm_route.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/autoroute.dir/src/core/fpm_route.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/core/fpm_route.c.o -MF CMakeFiles/autoroute.dir/src/core/fpm_route.c.o.d -o CMakeFiles/autoroute.dir/src/core/fpm_route.c.o -c /home/marek/FalconPM/src/core/fpm_route.c
+
+CMakeFiles/autoroute.dir/src/core/fpm_route.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/core/fpm_route.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/core/fpm_route.c > CMakeFiles/autoroute.dir/src/core/fpm_route.c.i
+
+CMakeFiles/autoroute.dir/src/core/fpm_route.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/core/fpm_route.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/core/fpm_route.c -o CMakeFiles/autoroute.dir/src/core/fpm_route.c.s
+
+CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o: CMakeFiles/autoroute.dir/flags.make
+CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o: /home/marek/FalconPM/src/core/fpm_portals.c
+CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o: CMakeFiles/autoroute.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o -MF CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o.d -o CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o -c /home/marek/FalconPM/src/core/fpm_portals.c
+
+CMakeFiles/autoroute.dir/src/core/fpm_portals.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/autoroute.dir/src/core/fpm_portals.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/core/fpm_portals.c > CMakeFiles/autoroute.dir/src/core/fpm_portals.c.i
+
+CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/core/fpm_portals.c -o CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s
+
 # Object files for target autoroute
 autoroute_OBJECTS = \
-"CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o"
+"CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o" \
+"CMakeFiles/autoroute.dir/src/core/fpm_path.c.o" \
+"CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o" \
+"CMakeFiles/autoroute.dir/src/core/fpm_route.c.o" \
+"CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o"
 
 # External object files for target autoroute
 autoroute_EXTERNAL_OBJECTS =
 
 plugins/autoroute.so: CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_path.c.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_route.c.o
+plugins/autoroute.so: CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o
 plugins/autoroute.so: CMakeFiles/autoroute.dir/build.make
 plugins/autoroute.so: CMakeFiles/autoroute.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared module plugins/autoroute.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared module plugins/autoroute.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/autoroute.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

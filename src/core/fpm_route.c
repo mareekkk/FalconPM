@@ -30,8 +30,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "fpm_graph.c"
-#include "fpm_path.c"
+#include "fpm_graph.h"
+#include "fpm_path.h"
 
 #define MAX_ROUTE 128
 

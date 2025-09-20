@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+
 project(FalconPM)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -58,8 +59,13 @@ set_target_properties(falconpm_base PROPERTIES
 # -------------------------------
 add_library(autoroute MODULE
     src/plugins/autoroute/autoroute.cpp
+    src/core/fpm_path.c
+    src/core/fpm_graph.c
+    src/core/fpm_route.c
+    src/core/fpm_portals.c
     src/infra/plugin_api.h
 )
+
 target_include_directories(autoroute PUBLIC
     ${CMAKE_SOURCE_DIR}/src/infra
     ${RA_SRC}          # <-- rAthena src root

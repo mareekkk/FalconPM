@@ -179,6 +179,102 @@ src/core/falconpm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s
 .PHONY : src/core/falconpm.cpp.s
 
+src/core/fpm_graph.o: src/core/fpm_graph.c.o
+.PHONY : src/core/fpm_graph.o
+
+# target to build an object file
+src/core/fpm_graph.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o
+.PHONY : src/core/fpm_graph.c.o
+
+src/core/fpm_graph.i: src/core/fpm_graph.c.i
+.PHONY : src/core/fpm_graph.i
+
+# target to preprocess a source file
+src/core/fpm_graph.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_graph.c.i
+.PHONY : src/core/fpm_graph.c.i
+
+src/core/fpm_graph.s: src/core/fpm_graph.c.s
+.PHONY : src/core/fpm_graph.s
+
+# target to generate assembly for a file
+src/core/fpm_graph.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_graph.c.s
+.PHONY : src/core/fpm_graph.c.s
+
+src/core/fpm_path.o: src/core/fpm_path.c.o
+.PHONY : src/core/fpm_path.o
+
+# target to build an object file
+src/core/fpm_path.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_path.c.o
+.PHONY : src/core/fpm_path.c.o
+
+src/core/fpm_path.i: src/core/fpm_path.c.i
+.PHONY : src/core/fpm_path.i
+
+# target to preprocess a source file
+src/core/fpm_path.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_path.c.i
+.PHONY : src/core/fpm_path.c.i
+
+src/core/fpm_path.s: src/core/fpm_path.c.s
+.PHONY : src/core/fpm_path.s
+
+# target to generate assembly for a file
+src/core/fpm_path.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_path.c.s
+.PHONY : src/core/fpm_path.c.s
+
+src/core/fpm_portals.o: src/core/fpm_portals.c.o
+.PHONY : src/core/fpm_portals.o
+
+# target to build an object file
+src/core/fpm_portals.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o
+.PHONY : src/core/fpm_portals.c.o
+
+src/core/fpm_portals.i: src/core/fpm_portals.c.i
+.PHONY : src/core/fpm_portals.i
+
+# target to preprocess a source file
+src/core/fpm_portals.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_portals.c.i
+.PHONY : src/core/fpm_portals.c.i
+
+src/core/fpm_portals.s: src/core/fpm_portals.c.s
+.PHONY : src/core/fpm_portals.s
+
+# target to generate assembly for a file
+src/core/fpm_portals.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_portals.c.s
+.PHONY : src/core/fpm_portals.c.s
+
+src/core/fpm_route.o: src/core/fpm_route.c.o
+.PHONY : src/core/fpm_route.o
+
+# target to build an object file
+src/core/fpm_route.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_route.c.o
+.PHONY : src/core/fpm_route.c.o
+
+src/core/fpm_route.i: src/core/fpm_route.c.i
+.PHONY : src/core/fpm_route.i
+
+# target to preprocess a source file
+src/core/fpm_route.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_route.c.i
+.PHONY : src/core/fpm_route.c.i
+
+src/core/fpm_route.s: src/core/fpm_route.c.s
+.PHONY : src/core/fpm_route.s
+
+# target to generate assembly for a file
+src/core/fpm_route.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/core/fpm_route.c.s
+.PHONY : src/core/fpm_route.c.s
+
 src/infra/loader.o: src/infra/loader.cpp.o
 .PHONY : src/infra/loader.o
 
@@ -241,6 +337,18 @@ help:
 	@echo "... src/core/falconpm.o"
 	@echo "... src/core/falconpm.i"
 	@echo "... src/core/falconpm.s"
+	@echo "... src/core/fpm_graph.o"
+	@echo "... src/core/fpm_graph.i"
+	@echo "... src/core/fpm_graph.s"
+	@echo "... src/core/fpm_path.o"
+	@echo "... src/core/fpm_path.i"
+	@echo "... src/core/fpm_path.s"
+	@echo "... src/core/fpm_portals.o"
+	@echo "... src/core/fpm_portals.i"
+	@echo "... src/core/fpm_portals.s"
+	@echo "... src/core/fpm_route.o"
+	@echo "... src/core/fpm_route.i"
+	@echo "... src/core/fpm_route.s"
 	@echo "... src/infra/loader.o"
 	@echo "... src/infra/loader.i"
 	@echo "... src/infra/loader.s"

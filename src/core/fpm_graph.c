@@ -22,13 +22,9 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
 #include <stdio.h>
 #include <string.h>
-
-#define MAX_MAPS 1024
-#define MAX_MAP_NAME 32
+#include "fpm_graph.h"
 
 // Adjacency matrix (1 = connected)
 static int adj[MAX_MAPS][MAX_MAPS];

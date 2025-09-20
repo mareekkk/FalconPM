@@ -1,35 +1,15 @@
 /**
- *  FalconPM - rAthena Plugin Infrastructure
- *  https://github.com/mareekkk/FalconPM
- *
- *  File: fpm_path.c
- *  Description: Pathfinding engine — calculates optimal routes across maps
- *
- *  Copyright (C) 2025 Marek
- *  Contact: falconpm@canarybuilds.com
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * FalconPM - Pathfinding
+ * fpm_path.c
+ * Local pathfinding inside one map (x,y steps)
  */
-
-// ============================================================
-// fpm_path.c
-// Local pathfinding inside one map (x,y steps)
-// ============================================================
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>          // for usleep (future humanization)
+#include "../infra/plugin_api.h"  // bring in PluginContext + APIs
 
 // Step structure
 typedef struct {
@@ -45,9 +25,9 @@ typedef struct {
 
 // ------------------------------------------------------------
 // Simple straight-line pathfinder (stub)
-// Replace with A* using map->getcell for obstacles later
 // ------------------------------------------------------------
 bool fpm_pathfind(int x1, int y1, int x2, int y2, FPM_StepList *out) {
+    if (!out) return false;
     out->count = 0;
 
     int dx = (x2 > x1) ? 1 : -1;
@@ -65,6 +45,34 @@ bool fpm_pathfind(int x1, int y1, int x2, int y2, FPM_StepList *out) {
         } else {
             return false; // path too long
         }
+    }
+    return true;
+}
+
+// ------------------------------------------------------------
+// FalconPM-aware executor: walk along path
+// ------------------------------------------------------------
+bool fpm_path_execute(struct map_session_data* sd,
+                      int x1, int y1, int x2, int y2,
+                      const PluginContext* ctx) {
+    if (!sd || !ctx || !ctx->movement) return false;
+
+    FPM_StepList steps;
+    if (!fpm_pathfind(x1, y1, x2, y2, &steps)) {
+        if (ctx->log) ctx->log->error("[fpm_path] failed to pathfind");
+        return false;
+    }
+
+    if (ctx->log) ctx->log->info("[fpm_path] %d steps planned", steps.count);
+
+    for (int i = 0; i < steps.count; i++) {
+        ctx->movement->pc_walktoxy(sd,
+                                   (short)steps.steps[i].x,
+                                   (short)steps.steps[i].y,
+                                   0);
+
+        // ⚠️ Humanization placeholder:
+        // usleep(100000 + (rand() % 200000)); // 100–300 ms pause
     }
     return true;
 }

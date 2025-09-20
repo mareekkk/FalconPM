@@ -1,4 +1,12 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o"
+  "CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o.d"
+  "CMakeFiles/autoroute.dir/src/core/fpm_path.c.o"
+  "CMakeFiles/autoroute.dir/src/core/fpm_path.c.o.d"
+  "CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o"
+  "CMakeFiles/autoroute.dir/src/core/fpm_portals.c.o.d"
+  "CMakeFiles/autoroute.dir/src/core/fpm_route.c.o"
+  "CMakeFiles/autoroute.dir/src/core/fpm_route.c.o.d"
   "CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o"
   "CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o.d"
   "plugins/autoroute.pdb"
@@ -6,6 +14,6 @@ file(REMOVE_RECURSE
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang CXX)
+foreach(lang C CXX)
   include(CMakeFiles/autoroute.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()
