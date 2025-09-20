@@ -93,26 +93,29 @@ bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int
     return false; // no handler found
 }
 
+
 // ----------------------------------------------------
 // Atcommand wrappers for FalconPM plugins
 // ----------------------------------------------------
+extern "C" void atcommand_register(const char* name, AtCommandFunc func);
+extern "C" bool atcommand_unregister(const char* name); // optional, if you patch one
+
 static bool at_add_wrapper(const char* name, AtCmdFunc func) {
     if (!name || !func) return false;
-    fpm_atcmds[name] = func;
-    fprintf(stdout, "[falconpm_base] registered plugin atcommand: %s\n", name);
+    atcommand_register(name, func);
+    fprintf(stdout, "[falconpm_base] registered atcommand: %s\n", name);
     return true;
 }
 
 static bool at_remove_wrapper(const char* name) {
     if (!name) return false;
-    auto it = fpm_atcmds.find(name);
-    if (it != fpm_atcmds.end()) {
-        fpm_atcmds.erase(it);
-        fprintf(stdout, "[falconpm_base] removed plugin atcommand: %s\n", name);
+    if (atcommand_unregister && atcommand_unregister(name)) {
+        fprintf(stdout, "[falconpm_base] removed atcommand: %s\n", name);
         return true;
     }
     return false;
 }
+
 
 // ----------------------------------------------------
 // API tables
