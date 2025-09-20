@@ -61,61 +61,59 @@ static int32_t rnd_impl(void) {
 }
 
 // ----------------------------------------------------
-// FalconPM Atcommand registry
+// FalconPM Atcommand registry (shadow storage)
 // ----------------------------------------------------
-static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;
+static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;  // [EDIT] we’ll keep this for local fallback
 
 // Pointer to original rAthena dispatcher
 using is_atcommand_t = bool(*)(const int32, map_session_data*, const char*, int32);
 static is_atcommand_t orig_is_atcommand = nullptr;
 
-// Hooked dispatcher
+// Hooked dispatcher (optional fallback if we keep symbol interpose)
+// ----------------------------------------------------
 bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int32 type) {
-    // Strip leading symbol (@/#)
     if (message && (message[0] == '@' || message[0] == '#')) {
-        std::string cmd = message + 1; // skip symbol
+        std::string cmd = message + 1;
         auto it = fpm_atcmds.find(cmd);
         if (it != fpm_atcmds.end()) {
             fprintf(stdout, "[falconpm_base] plugin atcommand: %s\n", cmd.c_str());
-            it->second(sd, cmd.c_str(), ""); // call plugin handler
+            it->second(sd, cmd.c_str(), "");
             return true;
         }
     }
-
-    // Fallback to original dispatcher if available
     if (!orig_is_atcommand) {
         orig_is_atcommand = (is_atcommand_t)dlsym(RTLD_NEXT, "is_atcommand");
     }
     if (orig_is_atcommand) {
         return orig_is_atcommand(fd, sd, message, type);
     }
-
-    return false; // no handler found
+    return false;
 }
-
 
 // ----------------------------------------------------
 // Atcommand wrappers for FalconPM plugins
 // ----------------------------------------------------
-extern "C" void atcommand_register(const char* name, AtCommandFunc func);
-extern "C" bool atcommand_unregister(const char* name); // optional, if you patch one
+using AtCmdFunc = int(*)(map_session_data*, const char*, const char*);
+
+// [EDIT] Changed names to avoid collision with rAthena built-in
+extern "C" bool fpm_atcommand_register(const char* name, AtCmdFunc func);
+extern "C" bool fpm_atcommand_unregister(const char* name);
 
 static bool at_add_wrapper(const char* name, AtCmdFunc func) {
     if (!name || !func) return false;
-    atcommand_register(name, func);
+    fpm_atcommand_register(name, func);   // [EDIT] call renamed function
     fprintf(stdout, "[falconpm_base] registered atcommand: %s\n", name);
     return true;
 }
 
 static bool at_remove_wrapper(const char* name) {
     if (!name) return false;
-    if (atcommand_unregister && atcommand_unregister(name)) {
+    if (fpm_atcommand_unregister && fpm_atcommand_unregister(name)) {  // [EDIT] call renamed function
         fprintf(stdout, "[falconpm_base] removed atcommand: %s\n", name);
         return true;
     }
     return false;
 }
-
 
 // ----------------------------------------------------
 // API tables
