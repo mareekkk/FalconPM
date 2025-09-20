@@ -1,6 +1,7 @@
 CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: \
  /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp \
- /usr/include/stdc-predef.h /home/marek/FalconPM/src/infra/plugin_api.h \
+ /usr/include/stdc-predef.h \
+ /home/marek/FalconPM/src/infra/../infra/plugin_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/aarch64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

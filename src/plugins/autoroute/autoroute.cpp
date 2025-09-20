@@ -1,12 +1,12 @@
-#include "plugin_api.h"
+#include "../infra/plugin_api.h"
 #include <cstdio>
 #include <cstdlib>
 
 // Local state
-static const PlayerAPI* pc = nullptr;
+static const PlayerAPI* pc   = nullptr;
 static const UnitAPI*   unit = nullptr;
 
-// Example tick function
+// Tick function — simulate walking
 static void autoroute_tick(map_session_data* sd) {
     if (!sd) return;
 
@@ -14,12 +14,21 @@ static void autoroute_tick(map_session_data* sd) {
     int x = rand() % 100;
     int y = rand() % 100;
 
-    // Future: move player with UnitAPI
-    // unit->walktoxy(sd->bl, x, y, 0);
-    fprintf(stdout, "[autoroute] walking to (%d,%d)\n", x, y);
+    // Future: real movement once UnitAPI exposes walktoxy
+    fprintf(stdout, "[autoroute] would walk to (%d,%d)\n", x, y);
 }
 
-// Declare required modules
+// Atcommand handler (future expansion)
+// For now just call autoroute_tick and stub player name
+static int atcommand_ar(map_session_data* sd, const char* command, const char* message) {
+    (void)command; (void)message;
+    const char* name = "(unknown)"; // TODO: expose via PlayerAPI
+    fprintf(stdout, "[autoroute] @ar used by %s\n", name);
+    autoroute_tick(sd);
+    return 0;
+}
+
+// Required deps
 static const FpmModuleId* required_modules(size_t* count) {
     static const FpmModuleId deps[] = { FPM_MOD_PLAYER, FPM_MOD_UNIT };
     *count = sizeof(deps) / sizeof(deps[0]);
@@ -32,6 +41,7 @@ static bool init(const PluginContext* ctx) {
     unit = ctx->unit;
     if (!pc || !unit) return false;
 
+    // TODO: add real ctx->atcommand once AtcommandAPI exists
     fprintf(stdout, "[autoroute] init OK\n");
     return true;
 }
