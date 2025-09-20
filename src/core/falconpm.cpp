@@ -21,7 +21,6 @@ static void log_info_impl(const char* fmt, ...) {
     fprintf(stdout, "\n");
     va_end(args);
 }
-
 static void log_error_impl(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -30,20 +29,18 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
-// ----------------------------------------------
+// ----------------------------------------------------
 // Timer
-//-----------------------------------------------
+// ----------------------------------------------------
 extern "C" {
     int fpm_add_timer(uint64_t tick, int (*func)(int, uint64_t, int, intptr_t), int id, intptr_t data);
     uint64_t fpm_gettick(void);
 }
-
 static TimerAPI timer_api = {
     { sizeof(TimerAPI), {1,0} },
     fpm_add_timer,
     fpm_gettick
 };
-
 
 // ----------------------------------------------------
 // Dummy stubs
@@ -56,7 +53,7 @@ static void dummy_send_message(int fd, const char* msg) { (void)fd; printf("[MSG
 static int32_t rnd_impl(void) { return rand(); }
 
 // ----------------------------------------------------
-// Atcommand registry
+// Atcommand
 // ----------------------------------------------------
 static std::unordered_map<std::string, AtCmdFunc> fpm_atcmds;
 
@@ -68,7 +65,6 @@ bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int
         std::string cmd = message + 1;
         auto it = fpm_atcmds.find(cmd);
         if (it != fpm_atcmds.end()) {
-            fprintf(stdout, "[falconpm_base] plugin atcommand: %s\n", cmd.c_str());
             it->second(sd, cmd.c_str(), "");
             return true;
         }
@@ -77,26 +73,17 @@ bool is_atcommand(const int32 fd, map_session_data* sd, const char* message, int
     return false;
 }
 
-// ----------------------------------------------------
-// Atcommand wrappers
-// ----------------------------------------------------
 extern "C" bool fpm_atcommand_register(const char* name, AtCmdFunc func);
 extern "C" bool fpm_atcommand_unregister(const char* name);
 
 static bool at_add_wrapper(const char* name, AtCmdFunc func) {
     if (!name || !func) return false;
     fpm_atcommand_register(name, func);
-    fprintf(stdout, "[falconpm_base] registered atcommand: %s\n", name);
     return true;
 }
-
 static bool at_remove_wrapper(const char* name) {
     if (!name) return false;
-    if (fpm_atcommand_unregister && fpm_atcommand_unregister(name)) {
-        fprintf(stdout, "[falconpm_base] removed atcommand: %s\n", name);
-        return true;
-    }
-    return false;
+    return fpm_atcommand_unregister && fpm_atcommand_unregister(name);
 }
 
 // ----------------------------------------------------
@@ -107,85 +94,85 @@ static LogAPI log_api = {
     log_info_impl,
     log_error_impl
 };
-
 static UnitAPI unit_api = {
     { sizeof(UnitAPI), {1,0} },
     dummy_get_target,
     dummy_get_id,
     dummy_get_type
 };
-
 static PlayerAPI player_api = {
     { sizeof(PlayerAPI), {1,0} },
     dummy_map_id2sd,
     dummy_send_message
 };
-
 static RandomAPI rnd_api = {
     { sizeof(RandomAPI), {1,0} },
     rnd_impl
 };
-
 static AtcommandAPI atcommand_api = {
     { sizeof(AtcommandAPI), {1,0} },
     at_add_wrapper,
     at_remove_wrapper
 };
 
-// Direct externs from bootstrap
-extern "C" int fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
-extern "C" int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
+// From bootstrap
+extern "C" {
+    int fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
+    int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
+    int fpm_path_search(struct walkpath_data *wpd, int m,
+                        int x0, int y0, int x1, int y1, int flag);
+    const int16_t* fpm_get_dirx();
+    const int16_t* fpm_get_diry();
+}
 
 static PlayerMovementAPI movement_api = {
     { sizeof(PlayerMovementAPI), {1,0} },
     fpm_pc_walktoxy,
     fpm_unit_walktoxy
 };
+static PathAPI path_api = {
+    { sizeof(PathAPI), {1,0} },
+    fpm_path_search
+};
+static DirectionAPI dir_api = {
+    { sizeof(DirectionAPI), {1,0} },
+    fpm_get_dirx(),
+    fpm_get_diry()
+};
 
 // ----------------------------------------------------
-// PluginContext
+// Global context
 // ----------------------------------------------------
 PluginContext g_ctx = {
-    {1,0}, // ABI version
+    {1,0},
     &log_api,
     &unit_api,
     &player_api,
     &rnd_api,
     &atcommand_api,
     &movement_api,
-    &timer_api
+    &timer_api,
+    &path_api,
+    &dir_api
 };
 
 // ----------------------------------------------------
-// Base plugin descriptor
+// Plugin descriptor
 // ----------------------------------------------------
-static const FpmModuleId* required_modules(size_t* count) {
+static const int* required_modules(size_t* count) {
     *count = 0;
     return nullptr;
 }
-
-static bool init(const PluginContext* ctx) {
-    (void)ctx;
-    log_api.info("[falconpm_base] initialized");
-    return true;
-}
-
-static void shutdown(void) {
-    log_api.info("[falconpm_base] shutdown");
-    fpm_atcmds.clear();
-}
+static bool init(const PluginContext* ctx) { (void)ctx; return true; }
+static void shutdown(void) { fpm_atcmds.clear(); }
 
 extern "C" {
 PluginDescriptor PLUGIN = {
     "falconpm",
-    "0.2",
+    "0.3",
     required_modules,
     init,
     shutdown
 };
-
-extern "C" const PluginContext* falconpm_get_context(void) {
-    return &g_ctx;
-}
-
+const PluginContext* falconpm_get_context(void) { return &g_ctx; }
 }

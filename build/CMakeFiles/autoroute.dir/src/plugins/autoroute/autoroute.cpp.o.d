@@ -63,9 +63,15 @@ CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: \
  /usr/include/aarch64-linux-gnu/bits/struct_rwlock.h \
  /usr/include/alloca.h /usr/include/aarch64-linux-gnu/bits/stdlib-float.h \
  /usr/include/c++/12/bits/std_abs.h /usr/include/c++/12/cstring \
- /usr/include/string.h /usr/include/strings.h \
- /home/marek/rathena/src/map/map.hpp /usr/include/c++/12/algorithm \
- /usr/include/c++/12/bits/stl_algobase.h \
+ /usr/include/string.h /usr/include/strings.h /usr/include/unistd.h \
+ /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
+ /usr/include/aarch64-linux-gnu/bits/environments.h \
+ /usr/include/aarch64-linux-gnu/bits/confname.h \
+ /usr/include/aarch64-linux-gnu/bits/getopt_posix.h \
+ /usr/include/aarch64-linux-gnu/bits/getopt_core.h \
+ /usr/include/aarch64-linux-gnu/bits/unistd_ext.h \
+ /usr/include/linux/close_range.h /home/marek/rathena/src/map/map.hpp \
+ /usr/include/c++/12/algorithm /usr/include/c++/12/bits/stl_algobase.h \
  /usr/include/c++/12/bits/functexcept.h \
  /usr/include/c++/12/bits/exception_defines.h \
  /usr/include/c++/12/bits/cpp_type_traits.h \
@@ -326,4 +332,5 @@ CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o: \
  /home/marek/rathena/src/map/pc_groups.hpp \
  /home/marek/rathena/src/map/searchstore.hpp \
  /home/marek/rathena/src/map/vending.hpp \
- /home/marek/rathena/src/map/unit.hpp
+ /home/marek/rathena/src/map/unit.hpp \
+ /home/marek/rathena/src/map/path.hpp

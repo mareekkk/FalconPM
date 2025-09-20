@@ -1,28 +1,29 @@
-// /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp
-//
+// autoroute.cpp
 // FalconPM Autoroute plugin
-// Extended: @ar on/off to enable continuous random roaming.
+// Features:
+//   - @ar on/off → continuous random roaming
+//   - @ar x y    → walk to given coordinates
+//   - @ar        → single random walk
+//
+// Uses FalconPM PathAPI + DirectionAPI to walk full-map routes.
 
 #include "../../infra/plugin_api.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <unistd.h>   // for usleep()
 
 // rAthena headers
 #include "map.hpp"
 #include "pc.hpp"
 #include "unit.hpp"
+#include "path.hpp"   // walkpath_data
 
 // ----------------------------------------------------
-// Access FalconPM context
+// FalconPM context
 // ----------------------------------------------------
 extern "C" const PluginContext* falconpm_get_context(void);
 static const PluginContext* ctx = nullptr;
-
-// Forward declare path executor
-extern "C" bool fpm_path_execute(struct map_session_data* sd,
-                                 int x1, int y1, int x2, int y2,
-                                 const PluginContext* ctx);
 
 // ----------------------------------------------------
 // Roaming state
@@ -31,7 +32,7 @@ static bool roaming_enabled = false;
 static map_session_data* roaming_sd = nullptr;
 
 // ----------------------------------------------------
-// Helper: choose random destination
+// Pick a random destination on the map and walk there
 // ----------------------------------------------------
 static void autoroute_random(map_session_data* sd) {
     if (!sd || !ctx || !ctx->rnd) return;
@@ -42,24 +43,56 @@ static void autoroute_random(map_session_data* sd) {
     int maxx = map[sd->m].xs;
     int maxy = map[sd->m].ys;
 
+    // Random destination + jitter
     int tx = ctx->rnd->rnd() % maxx;
     int ty = ctx->rnd->rnd() % maxy;
+    tx += (rand() % 5) - 2;
+    ty += (rand() % 5) - 2;
 
-    ctx->log->info("[autoroute] random target (%d,%d) on map %s",
+    if (tx < 0) tx = 0;
+    if (ty < 0) ty = 0;
+    if (tx >= maxx) tx = maxx - 1;
+    if (ty >= maxy) ty = maxy - 1;
+
+    ctx->log->info("[autoroute] target (%d,%d) on %s",
                    tx, ty, map[sd->m].name);
 
-    if (!fpm_path_execute(sd, sx, sy, tx, ty, ctx)) {
-        ctx->log->error("[autoroute] failed to walk random path");
+    // --- Path search
+    struct walkpath_data wpd;
+    int ok = ctx->path->path_search(&wpd, sd->m, sx, sy, tx, ty, 0);
+    if (!ok || wpd.path_len <= 0) {
+        ctx->log->error("[autoroute] no path found to (%d,%d)", tx, ty);
+        return;
+    }
+
+    // --- Follow path step by step
+    for (int i = 0; i < wpd.path_len; i++) {
+        int dir = wpd.path[i];
+        int nx = sx + ctx->dir->dx[dir];
+        int ny = sy + ctx->dir->dy[dir];
+
+        ctx->movement->pc_walktoxy(sd, (short)nx, (short)ny, 0);
+        sx = nx;
+        sy = ny;
+
+        // Humanization: random delay 100–300ms
+        usleep(100000 + (rand() % 200000));
+
+        // Pause longer every ~10 steps
+        if (i > 0 && i % 10 == 0) {
+            usleep(500000 + (rand() % 500000)); // 0.5–1s
+        }
     }
 }
 
 // ----------------------------------------------------
-// Timer callback (fires every 5s if roaming is enabled)
+// Timer callback for roaming
 // ----------------------------------------------------
 static int roaming_timer_cb(int tid, uint64_t tick, int id, intptr_t data) {
     if (roaming_enabled && roaming_sd) {
         autoroute_random(roaming_sd);
-        // reschedule after 5s
+
+        // schedule next tick after 5s
         ctx->timer->add_timer(ctx->timer->gettick() + 5000,
                               roaming_timer_cb, 0, 0);
     }
@@ -80,7 +113,6 @@ static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
                               roaming_timer_cb, 0, 0);
         return 0;
     }
-
     if (strcmp(args, "off") == 0) {
         roaming_enabled = false;
         roaming_sd = nullptr;
@@ -90,35 +122,48 @@ static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
 
     int x, y;
     if (sscanf(args, "%d %d", &x, &y) < 2) {
-        // No coords, single random walk
+        // No coords → do a single random walk
         autoroute_random(sd);
         return 0;
     }
 
-    ctx->log->info("[autoroute] @ar walking to (%d,%d)", x, y);
+    ctx->log->info("[autoroute] walking to (%d,%d)", x, y);
 
-    if (!fpm_path_execute(sd, sd->x, sd->y, x, y, ctx)) {
-        ctx->log->error("[autoroute] failed to walk explicit path");
+    // Same path logic as autoroute_random, but fixed target
+    struct walkpath_data wpd;
+    int sx = sd->x, sy = sd->y;
+    int ok = ctx->path->path_search(&wpd, sd->m, sx, sy, x, y, 0);
+    if (!ok || wpd.path_len <= 0) {
+        ctx->log->error("[autoroute] no path found to (%d,%d)", x, y);
+        return 0;
     }
+
+    for (int i = 0; i < wpd.path_len; i++) {
+        int dir = wpd.path[i];
+        int nx = sx + ctx->dir->dx[dir];
+        int ny = sy + ctx->dir->dy[dir];
+
+        ctx->movement->pc_walktoxy(sd, (short)nx, (short)ny, 0);
+        sx = nx; sy = ny;
+        usleep(100000 + (rand() % 200000));
+    }
+
     return 0;
 }
 
 // ----------------------------------------------------
-// FalconPM plugin boilerplate
+// Plugin boilerplate
 // ----------------------------------------------------
 static bool init(const PluginContext* c) {
     ctx = falconpm_get_context();
-    if (!ctx || !ctx->atcommand) {
-        fprintf(stderr, "[autoroute] missing AtcommandAPI\n");
+    if (!ctx || !ctx->atcommand || !ctx->path || !ctx->dir) {
+        fprintf(stderr, "[autoroute] missing APIs\n");
         return false;
     }
-
     ctx->atcommand->add("ar", at_ar);
-
-    fprintf(stdout, "[autoroute] init OK (use @ar on/off)\n");
+    fprintf(stdout, "[autoroute] init OK (@ar on/off)\n");
     return true;
 }
-
 static void shutdown(void) {
     roaming_enabled = false;
     roaming_sd = nullptr;
@@ -128,7 +173,7 @@ static void shutdown(void) {
 extern "C" {
 PluginDescriptor PLUGIN = {
     "autoroute",
-    "0.9",
+    "1.0",
     nullptr,
     init,
     shutdown
