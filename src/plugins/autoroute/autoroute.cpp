@@ -31,7 +31,7 @@ static bool roaming_enabled = false;
 static map_session_data* roaming_sd = nullptr;
 
 // ----------------------------------------------------
-// Helper: choose random destination
+// Helper: choose random destination (with jitter)
 // ----------------------------------------------------
 static void autoroute_random(map_session_data* sd) {
     if (!sd || !ctx || !ctx->rnd) return;
@@ -45,8 +45,21 @@ static void autoroute_random(map_session_data* sd) {
     int tx = ctx->rnd->rnd() % maxx;
     int ty = ctx->rnd->rnd() % maxy;
 
-    ctx->log->info("[autoroute] random target (%d,%d) on map %s",
-                   tx, ty, map[sd->m].name);
+    // --- Humanization: jitter target ±1–2 tiles ---
+    int jitter_x = (rand() % 5) - 2; // -2 .. +2
+    int jitter_y = (rand() % 5) - 2; // -2 .. +2
+
+    tx += jitter_x;
+    ty += jitter_y;
+
+    // Clamp inside map bounds
+    if (tx < 0) tx = 0;
+    if (ty < 0) ty = 0;
+    if (tx >= maxx) tx = maxx - 1;
+    if (ty >= maxy) ty = maxy - 1;
+
+    ctx->log->info("[autoroute] random target (%d,%d) on map %s (jitter %d,%d)",
+                   tx, ty, map[sd->m].name, jitter_x, jitter_y);
 
     if (!fpm_path_execute(sd, sx, sy, tx, ty, ctx)) {
         ctx->log->error("[autoroute] failed to walk random path");
@@ -134,3 +147,5 @@ PluginDescriptor PLUGIN = {
     shutdown
 };
 }
+
+

@@ -8,8 +8,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>          // for usleep (future humanization)
-#include "../infra/plugin_api.h"  // bring in PluginContext + APIs
+#include <unistd.h>          // for usleep (delays)
+#include "../infra/plugin_api.h"
 
 // Step structure
 typedef struct {
@@ -50,7 +50,7 @@ bool fpm_pathfind(int x1, int y1, int x2, int y2, FPM_StepList *out) {
 }
 
 // ------------------------------------------------------------
-// FalconPM-aware executor: walk along path
+// FalconPM-aware executor: walk along path with humanization
 // ------------------------------------------------------------
 bool fpm_path_execute(struct map_session_data* sd,
                       int x1, int y1, int x2, int y2,
@@ -66,13 +66,28 @@ bool fpm_path_execute(struct map_session_data* sd,
     if (ctx->log) ctx->log->info("[fpm_path] %d steps planned", steps.count);
 
     for (int i = 0; i < steps.count; i++) {
+        // --- Humanization behaviors ---
+
+        // 1. Random delay 100–300ms
+        usleep(100000 + (rand() % 200000));
+
+        // 2. Occasionally pause longer (every ~10 steps)
+        if (i > 0 && i % 10 == 0) {
+            usleep(1000000 + (rand() % 1000000)); // 1–2s
+        }
+
+        // 3. Occasionally skip a step (1 in 20 chance)
+        if ((rand() % 20) == 0) {
+            if (ctx->log) ctx->log->info("[fpm_path] skipped step (%d,%d)",
+                                         steps.steps[i].x, steps.steps[i].y);
+            continue;
+        }
+
+        // --- Send movement command ---
         ctx->movement->pc_walktoxy(sd,
                                    (short)steps.steps[i].x,
                                    (short)steps.steps[i].y,
                                    0);
-
-        // ⚠️ Humanization placeholder:
-        // usleep(100000 + (rand() % 200000)); // 100–300 ms pause
     }
     return true;
 }
