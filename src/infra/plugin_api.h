@@ -2,54 +2,51 @@
 #define FALCONPM_PLUGIN_API_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct map_session_data;
+// ---------------------------------------------------------------------
+// FalconPM ABI versioning
+// ---------------------------------------------------------------------
+#define FPM_API_VERSION 1   // bump this if the PluginAPI struct changes
 
-// Callback tick type
-typedef void (*falconpm_callback)(struct map_session_data *sd);
+struct PluginAPI {
+    uint32_t abi_version;   // must equal FPM_API_VERSION
 
-// Register plugin tick with FalconPM
-void falconpm_register(const char *name, falconpm_callback cb);
-
-// Atcommand handler type
-typedef int (*AtCmdHandler)(int fd,
-                            struct map_session_data* sd,
-                            const char* command,
-                            const char* message);
-
-typedef struct PluginAPI {
     // Logging
-    void     (*log_info)(const char* fmt, ...);
-    void     (*log_error)(const char* fmt, ...);
+    void (*log_info)(const char* fmt, ...);
+    void (*log_error)(const char* fmt, ...);
 
-    // Timers
+    // Timer
     uint32_t (*gettick)(void);
-    int      (*add_timer_interval)(uint32_t when_ms,
-                                   int (*cb)(int tid, uint32_t now, int id, intptr_t data),
-                                   int id,
-                                   intptr_t data,
-                                   uint32_t interval_ms);
+    int (*add_timer_interval)(uint32_t when,
+                              int (*cb)(int, uint32_t, int, intptr_t),
+                              int id, intptr_t data, uint32_t interval);
 
-    // Map lookups
-    struct map_session_data* (*map_id2sd)(int account_id);
+    // PlayerAPI
+    struct map_session_data* (*map_id2sd)(int aid);
+    int (*pc_readregistry)(struct map_session_data* sd, int id);
+    void (*pc_setregistry)(struct map_session_data* sd, int id, int val);
 
-    // Atcommand registration
-    void     (*register_atcommand)(const char* name, AtCmdHandler handler);
+    // ClifAPI
+    void (*clif_displaymessage)(int fd, const char* msg);
+};
 
-    // Message output
-    void     (*send_message)(int fd, const char* msg);
+// ---------------------------------------------------------------------
+// Every plugin must export this
+// ---------------------------------------------------------------------
+struct Plugin {
+    const char* name;   // e.g. "trade_echo"
+    const char* author;
+    const char* description;
+    uint32_t required_api_version; // must equal FPM_API_VERSION
 
-    // ✅ New: Account variable access (FalconPM shim)
-    int      (*accountvar_get)(struct map_session_data* sd, const char* name);
-    void     (*accountvar_set)(struct map_session_data* sd, const char* name, int val);
-} PluginAPI;
-
-// Exposed to plugins
-extern PluginAPI* g_plugin_api;
+    int (*on_load)(struct PluginAPI* api);   // called when plugin loads
+    void (*on_unload)(void);                 // called when plugin unloads
+};
 
 #ifdef __cplusplus
 }
