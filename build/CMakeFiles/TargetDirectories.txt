@@ -1,5 +1,6 @@
 /home/marek/FalconPM/build/CMakeFiles/falconpm_loader.dir
 /home/marek/FalconPM/build/CMakeFiles/falconpm_base.dir
 /home/marek/FalconPM/build/CMakeFiles/autoroute.dir
+/home/marek/FalconPM/build/CMakeFiles/autoattack.dir
 /home/marek/FalconPM/build/CMakeFiles/edit_cache.dir
 /home/marek/FalconPM/build/CMakeFiles/rebuild_cache.dir

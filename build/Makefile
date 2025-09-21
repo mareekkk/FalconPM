@@ -155,6 +155,19 @@ autoroute/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/build
 .PHONY : autoroute/fast
 
+#=============================================================================
+# Target rules for targets named autoattack
+
+# Build rule for target.
+autoattack: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 autoattack
+.PHONY : autoattack
+
+# fast build rule for target.
+autoattack/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/build
+.PHONY : autoattack/fast
+
 src/AI/peregrine/peregrine.o: src/AI/peregrine/peregrine.cpp.o
 .PHONY : src/AI/peregrine/peregrine.o
 
@@ -404,6 +417,30 @@ src/infra/loader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.s
 .PHONY : src/infra/loader.cpp.s
 
+src/plugins/autoattack/autoattack.o: src/plugins/autoattack/autoattack.cpp.o
+.PHONY : src/plugins/autoattack/autoattack.o
+
+# target to build an object file
+src/plugins/autoattack/autoattack.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/src/plugins/autoattack/autoattack.cpp.o
+.PHONY : src/plugins/autoattack/autoattack.cpp.o
+
+src/plugins/autoattack/autoattack.i: src/plugins/autoattack/autoattack.cpp.i
+.PHONY : src/plugins/autoattack/autoattack.i
+
+# target to preprocess a source file
+src/plugins/autoattack/autoattack.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/src/plugins/autoattack/autoattack.cpp.i
+.PHONY : src/plugins/autoattack/autoattack.cpp.i
+
+src/plugins/autoattack/autoattack.s: src/plugins/autoattack/autoattack.cpp.s
+.PHONY : src/plugins/autoattack/autoattack.s
+
+# target to generate assembly for a file
+src/plugins/autoattack/autoattack.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/src/plugins/autoattack/autoattack.cpp.s
+.PHONY : src/plugins/autoattack/autoattack.cpp.s
+
 src/plugins/autoroute/autoroute.o: src/plugins/autoroute/autoroute.cpp.o
 .PHONY : src/plugins/autoroute/autoroute.o
 
@@ -436,6 +473,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... autoattack"
 	@echo "... autoroute"
 	@echo "... falconpm_base"
 	@echo "... falconpm_loader"
@@ -469,6 +507,9 @@ help:
 	@echo "... src/infra/loader.o"
 	@echo "... src/infra/loader.i"
 	@echo "... src/infra/loader.s"
+	@echo "... src/plugins/autoattack/autoattack.o"
+	@echo "... src/plugins/autoattack/autoattack.i"
+	@echo "... src/plugins/autoattack/autoattack.s"
 	@echo "... src/plugins/autoroute/autoroute.o"
 	@echo "... src/plugins/autoroute/autoroute.i"
 	@echo "... src/plugins/autoroute/autoroute.s"

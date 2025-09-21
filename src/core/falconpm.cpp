@@ -32,6 +32,30 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
+extern "C" {
+    int fpm_get_sd_x(map_session_data* sd);
+    int fpm_get_sd_y(map_session_data* sd);
+    int fpm_get_sd_m(map_session_data* sd);
+
+    int fpm_get_bl_x(block_list* bl);
+    int fpm_get_bl_y(block_list* bl);
+    int fpm_get_bl_id(block_list* bl);
+}
+
+// combat
+extern "C" {
+    block_list* fpm_get_nearest_mob(map_session_data* sd, int range);
+    int fpm_unit_attack(map_session_data* sd, block_list* target);
+}
+static CombatAPI combat_api = {
+    { sizeof(CombatAPI), {1,0} },
+    fpm_get_nearest_mob,
+    fpm_unit_attack
+};
+
+extern "C" void fpm_send_message(map_session_data* sd, const char* msg);
+extern "C" int fpm_get_account_id(map_session_data* sd);
+
 // ----------------------------------------------------
 // Timer
 // ----------------------------------------------------
@@ -106,7 +130,8 @@ static UnitAPI unit_api = {
 static PlayerAPI player_api = {
     { sizeof(PlayerAPI), {1,0} },
     dummy_map_id2sd,
-    dummy_send_message
+    fpm_send_message,
+    fpm_get_account_id
 };
 static RandomAPI rnd_api = {
     { sizeof(RandomAPI), {1,0} },
@@ -157,7 +182,8 @@ PluginContext g_ctx = {
     &timer_api,
     &path_api,
     &dir_api,
-    &peregrine_api
+    &peregrine_api,
+    &combat_api
 };
 
 // ----------------------------------------------------

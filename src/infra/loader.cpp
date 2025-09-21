@@ -62,6 +62,17 @@ int falconpm_loader_init(void) {
         }
     }
 
+    // 3) Load autoattack with RTLD_LOCAL (new)
+    if (void* h = open_plugin("plugins/autoattack.so", RTLD_NOW | RTLD_LOCAL)) {
+        if (auto* desc = get_desc(h)) {
+            if (!desc->init(ctx)) {
+                std::fprintf(stderr, "[FalconPM] autoattack init failed\n");
+            } else {
+                g_others.push_back(h);
+            }
+        }
+    }
+
     return 1;
 }
 

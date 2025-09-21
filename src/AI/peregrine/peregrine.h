@@ -1,12 +1,16 @@
 #pragma once
 #include "pgn_path.h"
 #include "pgn_gat.h"
-#include "map.hpp"
-#include "../infra/plugin_api.h"
+#include "../../infra/plugin_api.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// Forward declarations (instead of including map.hpp)
+struct map_session_data;
+struct GatMap;
+struct PStepList;
 
 // Forward declare rAthena session
 struct map_session_data;

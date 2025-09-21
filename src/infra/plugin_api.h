@@ -87,7 +87,8 @@ typedef struct {
 typedef struct {
     FpmTableHeader _;
     struct map_session_data* (*map_id2sd)(int aid);
-    void (*send_message)(int fd, const char* msg);
+    void (*send_message)(struct map_session_data* sd, const char* msg);
+    int (*get_account_id)(struct map_session_data* sd); 
 } PlayerAPI;
 
 // ----------------------------------------------------
@@ -99,6 +100,15 @@ typedef struct {
     int  (*get_id)(struct block_list* bl);
     int  (*get_type)(struct block_list* bl);
 } UnitAPI;
+
+// ----------------------------------------------------
+// Combat
+// ----------------------------------------------------
+typedef struct {
+    FpmTableHeader _;
+    struct block_list* (*get_nearest_mob)(struct map_session_data* sd, int range);
+    int (*unit_attack)(struct map_session_data* sd, struct block_list* target);
+} CombatAPI;
 
 // ----------------------------------------------------
 // Random
@@ -145,6 +155,7 @@ typedef struct {
     PathAPI*           path;
     DirectionAPI*      dir;
     PeregrineAPI*      peregrine;
+    CombatAPI*         combat;
 } PluginContext;
 
 // -----------------------------

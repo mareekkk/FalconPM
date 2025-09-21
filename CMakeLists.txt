@@ -93,3 +93,10 @@ set_target_properties(autoroute PROPERTIES
 
 # Path to GAT files (relative to source dir)
 add_definitions(-DFALCONPM_GAT_PATH="${CMAKE_SOURCE_DIR}/db/gat/")
+
+add_library(autoattack MODULE src/plugins/autoattack/autoattack.cpp)
+set_target_properties(autoattack PROPERTIES
+    PREFIX ""
+    SUFFIX ".so"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
+)

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o plugins/autoattack.so CMakeFiles/autoattack.dir/src/plugins/autoattack/autoattack.cpp.o 
