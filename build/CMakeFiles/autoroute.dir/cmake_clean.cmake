@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/autoroute.dir/src/AI/peregrine_ai.c.o"
+  "CMakeFiles/autoroute.dir/src/AI/peregrine_ai.c.o.d"
   "CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o"
   "CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o.d"
   "CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o"

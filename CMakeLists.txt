@@ -33,8 +33,12 @@ set_target_properties(falconpm_loader PROPERTIES
 # -------------------------------
 add_library(falconpm_base MODULE
     src/core/falconpm.cpp
+    src/AI/peregrine_ai.c
+    src/AI/peregrine_gat.c      # <-- add this
+    src/AI/peregrine_path.c     # <-- and this
     src/infra/plugin_api.h
 )
+
 target_include_directories(falconpm_base PUBLIC
     ${CMAKE_SOURCE_DIR}/src/infra
     ${RA_SRC}
@@ -50,12 +54,10 @@ set_target_properties(falconpm_base PROPERTIES
     OUTPUT_NAME "falconpm_base"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
+target_link_options(falconpm_base PRIVATE -Wl,--export-dynamic)
 
 # -------------------------------
-# 3) Autoroute plugin (test plugin)
-# -------------------------------
-# -------------------------------
-# 3) Autoroute plugin (test plugin)
+# 3) Autoroute plugin (test plugin + Peregrine AI)
 # -------------------------------
 add_library(autoroute MODULE
     src/plugins/autoroute/autoroute.cpp
@@ -63,18 +65,25 @@ add_library(autoroute MODULE
     src/core/fpm_graph.c
     src/core/fpm_route.c
     src/core/fpm_portals.c
+    src/AI/peregrine_gat.c
+    src/AI/peregrine_path.c
+    src/AI/peregrine_ai.c      # <-- new orchestrator
+    # later: src/AI/peregrine_portals.c
+    # later: src/AI/peregrine_route.c
     src/infra/plugin_api.h
 )
 
 target_include_directories(autoroute PUBLIC
     ${CMAKE_SOURCE_DIR}/src/infra
-    ${RA_SRC}          # <-- rAthena src root
-    ${RA_SRC}/map      # <-- for map/ headers
-    ${RA_SRC}/common   # <-- for common/ headers
+    ${CMAKE_SOURCE_DIR}/src/AI          # <-- include Peregrine headers
+    ${RA_SRC}
+    ${RA_SRC}/map
+    ${RA_SRC}/common
     ${RA_3P_RYML}
     ${RA_3P_C4}
-    /usr/include/mariadb    
+    /usr/include/mariadb
 )
+
 set_target_properties(autoroute PROPERTIES
     PREFIX ""
     SUFFIX ".so"
@@ -82,4 +91,31 @@ set_target_properties(autoroute PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
 )
 
-target_link_options(falconpm_base PRIVATE -Wl,--export-dynamic)
+# -------------------------------
+# 4) Peregrine test executables
+# -------------------------------
+
+# Test GAT loader
+add_executable(gat_test
+    src/AI/tests/main_gat_test.c
+    src/AI/peregrine_gat.c
+)
+target_include_directories(gat_test PUBLIC
+    ${CMAKE_SOURCE_DIR}/src/AI
+)
+set_target_properties(gat_test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
+)
+
+# Test Pathfinding (A*)
+add_executable(path_test
+    src/AI/tests/main_path_test.c
+    src/AI/peregrine_gat.c
+    src/AI/peregrine_path.c
+)
+target_include_directories(path_test PUBLIC
+    ${CMAKE_SOURCE_DIR}/src/AI
+)
+set_target_properties(path_test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
+)

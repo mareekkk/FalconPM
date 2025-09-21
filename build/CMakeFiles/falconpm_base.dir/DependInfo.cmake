@@ -8,6 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/marek/FalconPM/src/AI/peregrine_ai.c" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_ai.c.o" "gcc" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_ai.c.o.d"
+  "/home/marek/FalconPM/src/AI/peregrine_gat.c" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_gat.c.o" "gcc" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_gat.c.o.d"
+  "/home/marek/FalconPM/src/AI/peregrine_path.c" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_path.c.o" "gcc" "CMakeFiles/falconpm_base.dir/src/AI/peregrine_path.c.o.d"
   "/home/marek/FalconPM/src/core/falconpm.cpp" "CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o" "gcc" "CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o.d"
   )
 

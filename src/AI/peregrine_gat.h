@@ -2,12 +2,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct {
+struct GatMap {
     int width;
     int height;
-    uint8_t* cells;   // width*height grid
-} GatMap;
+    uint8_t* cells;
+};
 
-GatMap* gat_load(const char* filename);
-void gat_free(GatMap* g);
-bool gat_is_walkable(const GatMap* g, int x, int y);
+struct GatMap* gat_load(const char* filename);
+void           gat_free(struct GatMap* g);
+bool           gat_is_walkable(const struct GatMap* g, int x, int y);
+
+typedef struct GatMap GatMap;

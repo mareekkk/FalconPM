@@ -181,11 +181,39 @@ path_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/build
 .PHONY : path_test/fast
 
+src/AI/peregrine_ai.o: src/AI/peregrine_ai.c.o
+.PHONY : src/AI/peregrine_ai.o
+
+# target to build an object file
+src/AI/peregrine_ai.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_ai.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_ai.c.o
+.PHONY : src/AI/peregrine_ai.c.o
+
+src/AI/peregrine_ai.i: src/AI/peregrine_ai.c.i
+.PHONY : src/AI/peregrine_ai.i
+
+# target to preprocess a source file
+src/AI/peregrine_ai.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_ai.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_ai.c.i
+.PHONY : src/AI/peregrine_ai.c.i
+
+src/AI/peregrine_ai.s: src/AI/peregrine_ai.c.s
+.PHONY : src/AI/peregrine_ai.s
+
+# target to generate assembly for a file
+src/AI/peregrine_ai.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_ai.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_ai.c.s
+.PHONY : src/AI/peregrine_ai.c.s
+
 src/AI/peregrine_gat.o: src/AI/peregrine_gat.c.o
 .PHONY : src/AI/peregrine_gat.o
 
 # target to build an object file
 src/AI/peregrine_gat.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_gat.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.o
@@ -196,6 +224,7 @@ src/AI/peregrine_gat.i: src/AI/peregrine_gat.c.i
 
 # target to preprocess a source file
 src/AI/peregrine_gat.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_gat.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.i
@@ -206,6 +235,7 @@ src/AI/peregrine_gat.s: src/AI/peregrine_gat.c.s
 
 # target to generate assembly for a file
 src/AI/peregrine_gat.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_gat.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_gat.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gat_test.dir/build.make CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.s
@@ -216,6 +246,7 @@ src/AI/peregrine_path.o: src/AI/peregrine_path.c.o
 
 # target to build an object file
 src/AI/peregrine_path.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_path.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.o
 .PHONY : src/AI/peregrine_path.c.o
@@ -225,6 +256,7 @@ src/AI/peregrine_path.i: src/AI/peregrine_path.c.i
 
 # target to preprocess a source file
 src/AI/peregrine_path.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_path.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.i
 .PHONY : src/AI/peregrine_path.c.i
@@ -234,6 +266,7 @@ src/AI/peregrine_path.s: src/AI/peregrine_path.c.s
 
 # target to generate assembly for a file
 src/AI/peregrine_path.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine_path.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine_path.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/path_test.dir/build.make CMakeFiles/path_test.dir/src/AI/peregrine_path.c.s
 .PHONY : src/AI/peregrine_path.c.s
@@ -467,6 +500,9 @@ help:
 	@echo "... falconpm_loader"
 	@echo "... gat_test"
 	@echo "... path_test"
+	@echo "... src/AI/peregrine_ai.o"
+	@echo "... src/AI/peregrine_ai.i"
+	@echo "... src/AI/peregrine_ai.s"
 	@echo "... src/AI/peregrine_gat.o"
 	@echo "... src/AI/peregrine_gat.i"
 	@echo "... src/AI/peregrine_gat.s"

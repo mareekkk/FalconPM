@@ -6,10 +6,12 @@ typedef struct {
     int x, y;
 } PStep;
 
-typedef struct {
+struct PStepList {
     PStep* steps;
-    int count;
-    int capacity;
-} PStepList;
+    int    count;
+    int    capacity;
+};
 
-bool path_astar(const GatMap* g, int sx, int sy, int tx, int ty, PStepList* out);
+bool path_astar(const GatMap* g, int sx, int sy, int tx, int ty, struct PStepList* out);
+
+typedef struct PStepList PStepList;

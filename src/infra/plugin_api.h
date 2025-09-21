@@ -24,6 +24,8 @@ typedef struct {
 struct map_session_data;
 struct block_list;
 struct walkpath_data;
+struct PStepList;
+struct GatMap;
 
 // -----------------------------
 // Common header for all API tables
@@ -50,6 +52,16 @@ typedef struct {
     int (*path_search)(struct walkpath_data *wpd, int m,
                        int x0, int y0, int x1, int y1, int flag);
 } PathAPI;
+
+typedef struct {
+    FpmTableHeader _;
+    struct GatMap* (*load_gat)(const char* filename);
+    void           (*free_gat)(struct GatMap* g);
+    bool           (*is_walkable)(const struct GatMap* g, int x, int y);
+    bool           (*astar)(const struct GatMap* g, int sx, int sy, int tx, int ty, struct PStepList* out);
+    void           (*free_steps)(struct PStepList* l);
+} SmartAPI;
+
 
 // ----------------------------------------------------
 // Direction API (dx/dy arrays for walkpath)
