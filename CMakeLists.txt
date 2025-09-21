@@ -31,7 +31,7 @@ set_target_properties(falconpm_loader PROPERTIES
 # -------------------------------
 # 2) FalconPM base (ABI context)
 # -------------------------------
-add_library(falconpm_base MODULE
+add_library(falconpm_base SHARED
     src/core/falconpm.cpp
     src/AI/peregrine_ai.c
     src/AI/peregrine_gat.c      # <-- add this
@@ -119,3 +119,6 @@ target_include_directories(path_test PUBLIC
 set_target_properties(path_test PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
 )
+
+# Path to GAT files (relative to source dir)
+add_definitions(-DFALCONPM_GAT_PATH="${CMAKE_SOURCE_DIR}/db/gat/")

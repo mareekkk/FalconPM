@@ -2,22 +2,21 @@
 // FalconPM Autoroute plugin
 // Features:
 //   - @ar on/off → continuous random roaming
-//   - @ar x y    → walk to given coordinates
 //   - @ar        → single random walk
 //
-// Uses FalconPM PathAPI + DirectionAPI to walk full-map routes.
+// Uses FalconPM SmartAPI (Peregrine) for GAT-based routing.
 
 #include "../../infra/plugin_api.h"
+#include "../../AI/peregrine_path.h"   // SmartAPI step list
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <unistd.h>   // for usleep()
+#include <string>
+#include <unistd.h>   // usleep()
 
-// rAthena headers
+// rAthena session structures
 #include "map.hpp"
 #include "pc.hpp"
-#include "unit.hpp"
-#include "path.hpp"   // walkpath_data
 
 // ----------------------------------------------------
 // FalconPM context
@@ -32,14 +31,13 @@ static bool roaming_enabled = false;
 static map_session_data* roaming_sd = nullptr;
 
 // ----------------------------------------------------
-// Pick a random destination on the map and walk there
+// PeregrineAI: pick a random destination and walk there
 // ----------------------------------------------------
 static void autoroute_random(map_session_data* sd) {
-    if (!sd || !ctx || !ctx->rnd) return;
+    if (!sd || !ctx || !ctx->rnd || !ctx->smart) return;
 
     int sx = sd->x;
     int sy = sd->y;
-
     int maxx = map[sd->m].xs;
     int maxy = map[sd->m].ys;
 
@@ -57,19 +55,34 @@ static void autoroute_random(map_session_data* sd) {
     ctx->log->info("[autoroute] target (%d,%d) on %s",
                    tx, ty, map[sd->m].name);
 
-    // --- Path search
-    struct walkpath_data wpd;
-    int ok = ctx->path->path_search(&wpd, sd->m, sx, sy, tx, ty, 0);
-    if (!ok || wpd.path_len <= 0) {
+    // --- Load GAT map (cache per map)
+    static GatMap* g = nullptr;
+    static std::string gmap_name;
+    if (!g || gmap_name != map[sd->m].name) {
+        if (g) ctx->smart->free_gat(g);
+        char filename[512];
+        snprintf(filename, sizeof(filename),
+         FALCONPM_GAT_PATH "%s.gat", map[sd->m].name);
+g = ctx->smart->load_gat(filename);
+        gmap_name = map[sd->m].name;
+        if (!g) {
+            ctx->log->error("[autoroute] failed to load GAT for %s", map[sd->m].name);
+            return;
+        }
+    }
+
+    // --- Path search with SmartAPI
+    PStepList steps;
+    bool ok = ctx->smart->astar(g, sx, sy, tx, ty, &steps);
+    if (!ok || steps.count <= 0) {
         ctx->log->error("[autoroute] no path found to (%d,%d)", tx, ty);
         return;
     }
 
     // --- Follow path step by step
-    for (int i = 0; i < wpd.path_len; i++) {
-        int dir = wpd.path[i];
-        int nx = sx + ctx->dir->dx[dir];
-        int ny = sy + ctx->dir->dy[dir];
+    for (int i = 0; i < steps.count; i++) {
+        int nx = steps.steps[i].x;
+        int ny = steps.steps[i].y;
 
         ctx->movement->pc_walktoxy(sd, (short)nx, (short)ny, 0);
         sx = nx;
@@ -83,6 +96,9 @@ static void autoroute_random(map_session_data* sd) {
             usleep(500000 + (rand() % 500000)); // 0.5–1s
         }
     }
+
+    // Free the step list
+    ctx->smart->free_steps(&steps);
 }
 
 // ----------------------------------------------------
@@ -120,34 +136,8 @@ static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
         return 0;
     }
 
-    int x, y;
-    if (sscanf(args, "%d %d", &x, &y) < 2) {
-        // No coords → do a single random walk
-        autoroute_random(sd);
-        return 0;
-    }
-
-    ctx->log->info("[autoroute] walking to (%d,%d)", x, y);
-
-    // Same path logic as autoroute_random, but fixed target
-    struct walkpath_data wpd;
-    int sx = sd->x, sy = sd->y;
-    int ok = ctx->path->path_search(&wpd, sd->m, sx, sy, x, y, 0);
-    if (!ok || wpd.path_len <= 0) {
-        ctx->log->error("[autoroute] no path found to (%d,%d)", x, y);
-        return 0;
-    }
-
-    for (int i = 0; i < wpd.path_len; i++) {
-        int dir = wpd.path[i];
-        int nx = sx + ctx->dir->dx[dir];
-        int ny = sy + ctx->dir->dy[dir];
-
-        ctx->movement->pc_walktoxy(sd, (short)nx, (short)ny, 0);
-        sx = nx; sy = ny;
-        usleep(100000 + (rand() % 200000));
-    }
-
+    // Default: single random walk
+    autoroute_random(sd);
     return 0;
 }
 
@@ -156,7 +146,7 @@ static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
 // ----------------------------------------------------
 static bool init(const PluginContext* c) {
     ctx = falconpm_get_context();
-    if (!ctx || !ctx->atcommand || !ctx->path || !ctx->dir) {
+    if (!ctx || !ctx->atcommand || !ctx->smart || !ctx->movement || !ctx->timer) {
         fprintf(stderr, "[autoroute] missing APIs\n");
         return false;
     }

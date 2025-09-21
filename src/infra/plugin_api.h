@@ -144,6 +144,7 @@ typedef struct {
     TimerAPI*          timer;
     PathAPI*           path;
     DirectionAPI*      dir;
+    SmartAPI*          smart;
 } PluginContext;
 
 // -----------------------------
