@@ -1,64 +1,74 @@
 #include "peregrine.h"
-#include "../../infra/plugin_api.h"   // for ctx (PluginContext)
-#include "../../AI/peregrine/peregrine.h"
+#include <cstdlib>
 
-extern PeregrineAPI peregrine_api;
-
-// Global route state
-static PeregrineAI g_route = {0};
 static const PluginContext* g_ctx = nullptr;
+PeregrineAI g_route = {0};
 
-// Forward declaration of timer callback
-static int pgn_route_step_cb(int tid, uint64_t tick, int id, intptr_t data);
-
-void pgn_route_start(const PluginContext* ctx,
-                     struct map_session_data* sd,
-                     PStepList* steps) {
-    if (!sd || !steps || !ctx) return;
-
-    g_ctx = ctx;  // store context globally
-
-    g_route.steps = *steps;
-    g_route.index = 0;
-    g_route.sd = sd;
-    g_route.active = true;
-
-    // Schedule first step (200ms delay)
-    g_ctx->timer->add_timer(g_ctx->timer->gettick() + 200,
-                            pgn_route_step_cb, 0, 0);
-}
-
-void pgn_route_stop(void) {
-    if (g_route.active) {
-        g_ctx->peregrine->free_steps(&g_route.steps);  // note: PeregrineAPI call
-        g_route.active = false;
-        g_route.index = 0;
-        g_route.sd = NULL;
-    }
-}
-
-bool pgn_route_active(void) {
-    return g_route.active;
-}
-
-// Timer callback: execute next step
+// ----------------------------------------------------
+// Step callback
+// ----------------------------------------------------
 static int pgn_route_step_cb(int tid, uint64_t tick, int id, intptr_t data) {
     if (!g_route.active || !g_route.sd) return 0;
-
     if (g_route.index >= g_route.steps.count) {
-        pgn_route_stop();
+        g_route.active = false;
         return 0;
     }
 
     int nx = g_route.steps.steps[g_route.index].x;
     int ny = g_route.steps.steps[g_route.index].y;
 
-    g_ctx->movement->pc_walktoxy(g_route.sd, (short)nx, (short)ny, 0);
+    // -- micro jitter (±1 cell)
+    int jx = nx + ((rand() % 3) - 1);
+    int jy = ny + ((rand() % 3) - 1);
+    if (jx < 0) jx = 0;
+    if (jy < 0) jy = 0;
+
+    // -- check walkability
+    if (g_ctx->peregrine->is_walkable(g_route.gmap, jx, jy)) {
+        g_ctx->movement->pc_walktoxy(g_route.sd, (short)jx, (short)jy, 0);
+    } else if (g_ctx->peregrine->is_walkable(g_route.gmap, nx, ny)) {
+        g_ctx->movement->pc_walktoxy(g_route.sd, (short)nx, (short)ny, 0);
+    } else {
+        g_ctx->log->info("[humanize] blocked cell (%d,%d), skipping", nx, ny);
+    }
+
     g_route.index++;
 
-    // Random delay between 200–400ms
-    g_ctx->timer->add_timer(g_ctx->timer->gettick() + 200 + (rand() % 200),
-                          pgn_route_step_cb, 0, 0);
+    // -- variable delay (150–350ms)
+    int delay = 150 + (rand() % 200);
+    g_ctx->timer->add_timer(g_ctx->timer->gettick() + delay,
+                            pgn_route_step_cb, 0, 0);
 
     return 0;
+}
+
+// ----------------------------------------------------
+// Start route
+// ----------------------------------------------------
+void pgn_route_start(const PluginContext* ctx,
+                     struct map_session_data* sd,
+                     PStepList* steps,
+                     GatMap* gmap) {
+    if (!sd || !steps || !ctx || !gmap) return;
+
+    g_ctx = ctx;
+    g_route.steps = *steps;
+    g_route.index = 0;
+    g_route.sd = sd;
+    g_route.active = true;
+    g_route.gmap = gmap;
+
+    g_ctx->timer->add_timer(g_ctx->timer->gettick() + 200,
+                            pgn_route_step_cb, 0, 0);
+}
+
+// ----------------------------------------------------
+// Stop route
+// ----------------------------------------------------
+void pgn_route_stop() {
+    if (!g_ctx) return;
+    g_route.active = false;
+    if (g_route.steps.steps) {
+        g_ctx->peregrine->free_steps(&g_route.steps);
+    }
 }

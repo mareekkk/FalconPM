@@ -85,11 +85,11 @@ g = ctx->peregrine->load_gat(filename);
         return;
     }
 
-    // --- Hand over path execution to PeregrineAI route system
-    pgn_route_start(ctx, sd, &steps);
+    // old: manual walking loop
+    // new: hand route to Peregrine
+    pgn_route_start(ctx, sd, &steps, g);
 
-        // Free the step list
-        ctx->peregrine->free_steps(&steps);
+
     }
 
 // ----------------------------------------------------

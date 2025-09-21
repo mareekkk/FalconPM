@@ -312,5 +312,4 @@ CMakeFiles/autoroute.dir/src/AI/peregrine/peregrine.cpp.o: \
  /usr/include/mariadb/mariadb_ctype.h /usr/include/mariadb/mariadb_stmt.h \
  /home/marek/rathena/src/common/strlib.hpp \
  /home/marek/rathena/src/common/malloc.hpp \
- /home/marek/FalconPM/src/infra/../infra/plugin_api.h \
- /home/marek/FalconPM/src/AI/peregrine/../../infra/plugin_api.h
+ /home/marek/FalconPM/src/infra/../infra/plugin_api.h
