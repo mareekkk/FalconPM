@@ -1,8 +1,8 @@
 #pragma once
 #include "../infra/plugin_api.h"
 #include <stdbool.h>
-#include "peregrine_gat.h"
-#include "peregrine_path.h"
+#include "pgn_gat.h"
+#include "pgn_path.h"
 
 // Global SmartAPI table implemented in peregrine_ai.c
 extern SmartAPI smart_api;

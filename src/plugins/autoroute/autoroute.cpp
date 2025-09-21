@@ -7,7 +7,7 @@
 // Uses FalconPM SmartAPI (Peregrine) for GAT-based routing.
 
 #include "../../infra/plugin_api.h"
-#include "../../AI/peregrine_path.h"   // SmartAPI step list
+#include "../../AI/peregrine/pgn_path.h"   // SmartAPI step list
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -41,20 +41,6 @@ static void autoroute_random(map_session_data* sd) {
     int maxx = map[sd->m].xs;
     int maxy = map[sd->m].ys;
 
-    // Random destination + jitter
-    int tx = ctx->rnd->rnd() % maxx;
-    int ty = ctx->rnd->rnd() % maxy;
-    tx += (rand() % 5) - 2;
-    ty += (rand() % 5) - 2;
-
-    if (tx < 0) tx = 0;
-    if (ty < 0) ty = 0;
-    if (tx >= maxx) tx = maxx - 1;
-    if (ty >= maxy) ty = maxy - 1;
-
-    ctx->log->info("[autoroute] target (%d,%d) on %s",
-                   tx, ty, map[sd->m].name);
-
     // --- Load GAT map (cache per map)
     static GatMap* g = nullptr;
     static std::string gmap_name;
@@ -71,6 +57,26 @@ g = ctx->smart->load_gat(filename);
         }
     }
 
+        // Pick a random walkable destination (retry up to 10 times)
+    int tx = 0, ty = 0, tries = 0;
+    do {
+        tx = ctx->rnd->rnd() % maxx;
+        ty = ctx->rnd->rnd() % maxy;
+        tx += (rand() % 5) - 2;
+        ty += (rand() % 5) - 2;
+
+        if (tx < 0) tx = 0;
+        if (ty < 0) ty = 0;
+        if (tx >= maxx) tx = maxx - 1;
+        if (ty >= maxy) ty = maxy - 1;
+
+        tries++;
+    } while (tries < 10 && !ctx->smart->is_walkable(g, tx, ty));
+
+    ctx->log->info("[autoroute] player at (%d,%d) → target (%d,%d) on %s",
+                sx, sy, tx, ty, map[sd->m].name);
+
+                
     // --- Path search with SmartAPI
     PStepList steps;
     bool ok = ctx->smart->astar(g, sx, sy, tx, ty, &steps);

@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/gat_test.dir/src/AI/tests/main_gat_test.c.o CMakeFiles/gat_test.dir/src/AI/peregrine_gat.c.o -o tests/gat_test 

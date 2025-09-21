@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <limits.h>
-#include "peregrine_gat.h"
+#include "pgn_gat.h"
 
 // ---------------------------------------------
 // Step structure
@@ -64,10 +64,19 @@ static inline int heuristic(int x1, int y1, int x2, int y2) {
 // A* pathfinding
 // ---------------------------------------------
 bool path_astar(const GatMap* g, int sx, int sy, int tx, int ty, PStepList* out) {
-    if (!g || !gat_is_walkable(g,sx,sy) || !gat_is_walkable(g,tx,ty)) {
-        fprintf(stderr, "[path] invalid start/target\n");
+    if (!g) {
+        fprintf(stderr, "[path] ERROR: GatMap is NULL\n");
         return false;
     }
+    if (!gat_is_walkable(g, sx, sy)) {
+        fprintf(stderr, "[path] invalid START (%d,%d)\n", sx, sy);
+        return false;
+    }
+    if (!gat_is_walkable(g, tx, ty)) {
+        fprintf(stderr, "[path] invalid TARGET (%d,%d)\n", tx, ty);
+        return false;
+    }
+
 
     int w = g->width, h = g->height;
     int maxNodes = w * h;

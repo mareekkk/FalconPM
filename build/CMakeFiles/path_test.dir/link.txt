@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/path_test.dir/src/AI/tests/main_path_test.c.o CMakeFiles/path_test.dir/src/AI/peregrine_gat.c.o CMakeFiles/path_test.dir/src/AI/peregrine_path.c.o -o tests/path_test 

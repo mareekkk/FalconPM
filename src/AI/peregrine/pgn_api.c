@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "peregrine_ai.h"
+#include "pgn_api.h"
 
 // ----------------------------------------------------
 // Local helper to free step lists

@@ -33,9 +33,9 @@ set_target_properties(falconpm_loader PROPERTIES
 # -------------------------------
 add_library(falconpm_base SHARED
     src/core/falconpm.cpp
-    src/AI/peregrine_ai.c
-    src/AI/peregrine_gat.c      # <-- add this
-    src/AI/peregrine_path.c     # <-- and this
+    src/AI/peregrine/pgn_api.c
+    src/AI/peregrine/pgn_gat.c      # <-- add this
+    src/AI/peregrine/pgn_path.c     # <-- and this
     src/infra/plugin_api.h
 )
 
@@ -65,9 +65,9 @@ add_library(autoroute MODULE
     src/core/fpm_graph.c
     src/core/fpm_route.c
     src/core/fpm_portals.c
-    src/AI/peregrine_gat.c
-    src/AI/peregrine_path.c
-    src/AI/peregrine_ai.c      # <-- new orchestrator
+    src/AI/peregrine/pgn_gat.c
+    src/AI/peregrine/pgn_path.c
+    src/AI/peregrine/pgn_api.c      # <-- new orchestrator
     # later: src/AI/peregrine_portals.c
     # later: src/AI/peregrine_route.c
     src/infra/plugin_api.h
@@ -89,35 +89,6 @@ set_target_properties(autoroute PROPERTIES
     SUFFIX ".so"
     OUTPUT_NAME "autoroute"
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
-)
-
-# -------------------------------
-# 4) Peregrine test executables
-# -------------------------------
-
-# Test GAT loader
-add_executable(gat_test
-    src/AI/tests/main_gat_test.c
-    src/AI/peregrine_gat.c
-)
-target_include_directories(gat_test PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/AI
-)
-set_target_properties(gat_test PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
-)
-
-# Test Pathfinding (A*)
-add_executable(path_test
-    src/AI/tests/main_path_test.c
-    src/AI/peregrine_gat.c
-    src/AI/peregrine_path.c
-)
-target_include_directories(path_test PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/AI
-)
-set_target_properties(path_test PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
 )
 
 # Path to GAT files (relative to source dir)

@@ -1,6 +1,6 @@
 #pragma once
 #include <stdbool.h>
-#include "peregrine_gat.h"
+#include "pgn_gat.h"
 
 typedef struct {
     int x, y;
