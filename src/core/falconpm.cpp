@@ -11,7 +11,7 @@
 #include "unit.hpp"
 #include "atcommand.hpp"
 
-extern "C" SmartAPI smart_api;
+extern "C" PeregrineAPI peregrine_api;
 
 
 // ----------------------------------------------------
@@ -157,7 +157,7 @@ PluginContext g_ctx = {
     &timer_api,
     &path_api,
     &dir_api,
-    &smart_api
+    &peregrine_api
 };
 
 // ----------------------------------------------------

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -Wl,--export-dynamic -shared -Wl,-soname,falconpm_base.so -o plugins/falconpm_base.so CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o 

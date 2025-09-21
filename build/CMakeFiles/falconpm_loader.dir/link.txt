@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o plugins/falconpm_loader.so CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o  -ldl 

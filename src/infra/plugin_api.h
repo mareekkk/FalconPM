@@ -60,7 +60,7 @@ typedef struct {
     bool           (*is_walkable)(const struct GatMap* g, int x, int y);
     bool           (*astar)(const struct GatMap* g, int sx, int sy, int tx, int ty, struct PStepList* out);
     void           (*free_steps)(struct PStepList* l);
-} SmartAPI;
+} PeregrineAPI;
 
 
 // ----------------------------------------------------
@@ -144,7 +144,7 @@ typedef struct {
     TimerAPI*          timer;
     PathAPI*           path;
     DirectionAPI*      dir;
-    SmartAPI*          smart;
+    PeregrineAPI*      peregrine;
 } PluginContext;
 
 // -----------------------------

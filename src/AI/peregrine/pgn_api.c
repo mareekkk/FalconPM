@@ -4,7 +4,7 @@
 // ----------------------------------------------------
 // Local helper to free step lists
 // ----------------------------------------------------
-static void smart_free_steps(PStepList* l) {
+static void peregrine_free_steps(PStepList* l) {
     if (!l) return;
     free(l->steps);
     l->steps = NULL;
@@ -13,12 +13,12 @@ static void smart_free_steps(PStepList* l) {
 }
 
 // ----------------------------------------------------
-// Expose Peregrine SmartAPI
+// Expose Peregrine PeregrineAPI
 // ----------------------------------------------------
-SmartAPI smart_api = {
+PeregrineAPI peregrine_api = {
     .load_gat    = gat_load,
     .free_gat    = gat_free,
     .is_walkable = gat_is_walkable,
     .astar       = path_astar,
-    .free_steps  = smart_free_steps
+    .free_steps  = peregrine_free_steps
 };

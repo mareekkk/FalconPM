@@ -67,8 +67,8 @@ add_library(autoroute MODULE
     src/core/fpm_portals.c
     src/AI/peregrine/pgn_gat.c
     src/AI/peregrine/pgn_path.c
-    src/AI/peregrine/pgn_api.c      # <-- new orchestrator
-    # later: src/AI/peregrine_portals.c
+    src/AI/peregrine/pgn_api.c      
+    src/AI/peregrine/peregrine.cpp  
     # later: src/AI/peregrine_route.c
     src/infra/plugin_api.h
 )

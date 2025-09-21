@@ -4,10 +4,10 @@
 #include "pgn_gat.h"
 #include "pgn_path.h"
 
-// Global SmartAPI table implemented in peregrine_ai.c
-extern SmartAPI smart_api;
+// Global PeregrineAPI table implemented in peregrine_ai.c
+extern PeregrineAPI peregrine_api;
 
 // Forward declare rAthena session
 struct map_session_data;
 
-bool peregrineAI(struct map_session_data* sd, const char* mapname, int tx, int ty);
+// test function bool peregrineAI(struct map_session_data* sd, const char* mapname, int tx, int ty);

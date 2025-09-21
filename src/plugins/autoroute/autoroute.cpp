@@ -4,15 +4,15 @@
 //   - @ar on/off → continuous random roaming
 //   - @ar        → single random walk
 //
-// Uses FalconPM SmartAPI (Peregrine) for GAT-based routing.
+// Uses FalconPM PeregrineAPI (Peregrine) for GAT-based routing.
 
 #include "../../infra/plugin_api.h"
-#include "../../AI/peregrine/pgn_path.h"   // SmartAPI step list
+#include "../../AI/peregrine/pgn_path.h"   // PeregrineAPI step list
+#include "../../AI/peregrine/peregrine.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <string>
-#include <unistd.h>   // usleep()
 
 // rAthena session structures
 #include "map.hpp"
@@ -34,7 +34,7 @@ static map_session_data* roaming_sd = nullptr;
 // PeregrineAI: pick a random destination and walk there
 // ----------------------------------------------------
 static void autoroute_random(map_session_data* sd) {
-    if (!sd || !ctx || !ctx->rnd || !ctx->smart) return;
+    if (!sd || !ctx || !ctx->rnd || !ctx->peregrine) return;
 
     int sx = sd->x;
     int sy = sd->y;
@@ -45,11 +45,11 @@ static void autoroute_random(map_session_data* sd) {
     static GatMap* g = nullptr;
     static std::string gmap_name;
     if (!g || gmap_name != map[sd->m].name) {
-        if (g) ctx->smart->free_gat(g);
+        if (g) ctx->peregrine->free_gat(g);
         char filename[512];
         snprintf(filename, sizeof(filename),
          FALCONPM_GAT_PATH "%s.gat", map[sd->m].name);
-g = ctx->smart->load_gat(filename);
+g = ctx->peregrine->load_gat(filename);
         gmap_name = map[sd->m].name;
         if (!g) {
             ctx->log->error("[autoroute] failed to load GAT for %s", map[sd->m].name);
@@ -71,41 +71,26 @@ g = ctx->smart->load_gat(filename);
         if (ty >= maxy) ty = maxy - 1;
 
         tries++;
-    } while (tries < 10 && !ctx->smart->is_walkable(g, tx, ty));
+    } while (tries < 10 && !ctx->peregrine->is_walkable(g, tx, ty));
 
     ctx->log->info("[autoroute] player at (%d,%d) → target (%d,%d) on %s",
                 sx, sy, tx, ty, map[sd->m].name);
 
                 
-    // --- Path search with SmartAPI
+    // --- Path search with PeregrineAPI
     PStepList steps;
-    bool ok = ctx->smart->astar(g, sx, sy, tx, ty, &steps);
+    bool ok = ctx->peregrine->astar(g, sx, sy, tx, ty, &steps);
     if (!ok || steps.count <= 0) {
         ctx->log->error("[autoroute] no path found to (%d,%d)", tx, ty);
         return;
     }
 
-    // --- Follow path step by step
-    for (int i = 0; i < steps.count; i++) {
-        int nx = steps.steps[i].x;
-        int ny = steps.steps[i].y;
+    // --- Hand over path execution to PeregrineAI route system
+    pgn_route_start(ctx, sd, &steps);
 
-        ctx->movement->pc_walktoxy(sd, (short)nx, (short)ny, 0);
-        sx = nx;
-        sy = ny;
-
-        // Humanization: random delay 100–300ms
-        usleep(100000 + (rand() % 200000));
-
-        // Pause longer every ~10 steps
-        if (i > 0 && i % 10 == 0) {
-            usleep(500000 + (rand() % 500000)); // 0.5–1s
-        }
+        // Free the step list
+        ctx->peregrine->free_steps(&steps);
     }
-
-    // Free the step list
-    ctx->smart->free_steps(&steps);
-}
 
 // ----------------------------------------------------
 // Timer callback for roaming
@@ -152,7 +137,7 @@ static int at_ar(map_session_data* sd, const char* cmd, const char* args) {
 // ----------------------------------------------------
 static bool init(const PluginContext* c) {
     ctx = falconpm_get_context();
-    if (!ctx || !ctx->atcommand || !ctx->smart || !ctx->movement || !ctx->timer) {
+    if (!ctx || !ctx->atcommand || !ctx->peregrine || !ctx->movement || !ctx->timer) {
         fprintf(stderr, "[autoroute] missing APIs\n");
         return false;
     }
