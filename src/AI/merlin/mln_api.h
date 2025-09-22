@@ -1,5 +1,6 @@
 #pragma once
 #include <stdbool.h>   // for bool
+#include "../../infra/plugin_api.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +29,7 @@ bool mln_attack_done(void);
 MobTarget* mln_target_find(void);
 
 // Global instance (defined in mln_api.c)
-extern struct MerlinAPI merlin_api;
+extern MerlinAPI merlin_api;
 
 #ifdef __cplusplus
 }

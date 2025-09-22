@@ -3,9 +3,9 @@
 
 // Dummy loot list for now
 static LootItem dummy_loot[] = {
-    {1, "Apple", 50, 50},
-    {2, "Knife", 60, 42},
-    {3, "Potion", 33, 70},
+    {1, "Apple"},
+    {2, "Knife"},
+    {3, "Potion"},
 };
 
 int tai_loot_list(LootItem* out, int max_count) {
@@ -24,5 +24,5 @@ void tai_loot_free(LootItem* arr) {
 
 void tai_loot_pickup(const LootItem* item) {
     if (!item) return;
-    printf("[Taita] Picking up item: %s at (%d,%d)\n", item->name, item->x, item->y);
+    printf("[Taita] Picking up item: %s (ID=%d)\n", item->name, item->id);
 }

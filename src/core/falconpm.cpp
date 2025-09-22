@@ -16,7 +16,7 @@
 #include "../AI/merlin/mln_attack.h"
 #include "../AI/merlin/merlin.cpp"
 
-#include "../AI/taita/tai_api.h"
+// #include "../AI/taita/tai_api.h"
 #include <stdint.h>
 
 // ----------------------------------------------------
@@ -27,7 +27,7 @@ extern "C" PeregrineAPI peregrine_api;
 
 // Forward declare API objects
 extern MerlinAPI merlin_api;
-extern TaitaAPI taita_api;
+// extern TaitaAPI taita_api;
 
 // ----------------------------------------------------
 // Logging
@@ -60,21 +60,37 @@ extern "C" {
 // ------------------------------------
 // Merlin API object
 // ------------------------------------
-static MerlinAPI merlin_api = {
-    merlin_tick,
-    mln_target_find,
-    mln_attack_start,
-    mln_attack_in_progress,
-    mln_attack_done
+MerlinAPI merlin_api = {
+    (void (*)(void))merlin_tick,              // matches void()
+    (void* (*)(void))mln_target_find,         // cast MobTarget* -> void*
+    (bool (*)(void*))mln_attack_start,        // cast MobTarget* -> void*
+    (bool (*)(void))mln_attack_in_progress,   // matches bool()
+    (bool (*)(void))mln_attack_done           // matches bool()
 };
-
+/*
 // ------------------------------------
 // Taita API object
 // ------------------------------------
-static TaitaAPI taita_api = {
+TaitaAPI taita_api = {
     tai_target_find_items,
     tai_loot_pickup,
-    taita_tick
+    tai_tick
+};
+*/
+// ----------------------------------------------------
+// Timer
+// ----------------------------------------------------
+extern "C" {
+    int fpm_add_timer(uint64_t tick, 
+                      int (*func)(int, uint64_t, int, intptr_t),
+                      int id, 
+                      intptr_t data);
+    uint64_t fpm_gettick(void);
+}
+static TimerAPI timer_api = {
+    { sizeof(TimerAPI), {1,0} },
+    fpm_add_timer,
+    fpm_gettick
 };
 
 // ----------------------------------------------------
@@ -85,8 +101,8 @@ static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
 
     if (ctx && ctx->merlin && ctx->merlin->tick)
         ctx->merlin->tick();
-    if (ctx && ctx->taita && ctx->taita->tick)
-        ctx->taita->tick();
+    // if (ctx && ctx->taita && ctx->taita->tick)
+    //    ctx->taita->tick();
 
     // reschedule runner every 100ms
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
@@ -119,22 +135,6 @@ static CombatAPI combat_api = {
 
 extern "C" void fpm_send_message(map_session_data* sd, const char* msg);
 extern "C" int fpm_get_account_id(map_session_data* sd);
-
-// ----------------------------------------------------
-// Timer
-// ----------------------------------------------------
-extern "C" {
-    int fpm_add_timer(uint64_t tick, 
-                      int (*func)(int, uint64_t, int, intptr_t),
-                      int id, 
-                      intptr_t data);
-    uint64_t fpm_gettick(void);
-}
-static TimerAPI timer_api = {
-    { sizeof(TimerAPI), {1,0} },
-    fpm_add_timer,
-    fpm_gettick
-};
 
 extern "C" {
     map_session_data* fpm_map_id2sd(int account_id);
@@ -198,6 +198,11 @@ static UnitAPI unit_api = {
     dummy_get_id,
     dummy_get_type
 };
+
+extern "C" {
+    map_session_data* fpm_map_id2sd(int account_id);
+}
+
 static PlayerAPI player_api = {
     { sizeof(PlayerAPI), {1,0} },
     fpm_map_id2sd,
@@ -255,8 +260,8 @@ PluginContext g_ctx = {
     &dir_api,
     &peregrine_api,
     &combat_api,
-    &merlin_api,
-    &taita_api
+    &merlin_api
+    // &taita_api
 };
 
 // ----------------------------------------------------
@@ -267,10 +272,11 @@ static const int* required_modules(size_t* count) {
     return nullptr;
 }
 
-static bool init(PluginContext* c) {
-    ctx = c;
+static bool init(const PluginContext* c) {
+    ctx = (PluginContext*)c;   // store into our non-const global pointer
+
     ctx->merlin = &merlin_api;
-    ctx->taita  = &taita_api;
+    // ctx->taita  = &taita_api;
 
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
 
@@ -278,7 +284,7 @@ static bool init(PluginContext* c) {
     return true;
 }
 
-static void final(void) {
+static void plugin_final(void) {
     ctx->log->info("FalconPM core shutting down.");
 }
 
@@ -288,7 +294,7 @@ PluginDescriptor PLUGIN = {
     "0.3",
     required_modules,
     init,
-    final
+    plugin_final   // ✅ fixed: use plugin_final
 };
 
 const PluginContext* falconpm_get_context(void) { return &g_ctx; }

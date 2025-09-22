@@ -372,102 +372,6 @@ src/AI/peregrine/pgn_path.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine/pgn_path.c.s
 .PHONY : src/AI/peregrine/pgn_path.c.s
 
-src/AI/taita/tai_api.o: src/AI/taita/tai_api.c.o
-.PHONY : src/AI/taita/tai_api.o
-
-# target to build an object file
-src/AI/taita/tai_api.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o
-.PHONY : src/AI/taita/tai_api.c.o
-
-src/AI/taita/tai_api.i: src/AI/taita/tai_api.c.i
-.PHONY : src/AI/taita/tai_api.i
-
-# target to preprocess a source file
-src/AI/taita/tai_api.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.i
-.PHONY : src/AI/taita/tai_api.c.i
-
-src/AI/taita/tai_api.s: src/AI/taita/tai_api.c.s
-.PHONY : src/AI/taita/tai_api.s
-
-# target to generate assembly for a file
-src/AI/taita/tai_api.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.s
-.PHONY : src/AI/taita/tai_api.c.s
-
-src/AI/taita/tai_loot.o: src/AI/taita/tai_loot.c.o
-.PHONY : src/AI/taita/tai_loot.o
-
-# target to build an object file
-src/AI/taita/tai_loot.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o
-.PHONY : src/AI/taita/tai_loot.c.o
-
-src/AI/taita/tai_loot.i: src/AI/taita/tai_loot.c.i
-.PHONY : src/AI/taita/tai_loot.i
-
-# target to preprocess a source file
-src/AI/taita/tai_loot.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.i
-.PHONY : src/AI/taita/tai_loot.c.i
-
-src/AI/taita/tai_loot.s: src/AI/taita/tai_loot.c.s
-.PHONY : src/AI/taita/tai_loot.s
-
-# target to generate assembly for a file
-src/AI/taita/tai_loot.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.s
-.PHONY : src/AI/taita/tai_loot.c.s
-
-src/AI/taita/tai_target.o: src/AI/taita/tai_target.c.o
-.PHONY : src/AI/taita/tai_target.o
-
-# target to build an object file
-src/AI/taita/tai_target.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o
-.PHONY : src/AI/taita/tai_target.c.o
-
-src/AI/taita/tai_target.i: src/AI/taita/tai_target.c.i
-.PHONY : src/AI/taita/tai_target.i
-
-# target to preprocess a source file
-src/AI/taita/tai_target.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.i
-.PHONY : src/AI/taita/tai_target.c.i
-
-src/AI/taita/tai_target.s: src/AI/taita/tai_target.c.s
-.PHONY : src/AI/taita/tai_target.s
-
-# target to generate assembly for a file
-src/AI/taita/tai_target.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.s
-.PHONY : src/AI/taita/tai_target.c.s
-
-src/AI/taita/taita.o: src/AI/taita/taita.cpp.o
-.PHONY : src/AI/taita/taita.o
-
-# target to build an object file
-src/AI/taita/taita.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o
-.PHONY : src/AI/taita/taita.cpp.o
-
-src/AI/taita/taita.i: src/AI/taita/taita.cpp.i
-.PHONY : src/AI/taita/taita.i
-
-# target to preprocess a source file
-src/AI/taita/taita.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.i
-.PHONY : src/AI/taita/taita.cpp.i
-
-src/AI/taita/taita.s: src/AI/taita/taita.cpp.s
-.PHONY : src/AI/taita/taita.s
-
-# target to generate assembly for a file
-src/AI/taita/taita.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.s
-.PHONY : src/AI/taita/taita.cpp.s
-
 src/core/falconpm.o: src/core/falconpm.cpp.o
 .PHONY : src/core/falconpm.o
 
@@ -696,18 +600,6 @@ help:
 	@echo "... src/AI/peregrine/pgn_path.o"
 	@echo "... src/AI/peregrine/pgn_path.i"
 	@echo "... src/AI/peregrine/pgn_path.s"
-	@echo "... src/AI/taita/tai_api.o"
-	@echo "... src/AI/taita/tai_api.i"
-	@echo "... src/AI/taita/tai_api.s"
-	@echo "... src/AI/taita/tai_loot.o"
-	@echo "... src/AI/taita/tai_loot.i"
-	@echo "... src/AI/taita/tai_loot.s"
-	@echo "... src/AI/taita/tai_target.o"
-	@echo "... src/AI/taita/tai_target.i"
-	@echo "... src/AI/taita/tai_target.s"
-	@echo "... src/AI/taita/taita.o"
-	@echo "... src/AI/taita/taita.i"
-	@echo "... src/AI/taita/taita.s"
 	@echo "... src/core/falconpm.o"
 	@echo "... src/core/falconpm.i"
 	@echo "... src/core/falconpm.s"

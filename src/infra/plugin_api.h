@@ -28,7 +28,7 @@ typedef struct {
 
 // Forward-declare here (before usage)
 struct MerlinAPI;
-struct TaitaAPI;
+// struct TaitaAPI;
 
 // Forward declarations from rAthena
 struct map_session_data;
@@ -76,24 +76,23 @@ typedef struct {
 // Merlin API
 // ----------------------------------------------------
 typedef struct MerlinAPI {
-    void (*tick)();                        // Orchestrator loop
-    void* (*find_monster)();               // Monster finder
-    void (*attack_start)(void* mob);       // Start attack
-    bool (*attack_in_progress)();          // Check if attacking
-    bool (*attack_done)();                 // Check if done
+    void (*tick)(void);                 // Orchestrator loop
+    void* (*target_find)(void);         // returns opaque pointer (MobTarget*)
+    bool (*attack_start)(void* mob);    // takes opaque mob pointer
+    bool (*attack_in_progress)(void);
+    bool (*attack_done)(void);
 } MerlinAPI;
 
+/*/
 // ----------------------------------------------------
 // Taita API
 // ----------------------------------------------------
 typedef struct TaitaAPI {
-    void*   (*find_items)();                        // opaque pointer to vector in C++
-    void    (*free_items)(void* ptr);               // free the vector
-    const char* (*get_item)(void* ptr, size_t idx); // get item name
-    size_t  (*get_item_count)(void* ptr);           // number of items
-    void    (*loot_pickup)(const char* item);       // pick up item by name
-    void    (*tick)();  
+    int   (*target_find_items)(void* out, int max_count); // LootItem* passed as void*
+    void  (*loot_pickup)(const void* item);               // const LootItem* as void*
+    void  (*tick)(void);                                  // orchestrator loop
 } TaitaAPI;
+*/
 
 // ----------------------------------------------------
 // Direction API (dx/dy arrays for walkpath)
@@ -189,7 +188,7 @@ typedef struct {
     PeregrineAPI*      peregrine;
     CombatAPI*         combat;
     MerlinAPI*         merlin;   
-    TaitaAPI*          taita;
+    // TaitaAPI*          taita;
 } PluginContext;
 
 // -----------------------------

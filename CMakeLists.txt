@@ -40,10 +40,10 @@ add_library(falconpm_base SHARED
     src/AI/merlin/merlin.cpp
     src/AI/merlin/mln_target.c
     src/AI/merlin/mln_attack.c
-    src/AI/taita/tai_api.c
-    src/AI/taita/taita.cpp
-    src/AI/taita/tai_target.c
-    src/AI/taita/tai_loot.c
+   # src/AI/taita/tai_api.c
+   # src/AI/taita/taita.cpp
+   # src/AI/taita/tai_target.c
+   # src/AI/taita/tai_loot.c
     src/infra/plugin_api.h
     src/core/falconpm.cpp
 )
