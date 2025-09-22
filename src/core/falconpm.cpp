@@ -14,7 +14,7 @@
 #include "../AI/merlin/mln_api.h"
 #include "../AI/merlin/mln_target.h"
 #include "../AI/merlin/mln_attack.h"
-#include "../AI/merlin/merlin.cpp"
+//#include "../AI/merlin/merlin.cpp"
 
 // #include "../AI/taita/tai_api.h"
 #include <stdint.h>

@@ -28,6 +28,9 @@ bool mln_attack_in_progress(void);
 bool mln_attack_done(void);
 MobTarget* mln_target_find(void);
 
+// Orchestrator tick
+void merlin_tick(void);
+
 // Global instance (defined in mln_api.c)
 extern MerlinAPI merlin_api;
 
