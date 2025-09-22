@@ -68,6 +68,11 @@ static TimerAPI timer_api = {
     fpm_gettick
 };
 
+extern "C" {
+    map_session_data* fpm_map_id2sd(int account_id);
+}
+
+
 // ----------------------------------------------------
 // Dummy stubs
 // ----------------------------------------------------
@@ -128,7 +133,7 @@ static UnitAPI unit_api = {
 };
 static PlayerAPI player_api = {
     { sizeof(PlayerAPI), {1,0} },
-    dummy_map_id2sd,
+    fpm_map_id2sd,
     fpm_send_message,
     fpm_get_account_id
 };
