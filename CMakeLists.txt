@@ -34,12 +34,20 @@ set_target_properties(falconpm_loader PROPERTIES
 add_library(falconpm_base SHARED
     src/AI/peregrine/peregrine.cpp
     src/AI/peregrine/pgn_api.c
-    src/AI/peregrine/pgn_api.c
     src/AI/peregrine/pgn_gat.c      
     src/AI/peregrine/pgn_path.c     
+    src/AI/merlin/mln_api.c
+    src/AI/merlin/merlin.cpp
+    src/AI/merlin/mln_target.c
+    src/AI/merlin/mln_attack.c
+    src/AI/taita/tai_api.c
+    src/AI/taita/taita.cpp
+    src/AI/taita/tai_target.c
+    src/AI/taita/tai_loot.c
     src/infra/plugin_api.h
     src/core/falconpm.cpp
 )
+
 
 target_include_directories(falconpm_base PUBLIC
     ${CMAKE_SOURCE_DIR}/src/infra
@@ -49,6 +57,8 @@ target_include_directories(falconpm_base PUBLIC
     ${RA_ROOT}/3rdparty/rapidyaml/src
     ${RA_ROOT}/3rdparty/rapidyaml/ext/c4core/src
     /usr/include/mariadb    
+    ${CMAKE_SOURCE_DIR}/src/AI
+
 )
 set_target_properties(falconpm_base PROPERTIES
     PREFIX ""

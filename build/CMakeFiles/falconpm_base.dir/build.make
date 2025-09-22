@@ -125,10 +125,122 @@ CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/peregrine/pgn_path.c -o CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s
 
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o: /home/marek/FalconPM/src/AI/merlin/mln_api.c
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o -c /home/marek/FalconPM/src/AI/merlin/mln_api.c
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/mln_api.c > CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_api.c -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o: /home/marek/FalconPM/src/AI/merlin/merlin.cpp
+CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o -c /home/marek/FalconPM/src/AI/merlin/merlin.cpp
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/merlin.cpp > CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/merlin.cpp -o CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.s
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o: /home/marek/FalconPM/src/AI/merlin/mln_target.c
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o -c /home/marek/FalconPM/src/AI/merlin/mln_target.c
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/mln_target.c > CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_target.c -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: /home/marek/FalconPM/src/AI/merlin/mln_attack.c
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o -c /home/marek/FalconPM/src/AI/merlin/mln_attack.c
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/mln_attack.c > CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_attack.c -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o: /home/marek/FalconPM/src/AI/taita/tai_api.c
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o -c /home/marek/FalconPM/src/AI/taita/tai_api.c
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/taita/tai_api.c > CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/taita/tai_api.c -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.s
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o: /home/marek/FalconPM/src/AI/taita/taita.cpp
+CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o -c /home/marek/FalconPM/src/AI/taita/taita.cpp
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/taita/taita.cpp > CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/taita/taita.cpp -o CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.s
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o: /home/marek/FalconPM/src/AI/taita/tai_target.c
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o -c /home/marek/FalconPM/src/AI/taita/tai_target.c
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/taita/tai_target.c > CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/taita/tai_target.c -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.s
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o: /home/marek/FalconPM/src/AI/taita/tai_loot.c
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o -c /home/marek/FalconPM/src/AI/taita/tai_loot.c
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/taita/tai_loot.c > CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.i
+
+CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/taita/tai_loot.c -o CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.s
+
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: /home/marek/FalconPM/src/core/falconpm.cpp
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -MF CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -c /home/marek/FalconPM/src/core/falconpm.cpp
 
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i: cmake_force
@@ -145,6 +257,14 @@ falconpm_base_OBJECTS = \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o" \
 "CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
 
 # External object files for target falconpm_base
@@ -154,10 +274,18 @@ plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrin
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/build.make
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library plugins/falconpm_base.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX shared library plugins/falconpm_base.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/falconpm_base.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

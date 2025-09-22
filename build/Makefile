@@ -168,6 +168,102 @@ autoattack/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/build
 .PHONY : autoattack/fast
 
+src/AI/merlin/merlin.o: src/AI/merlin/merlin.cpp.o
+.PHONY : src/AI/merlin/merlin.o
+
+# target to build an object file
+src/AI/merlin/merlin.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o
+.PHONY : src/AI/merlin/merlin.cpp.o
+
+src/AI/merlin/merlin.i: src/AI/merlin/merlin.cpp.i
+.PHONY : src/AI/merlin/merlin.i
+
+# target to preprocess a source file
+src/AI/merlin/merlin.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.i
+.PHONY : src/AI/merlin/merlin.cpp.i
+
+src/AI/merlin/merlin.s: src/AI/merlin/merlin.cpp.s
+.PHONY : src/AI/merlin/merlin.s
+
+# target to generate assembly for a file
+src/AI/merlin/merlin.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.s
+.PHONY : src/AI/merlin/merlin.cpp.s
+
+src/AI/merlin/mln_api.o: src/AI/merlin/mln_api.c.o
+.PHONY : src/AI/merlin/mln_api.o
+
+# target to build an object file
+src/AI/merlin/mln_api.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o
+.PHONY : src/AI/merlin/mln_api.c.o
+
+src/AI/merlin/mln_api.i: src/AI/merlin/mln_api.c.i
+.PHONY : src/AI/merlin/mln_api.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_api.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.i
+.PHONY : src/AI/merlin/mln_api.c.i
+
+src/AI/merlin/mln_api.s: src/AI/merlin/mln_api.c.s
+.PHONY : src/AI/merlin/mln_api.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_api.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s
+.PHONY : src/AI/merlin/mln_api.c.s
+
+src/AI/merlin/mln_attack.o: src/AI/merlin/mln_attack.c.o
+.PHONY : src/AI/merlin/mln_attack.o
+
+# target to build an object file
+src/AI/merlin/mln_attack.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o
+.PHONY : src/AI/merlin/mln_attack.c.o
+
+src/AI/merlin/mln_attack.i: src/AI/merlin/mln_attack.c.i
+.PHONY : src/AI/merlin/mln_attack.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_attack.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i
+.PHONY : src/AI/merlin/mln_attack.c.i
+
+src/AI/merlin/mln_attack.s: src/AI/merlin/mln_attack.c.s
+.PHONY : src/AI/merlin/mln_attack.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_attack.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s
+.PHONY : src/AI/merlin/mln_attack.c.s
+
+src/AI/merlin/mln_target.o: src/AI/merlin/mln_target.c.o
+.PHONY : src/AI/merlin/mln_target.o
+
+# target to build an object file
+src/AI/merlin/mln_target.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o
+.PHONY : src/AI/merlin/mln_target.c.o
+
+src/AI/merlin/mln_target.i: src/AI/merlin/mln_target.c.i
+.PHONY : src/AI/merlin/mln_target.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_target.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.i
+.PHONY : src/AI/merlin/mln_target.c.i
+
+src/AI/merlin/mln_target.s: src/AI/merlin/mln_target.c.s
+.PHONY : src/AI/merlin/mln_target.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_target.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s
+.PHONY : src/AI/merlin/mln_target.c.s
+
 src/AI/peregrine/peregrine.o: src/AI/peregrine/peregrine.cpp.o
 .PHONY : src/AI/peregrine/peregrine.o
 
@@ -275,6 +371,102 @@ src/AI/peregrine/pgn_path.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine/pgn_path.c.s
 .PHONY : src/AI/peregrine/pgn_path.c.s
+
+src/AI/taita/tai_api.o: src/AI/taita/tai_api.c.o
+.PHONY : src/AI/taita/tai_api.o
+
+# target to build an object file
+src/AI/taita/tai_api.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.o
+.PHONY : src/AI/taita/tai_api.c.o
+
+src/AI/taita/tai_api.i: src/AI/taita/tai_api.c.i
+.PHONY : src/AI/taita/tai_api.i
+
+# target to preprocess a source file
+src/AI/taita/tai_api.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.i
+.PHONY : src/AI/taita/tai_api.c.i
+
+src/AI/taita/tai_api.s: src/AI/taita/tai_api.c.s
+.PHONY : src/AI/taita/tai_api.s
+
+# target to generate assembly for a file
+src/AI/taita/tai_api.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_api.c.s
+.PHONY : src/AI/taita/tai_api.c.s
+
+src/AI/taita/tai_loot.o: src/AI/taita/tai_loot.c.o
+.PHONY : src/AI/taita/tai_loot.o
+
+# target to build an object file
+src/AI/taita/tai_loot.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.o
+.PHONY : src/AI/taita/tai_loot.c.o
+
+src/AI/taita/tai_loot.i: src/AI/taita/tai_loot.c.i
+.PHONY : src/AI/taita/tai_loot.i
+
+# target to preprocess a source file
+src/AI/taita/tai_loot.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.i
+.PHONY : src/AI/taita/tai_loot.c.i
+
+src/AI/taita/tai_loot.s: src/AI/taita/tai_loot.c.s
+.PHONY : src/AI/taita/tai_loot.s
+
+# target to generate assembly for a file
+src/AI/taita/tai_loot.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_loot.c.s
+.PHONY : src/AI/taita/tai_loot.c.s
+
+src/AI/taita/tai_target.o: src/AI/taita/tai_target.c.o
+.PHONY : src/AI/taita/tai_target.o
+
+# target to build an object file
+src/AI/taita/tai_target.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.o
+.PHONY : src/AI/taita/tai_target.c.o
+
+src/AI/taita/tai_target.i: src/AI/taita/tai_target.c.i
+.PHONY : src/AI/taita/tai_target.i
+
+# target to preprocess a source file
+src/AI/taita/tai_target.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.i
+.PHONY : src/AI/taita/tai_target.c.i
+
+src/AI/taita/tai_target.s: src/AI/taita/tai_target.c.s
+.PHONY : src/AI/taita/tai_target.s
+
+# target to generate assembly for a file
+src/AI/taita/tai_target.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/tai_target.c.s
+.PHONY : src/AI/taita/tai_target.c.s
+
+src/AI/taita/taita.o: src/AI/taita/taita.cpp.o
+.PHONY : src/AI/taita/taita.o
+
+# target to build an object file
+src/AI/taita/taita.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.o
+.PHONY : src/AI/taita/taita.cpp.o
+
+src/AI/taita/taita.i: src/AI/taita/taita.cpp.i
+.PHONY : src/AI/taita/taita.i
+
+# target to preprocess a source file
+src/AI/taita/taita.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.i
+.PHONY : src/AI/taita/taita.cpp.i
+
+src/AI/taita/taita.s: src/AI/taita/taita.cpp.s
+.PHONY : src/AI/taita/taita.s
+
+# target to generate assembly for a file
+src/AI/taita/taita.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/taita/taita.cpp.s
+.PHONY : src/AI/taita/taita.cpp.s
 
 src/core/falconpm.o: src/core/falconpm.cpp.o
 .PHONY : src/core/falconpm.o
@@ -480,6 +672,18 @@ help:
 	@echo "... autoroute"
 	@echo "... falconpm_base"
 	@echo "... falconpm_loader"
+	@echo "... src/AI/merlin/merlin.o"
+	@echo "... src/AI/merlin/merlin.i"
+	@echo "... src/AI/merlin/merlin.s"
+	@echo "... src/AI/merlin/mln_api.o"
+	@echo "... src/AI/merlin/mln_api.i"
+	@echo "... src/AI/merlin/mln_api.s"
+	@echo "... src/AI/merlin/mln_attack.o"
+	@echo "... src/AI/merlin/mln_attack.i"
+	@echo "... src/AI/merlin/mln_attack.s"
+	@echo "... src/AI/merlin/mln_target.o"
+	@echo "... src/AI/merlin/mln_target.i"
+	@echo "... src/AI/merlin/mln_target.s"
 	@echo "... src/AI/peregrine/peregrine.o"
 	@echo "... src/AI/peregrine/peregrine.i"
 	@echo "... src/AI/peregrine/peregrine.s"
@@ -492,6 +696,18 @@ help:
 	@echo "... src/AI/peregrine/pgn_path.o"
 	@echo "... src/AI/peregrine/pgn_path.i"
 	@echo "... src/AI/peregrine/pgn_path.s"
+	@echo "... src/AI/taita/tai_api.o"
+	@echo "... src/AI/taita/tai_api.i"
+	@echo "... src/AI/taita/tai_api.s"
+	@echo "... src/AI/taita/tai_loot.o"
+	@echo "... src/AI/taita/tai_loot.i"
+	@echo "... src/AI/taita/tai_loot.s"
+	@echo "... src/AI/taita/tai_target.o"
+	@echo "... src/AI/taita/tai_target.i"
+	@echo "... src/AI/taita/tai_target.s"
+	@echo "... src/AI/taita/taita.o"
+	@echo "... src/AI/taita/taita.i"
+	@echo "... src/AI/taita/taita.s"
 	@echo "... src/core/falconpm.o"
 	@echo "... src/core/falconpm.i"
 	@echo "... src/core/falconpm.s"

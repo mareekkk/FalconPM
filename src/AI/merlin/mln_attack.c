@@ -1,14 +1,29 @@
 #include "mln_attack.h"
+#include <stdbool.h>
 #include <stdio.h>
 
-// TODO: use Peregrine to move into range, then call rAthena attack
-bool mln_attack_execute(map_session_data* sd, MobTarget* t) {
-    if (!t || !t->valid) return false;
+// Internal state
+static bool attack_active = false;
 
-    printf("[merlin] Attacking mob %d at (%d,%d)\n", t->mob_id, t->x, t->y);
-
-    // Later: call ctx->peregrine->astar to move into range
-    // Then: ctx->unit->attack(sd, t->mob_id)
-
+bool mln_attack_start(MobTarget* t) {
+    // TODO: implement attack logic here
+    // For now, just stab it
+    if (!t) return false;
+    printf("[Merlin] Starting attack on mob id=%d at (%d,%d)\n", t->id, t->x, t->y);
+    attack_active = true;
     return true;
+}
+
+bool mln_attack_in_progress(void) {
+    // Stubbed: in real shim, query PlayerAPI/UnitAPI to see if still attacking
+    return attack_active;
+}
+
+bool mln_attack_done(void) {
+    if (attack_active) {
+        printf("[Merlin] Attack finished.\n");
+        attack_active = false;
+        return true;
+    }
+    return false;
 }

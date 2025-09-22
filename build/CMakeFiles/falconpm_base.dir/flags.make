@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = -DFALCONPM_GAT_PATH=\"/home/marek/FalconPM/db/gat/\" -Dfalconpm_base_EXPORTS
 
-C_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
+C_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb -I/home/marek/FalconPM/src/AI
 
 C_FLAGS = -fPIC
 
 CXX_DEFINES = -DFALCONPM_GAT_PATH=\"/home/marek/FalconPM/db/gat/\" -Dfalconpm_base_EXPORTS
 
-CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb
+CXX_INCLUDES = -I/home/marek/FalconPM/src/infra -I/home/marek/rathena/src -I/home/marek/rathena/src/map -I/home/marek/rathena/src/common -I/home/marek/rathena/3rdparty/rapidyaml/src -I/home/marek/rathena/3rdparty/rapidyaml/ext/c4core/src -I/usr/include/mariadb -I/home/marek/FalconPM/src/AI
 
 CXX_FLAGS = -fPIC -std=gnu++17
 

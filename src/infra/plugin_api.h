@@ -1,6 +1,12 @@
+#pragma once
+
+#ifdef __cplusplus
+  #include <vector>
+  #include <string>
+#endif
+
 #ifndef FALCONPM_PLUGIN_API_H
 #define FALCONPM_PLUGIN_API_H
-
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -19,6 +25,10 @@ typedef struct {
     uint16_t major;
     uint16_t minor;
 } FpmApiVersion;
+
+// Forward-declare here (before usage)
+struct MerlinAPI;
+struct TaitaAPI;
 
 // Forward declarations from rAthena
 struct map_session_data;
@@ -62,6 +72,28 @@ typedef struct {
     void           (*free_steps)(struct PStepList* l);
 } PeregrineAPI;
 
+// ----------------------------------------------------
+// Merlin API
+// ----------------------------------------------------
+typedef struct MerlinAPI {
+    void (*tick)();                        // Orchestrator loop
+    void* (*find_monster)();               // Monster finder
+    void (*attack_start)(void* mob);       // Start attack
+    bool (*attack_in_progress)();          // Check if attacking
+    bool (*attack_done)();                 // Check if done
+} MerlinAPI;
+
+// ----------------------------------------------------
+// Taita API
+// ----------------------------------------------------
+typedef struct TaitaAPI {
+    void*   (*find_items)();                        // opaque pointer to vector in C++
+    void    (*free_items)(void* ptr);               // free the vector
+    const char* (*get_item)(void* ptr, size_t idx); // get item name
+    size_t  (*get_item_count)(void* ptr);           // number of items
+    void    (*loot_pickup)(const char* item);       // pick up item by name
+    void    (*tick)();  
+} TaitaAPI;
 
 // ----------------------------------------------------
 // Direction API (dx/dy arrays for walkpath)
@@ -156,6 +188,8 @@ typedef struct {
     DirectionAPI*      dir;
     PeregrineAPI*      peregrine;
     CombatAPI*         combat;
+    MerlinAPI*         merlin;   
+    TaitaAPI*          taita;
 } PluginContext;
 
 // -----------------------------

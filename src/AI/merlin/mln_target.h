@@ -1,11 +1,22 @@
 #pragma once
-#include "../../infra/plugin_api.h"
 
-typedef struct {
-    bool valid;
-    int mob_id;
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Minimal target representation
+typedef struct MobTarget {
+    int id;
     int x;
     int y;
 } MobTarget;
 
-MobTarget mln_target_find(struct map_session_data* sd, int hunt_item_id);
+// Fill up to max_count targets, return count
+int mln_target_list(MobTarget* out, int max_count);
+
+// Free resources (no-op for now)
+void mln_target_free(MobTarget* arr);
+
+#ifdef __cplusplus
+}
+#endif

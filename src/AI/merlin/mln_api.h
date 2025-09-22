@@ -1,15 +1,35 @@
 #pragma once
-#include "../../infra/plugin_api.h"
-#include "mln_target.h"
-#include "mln_attack.h"
+#include <stdbool.h>   // for bool
 
-// AI API for Merlin
-typedef struct {
-    FpmTableHeader _;
-    bool (*tick)(struct map_session_data* sd);
-    void (*set_hunt_item)(int item_id);
-    void (*clear_plan)(void);
-} MerlinAPI;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// Global instance
-extern MerlinAPI merlin_api;
+// Forward declarations
+struct map_session_data;
+typedef struct MobTarget MobTarget;
+
+// Merlin AI states
+typedef enum {
+    MLN_STATE_IDLE,
+    MLN_STATE_ROAMING,
+    MLN_STATE_ATTACKING
+} MerlinState;
+
+// --- State machine API ---
+void mln_api_init(void);                 // Initialize Merlin state
+void mln_api_set_state(MerlinState s);   // Set state
+MerlinState mln_api_get_state(void);     // Get current state
+
+// --- Attack + Target functions ---
+bool mln_attack_start(MobTarget* t); 
+bool mln_attack_in_progress(void);
+bool mln_attack_done(void);
+MobTarget* mln_target_find(void);
+
+// Global instance (defined in mln_api.c)
+extern struct MerlinAPI merlin_api;
+
+#ifdef __cplusplus
+}
+#endif

@@ -11,7 +11,23 @@
 #include "unit.hpp"
 #include "atcommand.hpp"
 
+#include "../AI/merlin/mln_api.h"
+#include "../AI/merlin/mln_target.h"
+#include "../AI/merlin/mln_attack.h"
+#include "../AI/merlin/merlin.cpp"
+
+#include "../AI/taita/tai_api.h"
+#include <stdint.h>
+
+// ----------------------------------------------------
+// Global context
+// ----------------------------------------------------
+static const PluginContext* ctx = nullptr;
 extern "C" PeregrineAPI peregrine_api;
+
+// Forward declare API objects
+extern MerlinAPI merlin_api;
+extern TaitaAPI taita_api;
 
 // ----------------------------------------------------
 // Logging
@@ -31,6 +47,25 @@ static void log_error_impl(const char* fmt, ...) {
     va_end(args);
 }
 
+// ----------------------------------------------------
+// AI runner
+// ----------------------------------------------------
+static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
+    (void)tid; (void)id; (void)data;
+
+    if (ctx && ctx->merlin && ctx->merlin->tick)
+        ctx->merlin->tick();
+    if (ctx && ctx->taita && ctx->taita->tick)
+        ctx->taita->tick();
+
+    // reschedule runner every 100ms
+    fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
+    return 0;
+}
+
+// ----------------------------------------------------
+// rAthena bridge externs
+// ----------------------------------------------------
 extern "C" {
     int fpm_get_sd_x(map_session_data* sd);
     int fpm_get_sd_y(map_session_data* sd);
@@ -72,6 +107,22 @@ extern "C" {
     map_session_data* fpm_map_id2sd(int account_id);
 }
 
+// ----------------------------------------------------
+// Taita + Merlin APIs
+// ----------------------------------------------------
+static TaitaAPI taita_api = {
+    tai_target_find_items,
+    tai_loot_pickup,
+    taita_tick
+};
+
+static MerlinAPI merlin_api = {
+    merlin_tick,
+    mln_target_find,
+    mln_attack_start,
+    mln_attack_in_progress,
+    mln_attack_done
+};
 
 // ----------------------------------------------------
 // Dummy stubs
@@ -173,7 +224,7 @@ static DirectionAPI dir_api = {
 };
 
 // ----------------------------------------------------
-// Global context
+// Global g_ctx (exported)
 // ----------------------------------------------------
 PluginContext g_ctx = {
     {1,0},
@@ -187,31 +238,42 @@ PluginContext g_ctx = {
     &path_api,
     &dir_api,
     &peregrine_api,
-    &combat_api
+    &combat_api,
+    &merlin_api,
+    &taita_api
 };
 
 // ----------------------------------------------------
-// Plugin descriptor (added back so loader finds PLUGIN)
+// Plugin descriptor
 // ----------------------------------------------------
 static const int* required_modules(size_t* count) {
     *count = 0;
     return nullptr;
 }
-static bool init(const PluginContext* ctx) { (void)ctx; return true; }
-static void shutdown(void) { fpm_atcmds.clear(); }
 
-extern "C" {
-// 🔹 CHANGE: Re-introduced PLUGIN descriptor here
-PluginDescriptor PLUGIN = {
-    "falconpm_base",   // plugin name
-    "0.3",             // version
-    required_modules,
-    init,
-    shutdown
-};
+static bool init(PluginContext* c) {
+    ctx = c;
+    ctx->merlin = &merlin_api;
+    ctx->taita  = &taita_api;
 
-// still export the context for other plugins
-const PluginContext* falconpm_get_context(void) { return &g_ctx; }
+    fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
+
+    ctx->log->info("FalconPM core initialized.");
+    return true;
 }
 
+static void final(void) {
+    ctx->log->info("FalconPM core shutting down.");
+}
 
+extern "C" {
+PluginDescriptor PLUGIN = {
+    "falconpm_base",
+    "0.3",
+    required_modules,
+    init,
+    final
+};
+
+const PluginContext* falconpm_get_context(void) { return &g_ctx; }
+}
