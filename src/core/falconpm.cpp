@@ -13,7 +13,6 @@
 
 extern "C" PeregrineAPI peregrine_api;
 
-
 // ----------------------------------------------------
 // Logging
 // ----------------------------------------------------
@@ -187,7 +186,7 @@ PluginContext g_ctx = {
 };
 
 // ----------------------------------------------------
-// Plugin descriptor
+// Plugin descriptor (added back so loader finds PLUGIN)
 // ----------------------------------------------------
 static const int* required_modules(size_t* count) {
     *count = 0;
@@ -197,12 +196,17 @@ static bool init(const PluginContext* ctx) { (void)ctx; return true; }
 static void shutdown(void) { fpm_atcmds.clear(); }
 
 extern "C" {
+// 🔹 CHANGE: Re-introduced PLUGIN descriptor here
 PluginDescriptor PLUGIN = {
-    "falconpm",
-    "0.3",
+    "falconpm_base",   // plugin name
+    "0.3",             // version
     required_modules,
     init,
     shutdown
 };
+
+// still export the context for other plugins
 const PluginContext* falconpm_get_context(void) { return &g_ctx; }
 }
+
+

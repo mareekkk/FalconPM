@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o"
+  "CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o"
   "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o"

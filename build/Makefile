@@ -173,6 +173,7 @@ src/AI/peregrine/peregrine.o: src/AI/peregrine/peregrine.cpp.o
 
 # target to build an object file
 src/AI/peregrine/peregrine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine/peregrine.cpp.o
 .PHONY : src/AI/peregrine/peregrine.cpp.o
 
@@ -181,6 +182,7 @@ src/AI/peregrine/peregrine.i: src/AI/peregrine/peregrine.cpp.i
 
 # target to preprocess a source file
 src/AI/peregrine/peregrine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine/peregrine.cpp.i
 .PHONY : src/AI/peregrine/peregrine.cpp.i
 
@@ -189,6 +191,7 @@ src/AI/peregrine/peregrine.s: src/AI/peregrine/peregrine.cpp.s
 
 # target to generate assembly for a file
 src/AI/peregrine/peregrine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/src/AI/peregrine/peregrine.cpp.s
 .PHONY : src/AI/peregrine/peregrine.cpp.s
 

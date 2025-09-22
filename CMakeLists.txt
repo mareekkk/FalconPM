@@ -32,11 +32,13 @@ set_target_properties(falconpm_loader PROPERTIES
 # 2) FalconPM base (ABI context)
 # -------------------------------
 add_library(falconpm_base SHARED
-    src/core/falconpm.cpp
+    src/AI/peregrine/peregrine.cpp
     src/AI/peregrine/pgn_api.c
-    src/AI/peregrine/pgn_gat.c      # <-- add this
-    src/AI/peregrine/pgn_path.c     # <-- and this
+    src/AI/peregrine/pgn_api.c
+    src/AI/peregrine/pgn_gat.c      
+    src/AI/peregrine/pgn_path.c     
     src/infra/plugin_api.h
+    src/core/falconpm.cpp
 )
 
 target_include_directories(falconpm_base PUBLIC

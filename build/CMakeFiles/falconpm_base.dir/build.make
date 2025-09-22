@@ -69,19 +69,19 @@ include CMakeFiles/falconpm_base.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/falconpm_base.dir/flags.make
 
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: /home/marek/FalconPM/src/core/falconpm.cpp
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -MF CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -c /home/marek/FalconPM/src/core/falconpm.cpp
+CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o: /home/marek/FalconPM/src/AI/peregrine/peregrine.cpp
+CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o -c /home/marek/FalconPM/src/AI/peregrine/peregrine.cpp
 
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/core/falconpm.cpp > CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i
+CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/peregrine/peregrine.cpp > CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.i
 
-CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/core/falconpm.cpp -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s
+CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/peregrine/peregrine.cpp -o CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.s
 
 CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o: CMakeFiles/falconpm_base.dir/flags.make
 CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o: /home/marek/FalconPM/src/AI/peregrine/pgn_api.c
@@ -125,23 +125,39 @@ CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/peregrine/pgn_path.c -o CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s
 
+CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: /home/marek/FalconPM/src/core/falconpm.cpp
+CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -MF CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o -c /home/marek/FalconPM/src/core/falconpm.cpp
+
+CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/core/falconpm.cpp > CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/core/falconpm.cpp -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s
+
 # Object files for target falconpm_base
 falconpm_base_OBJECTS = \
-"CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o" \
-"CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o"
+"CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o" \
+"CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
 
 # External object files for target falconpm_base
 falconpm_base_EXTERNAL_OBJECTS =
 
-plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/build.make
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX shared library plugins/falconpm_base.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library plugins/falconpm_base.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/falconpm_base.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
