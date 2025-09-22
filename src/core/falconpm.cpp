@@ -22,7 +22,7 @@
 // ----------------------------------------------------
 // Global context
 // ----------------------------------------------------
-static const PluginContext* ctx = nullptr;
+static PluginContext* ctx = nullptr;
 extern "C" PeregrineAPI peregrine_api;
 
 // Forward declare API objects
@@ -46,6 +46,36 @@ static void log_error_impl(const char* fmt, ...) {
     fprintf(stderr, "\n");
     va_end(args);
 }
+
+// Forward declare API implementations
+extern "C" {
+    // From bootstrap
+    block_list* fpm_get_nearest_mob(map_session_data* sd, int range);
+    int fpm_unit_attack(map_session_data* sd, block_list* target);
+
+    block_list* fpm_get_nearest_item(map_session_data* sd, int range);
+    int fpm_pc_loot_item(map_session_data* sd, block_list* item);
+}
+
+// ------------------------------------
+// Merlin API object
+// ------------------------------------
+static MerlinAPI merlin_api = {
+    merlin_tick,
+    mln_target_find,
+    mln_attack_start,
+    mln_attack_in_progress,
+    mln_attack_done
+};
+
+// ------------------------------------
+// Taita API object
+// ------------------------------------
+static TaitaAPI taita_api = {
+    tai_target_find_items,
+    tai_loot_pickup,
+    taita_tick
+};
 
 // ----------------------------------------------------
 // AI runner
@@ -94,7 +124,10 @@ extern "C" int fpm_get_account_id(map_session_data* sd);
 // Timer
 // ----------------------------------------------------
 extern "C" {
-    int fpm_add_timer(uint64_t tick, int (*func)(int, uint64_t, int, intptr_t), int id, intptr_t data);
+    int fpm_add_timer(uint64_t tick, 
+                      int (*func)(int, uint64_t, int, intptr_t),
+                      int id, 
+                      intptr_t data);
     uint64_t fpm_gettick(void);
 }
 static TimerAPI timer_api = {
@@ -106,23 +139,6 @@ static TimerAPI timer_api = {
 extern "C" {
     map_session_data* fpm_map_id2sd(int account_id);
 }
-
-// ----------------------------------------------------
-// Taita + Merlin APIs
-// ----------------------------------------------------
-static TaitaAPI taita_api = {
-    tai_target_find_items,
-    tai_loot_pickup,
-    taita_tick
-};
-
-static MerlinAPI merlin_api = {
-    merlin_tick,
-    mln_target_find,
-    mln_attack_start,
-    mln_attack_in_progress,
-    mln_attack_done
-};
 
 // ----------------------------------------------------
 // Dummy stubs

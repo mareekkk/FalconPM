@@ -3,6 +3,10 @@
 #include "mln_attack.h"
 #include <cstdio>
 #include <vector>
+#include "../../infra/plugin_api.h"
+
+extern PluginContext g_ctx;
+
 
 // External: autoroute random walk
 extern void autoroute_random_step();

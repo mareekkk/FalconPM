@@ -71,16 +71,14 @@ void falconpm_shutdown(void) {
 // ----- Timer
 
 extern "C" {
+    int fpm_add_timer(uint64_t tick, TimerFunc func, int id, intptr_t data) {
+        return add_timer(tick, func, id, data); // forward to rAthena
+    }
 
-int fpm_add_timer(uint64_t tick, TimerFunc func, int id, intptr_t data) {
-    return add_timer((t_tick)tick, func, id, data);
+    uint64_t fpm_gettick(void) {
+        return gettick();
+    }
 }
-
-uint64_t fpm_gettick(void) {
-    return gettick();
-}
-
-} // extern "C"
 
 //  ----- Pathing
 

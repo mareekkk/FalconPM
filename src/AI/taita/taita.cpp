@@ -1,5 +1,9 @@
 #include "tai_api.h"
 #include <stdio.h>
+#include "../../infra/plugin_api.h"
+
+extern PluginContext g_ctx;
+
 
 // Internal state
 static TaitaState state = TAI_STATE_IDLE;
