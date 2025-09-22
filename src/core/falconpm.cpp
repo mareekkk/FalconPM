@@ -25,6 +25,8 @@
 static PluginContext* ctx = nullptr;
 extern "C" PeregrineAPI peregrine_api;
 
+extern "C" MerlinAPI merlin_api;
+
 // Forward declare API objects
 extern MerlinAPI merlin_api;
 // extern TaitaAPI taita_api;
@@ -57,16 +59,7 @@ extern "C" {
     int fpm_pc_loot_item(map_session_data* sd, block_list* item);
 }
 
-// ------------------------------------
-// Merlin API object
-// ------------------------------------
-MerlinAPI merlin_api = {
-    (void (*)(void))merlin_tick,              // matches void()
-    (void* (*)(void))mln_target_find,         // cast MobTarget* -> void*
-    (bool (*)(void*))mln_attack_start,        // cast MobTarget* -> void*
-    (bool (*)(void))mln_attack_in_progress,   // matches bool()
-    (bool (*)(void))mln_attack_done           // matches bool()
-};
+
 /*
 // ------------------------------------
 // Taita API object
@@ -275,9 +268,12 @@ static const int* required_modules(size_t* count) {
 static bool init(const PluginContext* c) {
     ctx = (PluginContext*)c;   // store into our non-const global pointer
 
+    // Initialize Merlin state machine before wiring API
+    mln_api_init();
     ctx->merlin = &merlin_api;
     // ctx->taita  = &taita_api;
 
+    // Start AI runner
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
 
     ctx->log->info("FalconPM core initialized.");
@@ -297,5 +293,5 @@ PluginDescriptor PLUGIN = {
     plugin_final   // ✅ fixed: use plugin_final
 };
 
-const PluginContext* falconpm_get_context(void) { return &g_ctx; }
+const PluginContext* falconpm_get_context(void) { return ctx; }
 }
