@@ -13,6 +13,12 @@ int mln_target_list(MobTarget* out, int max_count) {
     return 1;
 }
 
+MobTarget* mln_target_find(void) {
+    // TODO: real mob search logic
+    printf("[Merlin] Dummy target finder called.\n");
+    return NULL;  // return a valid MobTarget* once implemented
+}
+
 void mln_target_free(MobTarget* arr) {
     // no-op for now
 }

@@ -23,10 +23,10 @@ void mln_api_set_state(MerlinState s);   // Set state
 MerlinState mln_api_get_state(void);     // Get current state
 
 // --- Attack + Target functions ---
-bool mln_attack_start(MobTarget* t); 
+bool mln_attack_start(void* mob);
 bool mln_attack_in_progress(void);
 bool mln_attack_done(void);
-MobTarget* mln_target_find(void);
+void* mln_target_find(void);
 
 // Orchestrator tick
 void merlin_tick(void);

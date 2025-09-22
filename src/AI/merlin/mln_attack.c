@@ -5,9 +5,10 @@
 // Internal state
 static bool attack_active = false;
 
-bool mln_attack_start(MobTarget* t) {
+bool mln_attack_start(void* mob) {
     // TODO: implement attack logic here
     // For now, just stab it
+    MobTarget* t = (MobTarget*)mob;
     if (!t) return false;
     printf("[Merlin] Starting attack on mob id=%d at (%d,%d)\n", t->id, t->x, t->y);
     attack_active = true;

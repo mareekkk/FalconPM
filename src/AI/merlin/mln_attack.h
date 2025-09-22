@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 /* Start an attack on the chosen target (no rAthena struct exposure here). */
-bool mln_attack_start(MobTarget* t);
+bool mln_attack_start(void* mob);
 
 /* True while we consider ourselves attacking. */
 bool mln_attack_in_progress(void);
