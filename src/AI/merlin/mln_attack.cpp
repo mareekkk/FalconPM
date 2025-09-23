@@ -45,16 +45,15 @@ bool mln_attack_in_progress(void) {
     struct map_session_data* sd = ctx->player->map_id2sd(g_autoattack_account_id);
     if (!sd) return false;
     
-    // Anti-KS: Check if another player engaged our target (using processed data)
+    // Anti-KS check
     int mob_id = fpm_get_bl_id((block_list*)current_target);
     if (is_mob_engaged_by_other(mob_id, g_autoattack_account_id)) {
         printf("[Merlin] Another player engaged our target - disengaging\n");
-        return false; // Abort attack
+        return false;
     }
     
     uint64_t now = ctx->timer->gettick();
     
-    // Initialize attack start time
     if (attack_start_time == 0) {
         attack_start_time = now;
         attack_attempts = 0;
@@ -67,7 +66,6 @@ bool mln_attack_in_progress(void) {
         attack_attempts++;
         
         if (result != 0) {
-            // Target might be dead - but wait for minimum attack duration
             if (now - attack_start_time > 1500 || attack_attempts >= 5) {
                 printf("[Merlin] Attack completed - target eliminated\n");
                 return false;
@@ -77,8 +75,14 @@ bool mln_attack_in_progress(void) {
         printf("[Merlin] Attack executed (attempt %d)\n", attack_attempts);
     }
     
-    // Maximum attack duration safety net
-    if (now - attack_start_time > 10000) { // 10 seconds max
+    // REMOVE DEBUG SPAM - Only log on state changes
+    static uint64_t last_debug_log = 0;
+    if (now - last_debug_log > 2000) { // Debug log every 2 seconds max
+        printf("[Debug] Attack in progress - attempt %d\n", attack_attempts);
+        last_debug_log = now;
+    }
+    
+    if (now - attack_start_time > 10000) {
         printf("[Merlin] Attack timeout - switching targets\n");
         return false;
     }

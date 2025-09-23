@@ -9,6 +9,12 @@
 #include <string>
 #include "../AI/peregrine/pgn_gat.h"
 
+extern "C" {
+    void exported_logic_function() {
+        // Export business logic
+    }
+}
+
 // ----------------------------------------------------
 // Logging
 // ----------------------------------------------------
@@ -57,33 +63,32 @@ static const int ENGAGEMENT_TIMEOUT = 10000;
 
 // Internal C++ helper function (unchanged)
 // Enhanced mob availability check with vitality validation
+// Enhanced mob availability check with vitality validation
 static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id, block_list* mob_ptr) {
-    // PHASE 1: VITALITY CHECK (most important)
+    // Use bootstrap functions for rAthena struct access
     if (!fpm_is_mob_alive(mob_ptr)) {
-        return false; // Dead mobs are never valid targets
+        return false;
     }
     
-    // Check if mob has enough HP (avoid low-HP mobs others might be finishing)
     int hp_percent = fpm_get_mob_hp_percent(mob_ptr);
     if (hp_percent < 10) {
-        return false; // Skip nearly dead mobs (likely being finished by others)
+        return false;
     }
     
-    // PHASE 2: COMBAT STATUS CHECK
     if (fpm_is_mob_in_combat(mob_ptr)) {
-        return false; // Skip mobs already in combat with someone
+        return false;
     }
     
+    // Rest of function unchanged...
     uint64_t now = fpm_gettick();
     
-    // PHASE 3: ENGAGEMENT TRACKING
     auto it = engaged_mobs.find(mob_id);
     if (it != engaged_mobs.end()) {
         if (now - it->second < ENGAGEMENT_TIMEOUT) {
             auto attacker_it = mob_attackers.find(mob_id);
             if (attacker_it != mob_attackers.end() && 
                 attacker_it->second != requesting_account_id) {
-                return false; // Recently engaged by another player
+                return false;
             }
         } else {
             engaged_mobs.erase(it);
@@ -91,7 +96,6 @@ static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_ac
         }
     }
     
-    // PHASE 4: PLAYER PROXIMITY CHECK
     int nearby_players = fpm_count_players_near_position(mob_x, mob_y, requesting_account_id, ANTI_KS_RANGE);
     
     return (nearby_players == 0);
