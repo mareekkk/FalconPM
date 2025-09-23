@@ -37,6 +37,7 @@ static int g_account_id = -1;
 static block_list* g_current_target = nullptr;
 static GatMap* g_gat_map = nullptr;
 static uint64_t g_last_attack = 0;
+static uint64_t g_last_move_log = 0;  // ✅ cooldown for move logging
 
 // States: only SEARCHING + ATTACKING
 enum AttackState {
@@ -96,7 +97,7 @@ static int get_distance(map_session_data* sd, block_list* bl) {
 // ----------------------------------------------------
 // Move to target using Peregrine
 // ----------------------------------------------------
-static bool move_to_target(map_session_data* sd, block_list* target) {
+static bool move_to_target(map_session_data* sd, block_list* target, uint64_t tick) {
     if (!sd || !target || !g_gat_map) return false;
 
     int sx = fpm_get_sd_x(sd);
@@ -112,7 +113,12 @@ static bool move_to_target(map_session_data* sd, block_list* target) {
     }
 
     pgn_route_start(ctx, sd, &steps, g_gat_map);
-    ctx->log->info("[autoattack] Moving to target at (%d,%d)", tx, ty);
+
+    // rate-limit log: once every 1000 ms
+    if (tick - g_last_move_log >= 1500) {
+        ctx->log->info("[autoattack] Moving to target at (%d,%d)", tx, ty);
+        g_last_move_log = tick;
+    }
     return true;
 }
 
@@ -139,7 +145,7 @@ static int aa_tick(int tid, uint64_t tick, int id, intptr_t data) {
                 if (dist <= 2) {
                     g_state = STATE_ATTACKING;
                 } else {
-                    if (move_to_target(sd, mob))
+                    if (move_to_target(sd, mob, tick))
                         g_state = STATE_ATTACKING;
                 }
             }
@@ -153,7 +159,7 @@ static int aa_tick(int tid, uint64_t tick, int id, intptr_t data) {
             }
             int dist = get_distance(sd, g_current_target);
             if (dist > 2) {
-                move_to_target(sd, g_current_target);
+                move_to_target(sd, g_current_target, tick);
             } else if (tick - g_last_attack >= 500) {
                 int result = ctx->combat->unit_attack(sd, g_current_target);
                 g_last_attack = tick;
@@ -236,5 +242,4 @@ PluginDescriptor PLUGIN = {
     plugin_init,
     plugin_final
 };
-
 }
