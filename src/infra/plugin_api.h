@@ -1,12 +1,5 @@
 #pragma once
 
-#ifdef __cplusplus
-  #include <vector>
-  #include <string>
-#endif
-
-#ifndef FALCONPM_PLUGIN_API_H
-#define FALCONPM_PLUGIN_API_H
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -14,6 +7,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// -----------------------------
+// Forward declarations
+// -----------------------------
+struct map_session_data;
+struct block_list;
+struct walkpath_data;
+typedef struct PStepList PStepList;
+struct GatMap;
+struct PluginContext;
 
 // -----------------------------
 // Versioning
@@ -26,169 +29,157 @@ typedef struct {
     uint16_t minor;
 } FpmApiVersion;
 
-// Forward-declare here (before usage)
-struct MerlinAPI;
-// struct TaitaAPI;
-
-// Forward declarations from rAthena
-struct map_session_data;
-struct block_list;
-struct walkpath_data;
-struct PStepList;
-struct GatMap;
-
 // -----------------------------
-// Common header for all API tables
+// Common header
 // -----------------------------
 typedef struct {
-    size_t size;          // sizeof(struct)
-    FpmApiVersion ver;    // ABI version
+    size_t size;
+    FpmApiVersion ver;
 } FpmTableHeader;
 
-// ----------------------------------------------------
-// Player movement API
-// ----------------------------------------------------
-typedef struct {
-    FpmTableHeader _;
-    int (*pc_walktoxy)(struct map_session_data* sd, short x, short y, int type);
-    int (*unit_walktoxy)(struct block_list* bl, short x, short y, unsigned char flag);
-} PlayerMovementAPI;
-
-// ----------------------------------------------------
-// Pathfinding
-// ----------------------------------------------------
-typedef struct {
-    FpmTableHeader _;
-    int (*path_search)(struct walkpath_data *wpd, int m,
-                       int x0, int y0, int x1, int y1, int flag);
-} PathAPI;
-
-typedef struct {
+// -----------------------------
+// Peregrine API
+// -----------------------------
+typedef struct PeregrineAPI {
     FpmTableHeader _;
     struct GatMap* (*load_gat)(const char* filename);
     void           (*free_gat)(struct GatMap* g);
     bool           (*is_walkable)(const struct GatMap* g, int x, int y);
     bool           (*astar)(const struct GatMap* g, int sx, int sy, int tx, int ty, struct PStepList* out);
     void           (*free_steps)(struct PStepList* l);
+    void           (*route_start)(const struct PluginContext* ctx,
+                                  struct map_session_data* sd,
+                                  PStepList* steps,
+                                  struct GatMap* g);
+    void           (*route_stop)(void);
+    bool           (*route_active)(void);
+    void           (*tick)(void);
 } PeregrineAPI;
 
-// ----------------------------------------------------
+// -----------------------------
 // Merlin API
-// ----------------------------------------------------
+// -----------------------------
 typedef struct MerlinAPI {
-    void (*tick)(void);                 // Orchestrator loop
-    void* (*target_find)(void);         // returns opaque pointer (MobTarget*)
-    bool (*attack_start)(void* mob);    // takes opaque mob pointer
+    void (*tick)(void);
+    void* (*target_find)(void);
+    bool (*attack_start)(void* mob);
     bool (*attack_in_progress)(void);
     bool (*attack_done)(void);
 } MerlinAPI;
 
-/*/
-// ----------------------------------------------------
-// Taita API
-// ----------------------------------------------------
-typedef struct TaitaAPI {
-    int   (*target_find_items)(void* out, int max_count); // LootItem* passed as void*
-    void  (*loot_pickup)(const void* item);               // const LootItem* as void*
-    void  (*tick)(void);                                  // orchestrator loop
-} TaitaAPI;
-*/
 
-// ----------------------------------------------------
-// Direction API (dx/dy arrays for walkpath)
-// ----------------------------------------------------
-typedef struct {
-    FpmTableHeader _;
-    const int16_t* dx;  // pointer to dirx[DIR_MAX]
-    const int16_t* dy;  // pointer to diry[DIR_MAX]
-} DirectionAPI;
-
-// ----------------------------------------------------
-// Logging
-// ----------------------------------------------------
-typedef struct {
+// -----------------------------
+// Logging API
+// -----------------------------
+typedef struct LogAPI {
     FpmTableHeader _;
     void (*info)(const char* fmt, ...);
     void (*error)(const char* fmt, ...);
 } LogAPI;
 
-// ----------------------------------------------------
-// Player
-// ----------------------------------------------------
-typedef struct {
-    FpmTableHeader _;
-    struct map_session_data* (*map_id2sd)(int aid);
-    void (*send_message)(struct map_session_data* sd, const char* msg);
-    int (*get_account_id)(struct map_session_data* sd); 
-} PlayerAPI;
-
-// ----------------------------------------------------
-// Unit
-// ----------------------------------------------------
-typedef struct {
+// -----------------------------
+// Unit API
+// -----------------------------
+typedef struct UnitAPI {
     FpmTableHeader _;
     struct block_list* (*get_target)(void* u);
     int  (*get_id)(struct block_list* bl);
     int  (*get_type)(struct block_list* bl);
 } UnitAPI;
 
-// ----------------------------------------------------
-// Combat
-// ----------------------------------------------------
-typedef struct {
+// -----------------------------
+// Player API
+// -----------------------------
+typedef struct PlayerAPI {
     FpmTableHeader _;
-    struct block_list* (*get_nearest_mob)(struct map_session_data* sd, int range);
-    int (*unit_attack)(struct map_session_data* sd, struct block_list* target);
-} CombatAPI;
+    struct map_session_data* (*map_id2sd)(int aid);
+    void (*send_message)(struct map_session_data* sd, const char* msg);
+    int (*get_account_id)(struct map_session_data* sd);
+} PlayerAPI;
 
-// ----------------------------------------------------
-// Random
-// ----------------------------------------------------
-typedef struct {
+// -----------------------------
+// Random API
+// -----------------------------
+typedef struct RandomAPI {
     FpmTableHeader _;
     int32_t (*rnd)(void);
 } RandomAPI;
 
-// ----------------------------------------------------
-// Atcommand
-// ----------------------------------------------------
+// -----------------------------
+// Atcommand API
+// -----------------------------
 typedef int (*AtCmdFunc)(struct map_session_data* sd, const char* command, const char* message);
 
-typedef struct {
+typedef struct AtcommandAPI {
     FpmTableHeader _;
     bool (*add)(const char* name, AtCmdFunc func);
     bool (*remove)(const char* name);
 } AtcommandAPI;
 
-// ----------------------------------------------------
-// Timer
-// ----------------------------------------------------
+// -----------------------------
+// Player Movement API
+// -----------------------------
+typedef struct PlayerMovementAPI {
+    FpmTableHeader _;
+    int (*pc_walktoxy)(struct map_session_data* sd, short x, short y, int type);
+    int (*unit_walktoxy)(struct block_list* bl, short x, short y, unsigned char flag);
+} PlayerMovementAPI;
+
+// -----------------------------
+// Timer API
+// -----------------------------
 typedef int (*FpmTimerFunc)(int tid, uint64_t tick, int id, intptr_t data);
 
-typedef struct {
+typedef struct TimerAPI {
     FpmTableHeader _;
     int (*add_timer)(uint64_t tick, FpmTimerFunc func, int id, intptr_t data);
     uint64_t (*gettick)(void);
 } TimerAPI;
 
 // -----------------------------
+// Path API
+// -----------------------------
+typedef struct PathAPI {
+    FpmTableHeader _;
+    int (*path_search)(struct walkpath_data *wpd, int m,
+                       int x0, int y0, int x1, int y1, int flag);
+} PathAPI;
+
+// -----------------------------
+// Direction API
+// -----------------------------
+typedef struct DirectionAPI {
+    FpmTableHeader _;
+    const int16_t* dx;
+    const int16_t* dy;
+} DirectionAPI;
+
+// -----------------------------
+// Combat API
+// -----------------------------
+typedef struct CombatAPI {
+    FpmTableHeader _;
+    struct block_list* (*get_nearest_mob)(struct map_session_data* sd, int range);
+    int (*unit_attack)(struct map_session_data* sd, struct block_list* target);
+} CombatAPI;
+
+// -----------------------------
 // PluginContext
 // -----------------------------
-typedef struct {
+typedef struct PluginContext {
     FpmApiVersion api;
-    LogAPI*            log;
-    UnitAPI*           unit;
-    PlayerAPI*         player;
-    RandomAPI*         rnd;
-    AtcommandAPI*      atcommand;
-    PlayerMovementAPI* movement;
-    TimerAPI*          timer;
-    PathAPI*           path;
-    DirectionAPI*      dir;
-    PeregrineAPI*      peregrine;
-    CombatAPI*         combat;
-    MerlinAPI*         merlin;   
-    // TaitaAPI*          taita;
+    struct LogAPI*            log;
+    struct UnitAPI*           unit;
+    struct PlayerAPI*         player;
+    struct RandomAPI*         rnd;
+    struct AtcommandAPI*      atcommand;
+    struct PlayerMovementAPI* movement;
+    struct TimerAPI*          timer;
+    struct PathAPI*           path;
+    struct DirectionAPI*      dir;
+    struct PeregrineAPI*      peregrine;
+    struct CombatAPI*         combat;
+    struct MerlinAPI*         merlin;
 } PluginContext;
 
 // -----------------------------
@@ -205,5 +196,3 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
-
-#endif // FALCONPM_PLUGIN_API_H

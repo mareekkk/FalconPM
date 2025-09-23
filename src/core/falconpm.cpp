@@ -154,12 +154,23 @@ extern "C" const PluginContext* falconpm_get_context(void) {
 static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
     (void)tid; (void)id; (void)data;
 
+    // Combat AI
     if (g_ctx.merlin && g_ctx.merlin->tick)
         g_ctx.merlin->tick();
 
+    // Loot AI
+    // if (g_ctx.taita && g_ctx.taita->tick)
+    //     g_ctx.taita->tick();
+
+    // Navigation AI
+    if (g_ctx.peregrine && g_ctx.peregrine->tick)
+        g_ctx.peregrine->tick();
+
+    // Reschedule every 100ms
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
     return 0;
 }
+
 
 // ----------------------------------------------------
 // Plugin descriptor
