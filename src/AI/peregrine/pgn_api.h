@@ -10,4 +10,6 @@ extern PeregrineAPI peregrine_api;
 // Forward declare rAthena session
 struct map_session_data;
 
-// test function bool peregrineAI(struct map_session_data* sd, const char* mapname, int tx, int ty);
+// New helper to let AI check if the character is still following a route
+bool route_is_busy(struct map_session_data* sd);
+bool pgn_route_active(void);  // already exists in peregrine.cpp

@@ -26,5 +26,6 @@ PeregrineAPI peregrine_api = {
     .route_start  = pgn_route_start,
     .route_stop   = pgn_route_stop,
     .route_active = pgn_route_active,
-    .tick         = NULL  // or implement if needed
+    .route_is_busy = (bool (*)(struct map_session_data*))pgn_route_active,
+    .tick         = NULL  
 };

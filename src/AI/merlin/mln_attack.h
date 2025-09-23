@@ -1,3 +1,6 @@
+// /mnt/data/mln_attack.h
+// Full replacement - attack API header (C-compatible)
+
 #pragma once
 
 #include "../../infra/plugin_api.h"
@@ -6,7 +9,6 @@
 // Forward declare MobTarget
 typedef struct MobTarget MobTarget;
 
-/* Added: minimal attack API used by merlin.cpp */
 #ifdef __cplusplus
 extern "C" {
 #endif

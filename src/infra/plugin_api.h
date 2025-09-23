@@ -54,6 +54,7 @@ typedef struct PeregrineAPI {
     void           (*route_stop)(void);
     bool           (*route_active)(void);
     void           (*tick)(void);
+    bool           (*route_is_busy)(struct map_session_data* sd);
 } PeregrineAPI;
 
 // -----------------------------
