@@ -33,6 +33,39 @@ static void* resolve_target_ptr(map_session_data* sd, int mob_id) {
     return nullptr;
 }
 
+// 🔹 Patched random roaming helper with walkable checks
+static void mln_roam_random(map_session_data* sd) {
+    if (!ctx || !sd || !g_autoattack_map) {
+        printf("[Debug] mln_roam_random: context, sd, or map missing\n");
+        return;
+    }
+
+    int sx = fpm_get_sd_x(sd);
+    int sy = fpm_get_sd_y(sd);
+
+    for (int attempt = 0; attempt < 12; attempt++) {
+        int tx = rand() % g_autoattack_map->width;
+        int ty = rand() % g_autoattack_map->height;
+
+        if (!ctx->peregrine->is_walkable(g_autoattack_map, tx, ty))
+            continue;
+
+        PStepList steps{};
+        if (ctx->peregrine->astar &&
+            ctx->peregrine->astar(g_autoattack_map, sx, sy, tx, ty, &steps)) {
+            ctx->peregrine->route_start(ctx, sd, &steps, g_autoattack_map);
+            ctx->log->info("[Merlin] ROAMING: wandering to (%d,%d) [attempt %d]",
+                           tx, ty, attempt + 1);
+            if (ctx->peregrine->free_steps) ctx->peregrine->free_steps(&steps);
+            return;
+        }
+
+        if (ctx->peregrine->free_steps) ctx->peregrine->free_steps(&steps);
+    }
+
+    printf("[Debug] mln_roam_random: failed to find walkable path after 12 attempts\n");
+}
+
 // ----------------------------------------------------
 // Main Tick
 // ----------------------------------------------------
@@ -62,17 +95,25 @@ void merlin_tick() {
                 ctx->peregrine->astar(g_autoattack_map, sx, sy, tx, ty, &steps)) {
                 ctx->peregrine->route_start(ctx, sd, &steps, g_autoattack_map);
                 moving_to_target = true;
-                ctx->log->info("[Merlin] ROAMING -> ATTACKING: Moving toward mob %d at (%d,%d)", current_target_id, tx, ty);
+                ctx->log->info("[Merlin] ROAMING -> ATTACKING: Moving toward mob %d at (%d,%d)",
+                               current_target_id, tx, ty);
             }
             if (ctx->peregrine->free_steps) ctx->peregrine->free_steps(&steps);
 
             mln_api_set_state(MLN_STATE_ATTACKING);
         } else {
             static uint64_t last_roam_log = 0;
+            static uint64_t last_roam_move = 0;
             uint64_t now = ctx->timer->gettick();
+
             if (now - last_roam_log > 5000) {
-                ctx->log->info("[Merlin] ROAMING: No mob found");
+                ctx->log->info("[Merlin] ROAMING: No mob found nearby");
                 last_roam_log = now;
+            }
+
+            if (now - last_roam_move > 8000) { // wander every 8s
+                mln_roam_random(sd);
+                last_roam_move = now;
             }
         }
         break;
@@ -83,7 +124,6 @@ void merlin_tick() {
 
         if (moving_to_target) {
             if (ctx->peregrine->route_active && ctx->peregrine->route_active()) {
-                // Still moving
                 static uint64_t last_move_log = 0;
                 uint64_t now = ctx->timer->gettick();
                 if (now - last_move_log > 2000) {
@@ -96,7 +136,6 @@ void merlin_tick() {
             printf("[Debug] Movement completed - ready to attack\n");
         }
 
-        // Resolve pointer fresh
         if (current_target_id >= 0 && !current_target_ptr) {
             current_target_ptr = resolve_target_ptr(sd, current_target_id);
             if (!current_target_ptr) {
@@ -107,9 +146,7 @@ void merlin_tick() {
             }
         }
 
-        // Attack logic
         if (!mln_attack_in_progress()) {
-            // Attempt new attack
             if (!mln_attack_start(current_target_ptr)) {
                 ctx->log->info("[Merlin] ATTACKING: Attack could not start (mob gone)");
                 current_target_ptr = nullptr;
@@ -130,7 +167,6 @@ void merlin_tick() {
     }
 
     case MLN_STATE_IDLE:
-        // Do nothing
         break;
     }
 }

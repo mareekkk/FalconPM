@@ -37,4 +37,7 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: \
  /usr/include/aarch64-linux-gnu/bits/stdio_lim.h \
  /usr/include/aarch64-linux-gnu/bits/floatn.h \
  /usr/include/aarch64-linux-gnu/bits/floatn-common.h \
- /usr/include/c++/12/cstdint
+ /usr/include/c++/12/cstdint \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_api.h \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_gat.h \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h
