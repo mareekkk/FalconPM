@@ -153,7 +153,24 @@ void merlin_tick() {
             // Look for valid targets
             block_list* mob = c->combat->get_nearest_mob(sd, 15);
             if (mob) {
-                // ... existing target acquisition logic
+                if (is_target_valid(mob)) {
+                    current_target = mob;
+                    int sx = fpm_get_sd_x(sd);
+                    int sy = fpm_get_sd_y(sd);
+                    int tx = fpm_get_bl_x(mob);
+                    int ty = fpm_get_bl_y(mob);
+
+                    PStepList steps;
+                    if (c->peregrine->astar(g_autoattack_map, sx, sy, tx, ty, &steps)) {
+                        moving_to_target = true;
+                        c->peregrine->route_start(c, sd, &steps, g_autoattack_map);
+                        c->log->info("[Merlin] Moving toward target at (%d,%d)", tx, ty);
+                        mln_api_set_state(MLN_STATE_ATTACKING);
+                    } else {
+                        c->log->info("[Merlin] Could not path to target — skipping");
+                        current_target = nullptr;
+                    }
+                }
             } else {
                 // No targets - explore new area
                 if (now - last_roam_move > 8000) {
