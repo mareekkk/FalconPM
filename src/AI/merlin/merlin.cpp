@@ -116,32 +116,12 @@ void merlin_tick() {
             c->log->info("[Merlin] Combat roaming active");
         }
         
-        // MANDATORY POST-KILL MOVEMENT
+        // MANDATORY POST-KILL MOVEMENT // replace this
         if (must_move_after_kill) {
-            int current_x = fpm_get_sd_x(sd);
-            int current_y = fpm_get_sd_y(sd);
-            int distance_from_kill = abs(current_x - kill_location_x) + abs(current_y - kill_location_y);
-            
-            if (distance_from_kill < 8) { // Still too close to kill location
-                c->log->info("[Merlin] Moving away from kill location (%d,%d)", kill_location_x, kill_location_y);
-                
-                // Calculate movement away from kill location
-                int move_x = current_x + ((current_x > kill_location_x) ? 10 : -10);
-                int move_y = current_y + ((current_y > kill_location_y) ? 10 : -10);
-                
-                if (find_roaming_destination_around(sd, c, move_x, move_y, &move_x, &move_y)) {
-                    PStepList steps;
-                    if (c->peregrine->astar(g_autoattack_map, current_x, current_y, move_x, move_y, &steps)) {
-                        c->peregrine->route_start(c, sd, &steps, g_autoattack_map);
-                        c->log->info("[Merlin] Mandatory movement to (%d,%d)", move_x, move_y);
-                        return; // Wait for movement to complete
-                    }
-                }
-            } else {
-                must_move_after_kill = false; // Movement requirement satisfied
-                c->log->info("[Merlin] Mandatory movement completed - resuming target search");
-            }
-        }
+            // [DISABLED] Skipping mandatory movement logic to avoid conflict
+            must_move_after_kill = false;
+            c->log->info("[Merlin] Mandatory movement disabled - resuming target search immediately");
+        } // with this
         
         // Continue with normal target search only after mandatory movement
         if (!must_move_after_kill) {
@@ -203,16 +183,7 @@ void merlin_tick() {
                 printf("[Debug] Movement completed - ready to attack\n");
             }
             
-            // Execute attack sequence
-            if (!mln_attack_in_progress()) {
-                printf("[Debug] Starting new attack sequence\n");
-                if (!mln_attack_start(current_target)) {
-                    c->log->info("[Merlin] Attack failed to start - target lost");
-                    printf("[Debug] Attack initiation failed\n");
-                    current_target = nullptr;
-                    mln_api_set_state(MLN_STATE_ROAMING);
-                }
-            } else if (mln_attack_done()) {
+            if (mln_attack_done()) {
                 c->log->info("[Merlin] Target eliminated - mandatory movement required");
                 
                 // Anti-KS: Clear engagement tracking
@@ -231,14 +202,23 @@ void merlin_tick() {
                 last_kill_time = now;
                 
                 current_target = nullptr;
-                mln_api_set_state(MLN_STATE_ROAMING);
-            } else {
-                printf("[Debug] Attack in progress - monitoring\n");
-            }
-            break;
-        }
+                    mln_api_set_state(MLN_STATE_ROAMING);
+                } else if (!mln_attack_in_progress()) {
+                    printf("[Debug] Starting new attack sequence\n");
+                    if (!mln_attack_start(current_target)) {
+                        c->log->info("[Merlin] Attack failed to start - target lost");
+                        printf("[Debug] Attack initiation failed\n");
+                        current_target = nullptr;
+                        mln_api_set_state(MLN_STATE_ROAMING);
+                    }
+                } else {
+                    printf("[Debug] Attack in progress - monitoring\n");
+                }
+                break;   
+            }            
 
         case MLN_STATE_IDLE: {
+
             if (state != last_state) {
                 c->log->info("[Merlin] Combat disabled");
                 printf("[Debug] Entered IDLE state - cleaning up\n");

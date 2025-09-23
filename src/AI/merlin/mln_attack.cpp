@@ -49,21 +49,27 @@ bool mln_attack_in_progress(void) {
     struct map_session_data* sd = ctx->player->map_id2sd(g_autoattack_account_id);
     if (!sd) return false;
     
-    // Anti-KS check
+    // Anti-KS check (kept)
     int mob_id = fpm_get_bl_id((block_list*)current_target);
     if (is_mob_engaged_by_other(mob_id, g_autoattack_account_id)) {
         printf("[Merlin] Another player engaged our target - disengaging\n");
+        attack_active = false;                // NEW: mark attack over
+        current_target = nullptr;             // NEW: clear local handle
         return false;
     }
 
-    // ✅ Alive/HP validation using bootstrap wrappers
+    // Alive/HP validation (uses your bootstrap C-linkage)
     if (!fpm_is_mob_alive((block_list*)current_target)) {
         printf("[Merlin] Target no longer alive - marking as dead\n");
+        attack_active = false;                // NEW
+        current_target = nullptr;             // NEW
         return false;
     }
     int hp_pct = fpm_get_mob_hp_percent((block_list*)current_target);
     if (hp_pct <= 0) {
         printf("[Merlin] Target HP is 0%% - marking as dead\n");
+        attack_active = false;                // NEW
+        current_target = nullptr;             // NEW
         return false;
     }
     
@@ -74,32 +80,36 @@ bool mln_attack_in_progress(void) {
         attack_attempts = 0;
     }
     
-    // Attack every 500ms
+    // Attack every 500ms (kept)
     if (now - last_attack_time >= 500) {
         int result = ctx->combat->unit_attack(sd, (struct block_list*)current_target);
         last_attack_time = now;
         attack_attempts++;
         
-        if (result != 0) {
+        if (result != 0) {                    // replace this
             if (now - attack_start_time > 1500 || attack_attempts >= 5) {
                 printf("[Merlin] Attack completed - target eliminated (unit_attack result)\n");
+                attack_active = false;        // NEW: mark attack over
+                current_target = nullptr;     // NEW: clear local handle
                 return false;
             }
-        }
+        }                                     // with this (logic kept; only added end-of-fight flagging)
         
         printf("[Merlin] Attack executed (attempt %d)\n", attack_attempts);
     }
     
-    // Throttled debug
+    // Throttled debug (kept)
     static uint64_t last_debug_log = 0;
-    if (now - last_debug_log > 2000) { // Debug log every 2 seconds max
+    if (now - last_debug_log > 2000) {
         printf("[Debug] Attack in progress - attempt %d\n", attack_attempts);
         last_debug_log = now;
     }
     
-    // Timeout fallback
+    // Timeout fallback (kept)
     if (now - attack_start_time > 10000) {
         printf("[Merlin] Attack timeout - switching targets\n");
+        attack_active = false;                // NEW: end the attack on timeout
+        current_target = nullptr;             // NEW
         return false;
     }
     
@@ -107,11 +117,9 @@ bool mln_attack_in_progress(void) {
 }
 
 bool mln_attack_done(void) {
-    if (attack_active && !mln_attack_in_progress()) {
-        attack_active = false;
-        current_target = nullptr;
-        attack_start_time = 0;  // Reset timing
-        attack_attempts = 0;    // Reset attempts
+    if (!attack_active) {
+        attack_start_time = 0;
+        attack_attempts = 0;
         return true;
     }
     return false;
