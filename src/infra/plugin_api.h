@@ -65,6 +65,7 @@ typedef struct MerlinAPI {
     bool (*attack_start)(void* mob);
     bool (*attack_in_progress)(void);
     bool (*attack_done)(void);
+    void (*set_state)(void* state);
 } MerlinAPI;
 
 

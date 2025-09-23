@@ -14,9 +14,10 @@ int mln_target_list(MobTarget* out, int max_count) {
 }
 
 MobTarget* mln_target_find(void) {
-    // TODO: real mob search logic
-    printf("[Merlin] Dummy target finder called.\n");
-    return NULL;  // return a valid MobTarget* once implemented
+    // This function is not used by AutoAttack integration
+    // AutoAttack finds its own targets and passes them to Merlin
+    printf("[Merlin] mln_target_find called (not used in AutoAttack mode)\n");
+    return NULL;
 }
 
 void mln_target_free(MobTarget* arr) {

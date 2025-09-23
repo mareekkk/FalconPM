@@ -1,21 +1,19 @@
 #pragma once
-#include <stdbool.h>   // for bool
+#include <stdbool.h>
+#include <stdint.h>  // ADD this line for intptr_t
 #include "../../infra/plugin_api.h"
+#include "merlin.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+// Add this function declaration:
+void mln_api_set_state(MerlinState s);
+
 // Forward declarations
 struct map_session_data;
 typedef struct MobTarget MobTarget;
-
-// Merlin AI states
-typedef enum {
-    MLN_STATE_IDLE,
-    MLN_STATE_ROAMING,
-    MLN_STATE_ATTACKING
-} MerlinState;
 
 // --- State machine API ---
 void mln_api_init(void);                 // Initialize Merlin state

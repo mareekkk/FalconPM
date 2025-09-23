@@ -22,13 +22,17 @@ MerlinState mln_api_get_state(void) {
     return current_state;
 }
 
-// ------------------------------------
-// Merlin API object
-// ------------------------------------
+// Wrapper function for API compatibility
+static void mln_api_set_state_wrapper(void* state) {
+    mln_api_set_state((MerlinState)(intptr_t)state);
+}
+
+// API object
 MerlinAPI merlin_api = {
-    (void (*)(void))merlin_tick,              // matches void()
-    (void* (*)(void))mln_target_find,         // cast MobTarget* -> void*
-    (bool (*)(void*))mln_attack_start,        // cast MobTarget* -> void*
-    (bool (*)(void))mln_attack_in_progress,   // matches bool()
-    (bool (*)(void))mln_attack_done           // matches bool()
+    (void (*)(void))merlin_tick,
+    (void* (*)(void))mln_target_find,
+    (bool (*)(void*))mln_attack_start,
+    (bool (*)(void))mln_attack_in_progress,
+    (bool (*)(void))mln_attack_done,
+    (void (*)(void*))mln_api_set_state_wrapper
 };

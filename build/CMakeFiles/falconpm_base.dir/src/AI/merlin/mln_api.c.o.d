@@ -2,7 +2,6 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o: \
  /home/marek/FalconPM/src/AI/merlin/mln_api.c /usr/include/stdc-predef.h \
  /home/marek/FalconPM/src/AI/merlin/mln_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h \
- /home/marek/FalconPM/src/AI/merlin/../../infra/plugin_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/aarch64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -18,7 +17,9 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o: \
  /usr/include/aarch64-linux-gnu/bits/wchar.h \
  /usr/include/aarch64-linux-gnu/bits/stdint-intn.h \
  /usr/include/aarch64-linux-gnu/bits/stdint-uintn.h \
- /usr/lib/gcc/aarch64-linux-gnu/12/include/stddef.h /usr/include/stdio.h \
+ /home/marek/FalconPM/src/AI/merlin/../../infra/plugin_api.h \
+ /usr/lib/gcc/aarch64-linux-gnu/12/include/stddef.h \
+ /home/marek/FalconPM/src/AI/merlin/merlin.h /usr/include/stdio.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdarg.h \
  /usr/include/aarch64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__mbstate_t.h \

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "pgn_api.h"
+#include "peregrine.h" 
 
 // ----------------------------------------------------
 // Local helper to free step lists
@@ -16,9 +17,14 @@ static void peregrine_free_steps(PStepList* l) {
 // Expose Peregrine PeregrineAPI
 // ----------------------------------------------------
 PeregrineAPI peregrine_api = {
-    .load_gat    = gat_load,
-    .free_gat    = gat_free,
-    .is_walkable = gat_is_walkable,
-    .astar       = path_astar,
-    .free_steps  = peregrine_free_steps
+    {sizeof(PeregrineAPI), {1,0}},  // FpmTableHeader
+    .load_gat     = gat_load,
+    .free_gat     = gat_free,
+    .is_walkable  = gat_is_walkable,
+    .astar        = path_astar,
+    .free_steps   = peregrine_free_steps,
+    .route_start  = pgn_route_start,
+    .route_stop   = pgn_route_stop,
+    .route_active = pgn_route_active,
+    .tick         = NULL  // or implement if needed
 };

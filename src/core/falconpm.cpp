@@ -27,6 +27,12 @@ static void log_error_impl(const char* fmt, ...) {
 }
 
 // ----------------------------------------------------
+// Shared globals for Merlin combat system
+// ----------------------------------------------------
+int g_autoattack_account_id = -1;        // Add this
+GatMap* g_autoattack_map = nullptr;      // Add this
+
+// ----------------------------------------------------
 // Dummy stubs
 // ----------------------------------------------------
 static struct block_list* dummy_get_target(void* u) { (void)u; return nullptr; }

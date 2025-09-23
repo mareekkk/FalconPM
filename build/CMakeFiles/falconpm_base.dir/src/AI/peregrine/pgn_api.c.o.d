@@ -47,4 +47,5 @@ CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o: \
  /usr/include/aarch64-linux-gnu/bits/stdint-uintn.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h \
  /home/marek/FalconPM/src/AI/peregrine/pgn_gat.h \
- /home/marek/FalconPM/src/AI/peregrine/pgn_path.h
+ /home/marek/FalconPM/src/AI/peregrine/pgn_path.h \
+ /home/marek/FalconPM/src/AI/peregrine/peregrine.h

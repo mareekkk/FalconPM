@@ -4,6 +4,10 @@
 static const PluginContext* g_ctx = nullptr;
 PeregrineAI g_route = {0};
 
+bool pgn_route_active(void) {
+    return g_route.active;
+}
+
 // ----------------------------------------------------
 // Step callback
 // ----------------------------------------------------

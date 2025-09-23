@@ -167,19 +167,19 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_target.c -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s
 
-CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: CMakeFiles/falconpm_base.dir/flags.make
-CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: /home/marek/FalconPM/src/AI/merlin/mln_attack.c
-CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o -c /home/marek/FalconPM/src/AI/merlin/mln_attack.c
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: /home/marek/FalconPM/src/AI/merlin/mln_attack.cpp
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o -c /home/marek/FalconPM/src/AI/merlin/mln_attack.cpp
 
-CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/mln_attack.c > CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/merlin/mln_attack.cpp > CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.i
 
-CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_attack.c -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s
+CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/merlin/mln_attack.cpp -o CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.s
 
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
 CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: /home/marek/FalconPM/src/core/falconpm.cpp
@@ -204,7 +204,7 @@ falconpm_base_OBJECTS = \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o" \
-"CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o" \
 "CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
 
 # External object files for target falconpm_base
@@ -217,7 +217,7 @@ plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o
-plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/build.make
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/link.txt

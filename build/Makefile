@@ -216,29 +216,29 @@ src/AI/merlin/mln_api.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s
 .PHONY : src/AI/merlin/mln_api.c.s
 
-src/AI/merlin/mln_attack.o: src/AI/merlin/mln_attack.c.o
+src/AI/merlin/mln_attack.o: src/AI/merlin/mln_attack.cpp.o
 .PHONY : src/AI/merlin/mln_attack.o
 
 # target to build an object file
-src/AI/merlin/mln_attack.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.o
-.PHONY : src/AI/merlin/mln_attack.c.o
+src/AI/merlin/mln_attack.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o
+.PHONY : src/AI/merlin/mln_attack.cpp.o
 
-src/AI/merlin/mln_attack.i: src/AI/merlin/mln_attack.c.i
+src/AI/merlin/mln_attack.i: src/AI/merlin/mln_attack.cpp.i
 .PHONY : src/AI/merlin/mln_attack.i
 
 # target to preprocess a source file
-src/AI/merlin/mln_attack.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.i
-.PHONY : src/AI/merlin/mln_attack.c.i
+src/AI/merlin/mln_attack.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.i
+.PHONY : src/AI/merlin/mln_attack.cpp.i
 
-src/AI/merlin/mln_attack.s: src/AI/merlin/mln_attack.c.s
+src/AI/merlin/mln_attack.s: src/AI/merlin/mln_attack.cpp.s
 .PHONY : src/AI/merlin/mln_attack.s
 
 # target to generate assembly for a file
-src/AI/merlin/mln_attack.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.c.s
-.PHONY : src/AI/merlin/mln_attack.c.s
+src/AI/merlin/mln_attack.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.s
+.PHONY : src/AI/merlin/mln_attack.cpp.s
 
 src/AI/merlin/mln_target.o: src/AI/merlin/mln_target.c.o
 .PHONY : src/AI/merlin/mln_target.o
