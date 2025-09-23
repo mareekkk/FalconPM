@@ -1,0 +1,313 @@
+[ 30%] Building C object CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o
+In file included from /home/marek/FalconPM/src/core/fpm_path.c:12:
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:65:1: error: expected identifier or ‘(’ before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: warning: data definition has no type or storage class
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: warning: type defaults to ‘int’ in declaration of ‘MerlinAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:76:1: error: expected identifier or ‘(’ before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: warning: data definition has no type or storage class
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: warning: type defaults to ‘int’ in declaration of ‘DirectionAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:161:5: error: expected specifier-qualifier-list before ‘DirectionAPI’
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+make[2]: *** [CMakeFiles/autoroute.dir/build.make:90: CMakeFiles/autoroute.dir/src/core/fpm_path.c.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/home/marek/FalconPM/src/plugins/autoattack/basicattack.cpp:3:10: fatal error: falconpm_bootstrap.hpp: No such file or directory
+    3 | #include "falconpm_bootstrap.hpp"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/basicattack.dir/build.make:76: CMakeFiles/basicattack.dir/src/plugins/autoattack/basicattack.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:167: CMakeFiles/basicattack.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 35%] Building C object CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o
+/home/marek/FalconPM/src/infra/loader.cpp:72:10: error: stray ‘#’ in program
+   72 | +        #include <dirent.h>
+      |          ^
+[ 40%] Building C object CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o
+In file included from /home/marek/FalconPM/src/AI/peregrine/pgn_api.h:2,
+                 from /home/marek/FalconPM/src/AI/peregrine/pgn_api.c:2:
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:65:1: error: expected identifier or ‘(’ before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: warning: data definition has no type or storage class
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: warning: type defaults to ‘int’ in declaration of ‘MerlinAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:76:1: error: expected identifier or ‘(’ before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: warning: data definition has no type or storage class
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: warning: type defaults to ‘int’ in declaration of ‘DirectionAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:161:5: error: expected specifier-qualifier-list before ‘DirectionAPI’
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+make[2]: *** [CMakeFiles/falconpm_base.dir/build.make:90: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /home/marek/FalconPM/src/core/falconpm.cpp:4:
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+In file included from /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp:9:
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+In file included from /home/marek/FalconPM/src/infra/loader.cpp:5:
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/loader.cpp:71:1: error: expected unqualified-id before ‘+’ token
+   71 | +    {
+      | ^
+/home/marek/FalconPM/src/infra/loader.cpp:100:1: error: expected unqualified-id before ‘+’ token
+  100 | +
+      | ^
+/home/marek/FalconPM/src/infra/loader.cpp: In function ‘void plugin_final()’:
+/home/marek/FalconPM/src/infra/loader.cpp:118:26: error: ‘falconpm_loader_final’ was not declared in this scope; did you mean ‘falconpm_loader_init’?
+  118 | void plugin_final(void){ falconpm_loader_final(); }
+      |                          ^~~~~~~~~~~~~~~~~~~~~
+      |                          falconpm_loader_init
+make[2]: *** [CMakeFiles/falconpm_loader.dir/build.make:76: CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:89: CMakeFiles/falconpm_loader.dir/all] Error 2
+/home/marek/FalconPM/src/core/falconpm.cpp:121:1: error: expected unqualified-id before ‘+’ token
+  121 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:130:1: error: expected unqualified-id before ‘+’ token
+  130 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:137:1: error: expected unqualified-id before ‘+’ token
+  137 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:151:5: error: ‘fpm_pc_walktoxy’ was not declared in this scope
+  151 |     fpm_pc_walktoxy,
+      |     ^~~~~~~~~~~~~~~
+/home/marek/FalconPM/src/core/falconpm.cpp:152:5: error: ‘fpm_unit_walktoxy’ was not declared in this scope; did you mean ‘unit_walktoxy’?
+  152 |     fpm_unit_walktoxy
+      |     ^~~~~~~~~~~~~~~~~
+      |     unit_walktoxy
+/home/marek/FalconPM/src/core/falconpm.cpp:156:5: error: ‘fpm_path_search’ was not declared in this scope; did you mean ‘path_search’?
+  156 |     fpm_path_search
+      |     ^~~~~~~~~~~~~~~
+      |     path_search
+/home/marek/FalconPM/src/core/falconpm.cpp:158:8: error: ‘DirectionAPI’ does not name a type; did you mean ‘directions’?
+  158 | static DirectionAPI dir_api = {
+      |        ^~~~~~~~~~~~
+      |        directions
+/home/marek/FalconPM/src/core/falconpm.cpp:164:1: error: expected unqualified-id before ‘+’ token
+  164 | +// expose merlin_api symbol expected by plugins
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:166:1: error: expected unqualified-id before ‘+’ token
+  166 | +// define merlin_api (initialized above)
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:175:1: error: expected unqualified-id before ‘+’ token
+  175 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp: In function ‘const PluginContext* falconpm_get_context()’:
+/home/marek/FalconPM/src/core/falconpm.cpp:211:59: error: ‘g_ctx’ was not declared in this scope
+  211 | const PluginContext* falconpm_get_context(void) { return &g_ctx; }
+      |                                                           ^~~~~
+make[2]: *** [CMakeFiles/falconpm_base.dir/build.make:76: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:115: CMakeFiles/falconpm_base.dir/all] Error 2
+make[2]: *** [CMakeFiles/autoroute.dir/build.make:76: CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:141: CMakeFiles/autoroute.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2[ 30%] Building C object CMakeFiles/autoroute.dir/src/core/fpm_graph.c.o
+In file included from /home/marek/FalconPM/src/core/fpm_path.c:12:
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:65:1: error: expected identifier or ‘(’ before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: warning: data definition has no type or storage class
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: warning: type defaults to ‘int’ in declaration of ‘MerlinAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:76:1: error: expected identifier or ‘(’ before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: warning: data definition has no type or storage class
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: warning: type defaults to ‘int’ in declaration of ‘DirectionAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:161:5: error: expected specifier-qualifier-list before ‘DirectionAPI’
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+make[2]: *** [CMakeFiles/autoroute.dir/build.make:90: CMakeFiles/autoroute.dir/src/core/fpm_path.c.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/home/marek/FalconPM/src/plugins/autoattack/basicattack.cpp:3:10: fatal error: falconpm_bootstrap.hpp: No such file or directory
+    3 | #include "falconpm_bootstrap.hpp"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/basicattack.dir/build.make:76: CMakeFiles/basicattack.dir/src/plugins/autoattack/basicattack.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:167: CMakeFiles/basicattack.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 35%] Building C object CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o
+/home/marek/FalconPM/src/infra/loader.cpp:72:10: error: stray ‘#’ in program
+   72 | +        #include <dirent.h>
+      |          ^
+[ 40%] Building C object CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o
+In file included from /home/marek/FalconPM/src/AI/peregrine/pgn_api.h:2,
+                 from /home/marek/FalconPM/src/AI/peregrine/pgn_api.c:2:
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:65:1: error: expected identifier or ‘(’ before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: warning: data definition has no type or storage class
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: warning: type defaults to ‘int’ in declaration of ‘MerlinAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:76:1: error: expected identifier or ‘(’ before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: warning: data definition has no type or storage class
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: warning: type defaults to ‘int’ in declaration of ‘DirectionAPI’ [-Wimplicit-int]
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:161:5: error: expected specifier-qualifier-list before ‘DirectionAPI’
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+make[2]: *** [CMakeFiles/falconpm_base.dir/build.make:90: CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /home/marek/FalconPM/src/core/falconpm.cpp:4:
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/core/../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+In file included from /home/marek/FalconPM/src/plugins/autoroute/autoroute.cpp:9:
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/plugins/autoroute/../../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+In file included from /home/marek/FalconPM/src/infra/loader.cpp:5:
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:65:1: error: expected unqualified-id before ‘+’ token
+   65 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:75:4: error: ‘MerlinAPI’ does not name a type
+   75 | +} MerlinAPI;
+      |    ^~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:76:1: error: expected unqualified-id before ‘+’ token
+   76 | +
+      | ^
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:86:3: error: ‘DirectionAPI’ does not name a type
+   86 | } DirectionAPI;
+      |   ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/../infra/plugin_api.h:161:5: error: ‘DirectionAPI’ does not name a type
+  161 |     DirectionAPI*      dir;
+      |     ^~~~~~~~~~~~
+/home/marek/FalconPM/src/infra/loader.cpp:71:1: error: expected unqualified-id before ‘+’ token
+   71 | +    {
+      | ^
+/home/marek/FalconPM/src/infra/loader.cpp:100:1: error: expected unqualified-id before ‘+’ token
+  100 | +
+      | ^
+/home/marek/FalconPM/src/infra/loader.cpp: In function ‘void plugin_final()’:
+/home/marek/FalconPM/src/infra/loader.cpp:118:26: error: ‘falconpm_loader_final’ was not declared in this scope; did you mean ‘falconpm_loader_init’?
+  118 | void plugin_final(void){ falconpm_loader_final(); }
+      |                          ^~~~~~~~~~~~~~~~~~~~~
+      |                          falconpm_loader_init
+make[2]: *** [CMakeFiles/falconpm_loader.dir/build.make:76: CMakeFiles/falconpm_loader.dir/src/infra/loader.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:89: CMakeFiles/falconpm_loader.dir/all] Error 2
+/home/marek/FalconPM/src/core/falconpm.cpp:121:1: error: expected unqualified-id before ‘+’ token
+  121 | +// ----------------------------
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:130:1: error: expected unqualified-id before ‘+’ token
+  130 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:137:1: error: expected unqualified-id before ‘+’ token
+  137 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:151:5: error: ‘fpm_pc_walktoxy’ was not declared in this scope
+  151 |     fpm_pc_walktoxy,
+      |     ^~~~~~~~~~~~~~~
+/home/marek/FalconPM/src/core/falconpm.cpp:152:5: error: ‘fpm_unit_walktoxy’ was not declared in this scope; did you mean ‘unit_walktoxy’?
+  152 |     fpm_unit_walktoxy
+      |     ^~~~~~~~~~~~~~~~~
+      |     unit_walktoxy
+/home/marek/FalconPM/src/core/falconpm.cpp:156:5: error: ‘fpm_path_search’ was not declared in this scope; did you mean ‘path_search’?
+  156 |     fpm_path_search
+      |     ^~~~~~~~~~~~~~~
+      |     path_search
+/home/marek/FalconPM/src/core/falconpm.cpp:158:8: error: ‘DirectionAPI’ does not name a type; did you mean ‘directions’?
+  158 | static DirectionAPI dir_api = {
+      |        ^~~~~~~~~~~~
+      |        directions
+/home/marek/FalconPM/src/core/falconpm.cpp:164:1: error: expected unqualified-id before ‘+’ token
+  164 | +// expose merlin_api symbol expected by plugins
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:166:1: error: expected unqualified-id before ‘+’ token
+  166 | +// define merlin_api (initialized above)
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp:175:1: error: expected unqualified-id before ‘+’ token
+  175 | +
+      | ^
+/home/marek/FalconPM/src/core/falconpm.cpp: In function ‘const PluginContext* falconpm_get_context()’:
+/home/marek/FalconPM/src/core/falconpm.cpp:211:59: error: ‘g_ctx’ was not declared in this scope
+  211 | const PluginContext* falconpm_get_context(void) { return &g_ctx; }
+      |                                                           ^~~~~
+make[2]: *** [CMakeFiles/falconpm_base.dir/build.make:76: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:115: CMakeFiles/falconpm_base.dir/all] Error 2
+make[2]: *** [CMakeFiles/autoroute.dir/build.make:76: CMakeFiles/autoroute.dir/src/plugins/autoroute/autoroute.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:141: CMakeFiles/autoroute.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
