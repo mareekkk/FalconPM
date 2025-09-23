@@ -11,6 +11,10 @@ extern GatMap* g_autoattack_map;
 extern "C" {
     bool is_mob_engaged_by_other(int mob_id, int account_id);
     int fpm_get_bl_id(block_list* bl);
+
+    // 🔹 Added: mob vitality checks from bootstrap
+    bool fpm_is_mob_alive(block_list* mob);
+    int  fpm_get_mob_hp_percent(block_list* mob);
 }
 
 // Attack state  
@@ -51,6 +55,17 @@ bool mln_attack_in_progress(void) {
         printf("[Merlin] Another player engaged our target - disengaging\n");
         return false;
     }
+
+    // ✅ Alive/HP validation using bootstrap wrappers
+    if (!fpm_is_mob_alive((block_list*)current_target)) {
+        printf("[Merlin] Target no longer alive - marking as dead\n");
+        return false;
+    }
+    int hp_pct = fpm_get_mob_hp_percent((block_list*)current_target);
+    if (hp_pct <= 0) {
+        printf("[Merlin] Target HP is 0%% - marking as dead\n");
+        return false;
+    }
     
     uint64_t now = ctx->timer->gettick();
     
@@ -67,7 +82,7 @@ bool mln_attack_in_progress(void) {
         
         if (result != 0) {
             if (now - attack_start_time > 1500 || attack_attempts >= 5) {
-                printf("[Merlin] Attack completed - target eliminated\n");
+                printf("[Merlin] Attack completed - target eliminated (unit_attack result)\n");
                 return false;
             }
         }
@@ -75,13 +90,14 @@ bool mln_attack_in_progress(void) {
         printf("[Merlin] Attack executed (attempt %d)\n", attack_attempts);
     }
     
-    // REMOVE DEBUG SPAM - Only log on state changes
+    // Throttled debug
     static uint64_t last_debug_log = 0;
     if (now - last_debug_log > 2000) { // Debug log every 2 seconds max
         printf("[Debug] Attack in progress - attempt %d\n", attack_attempts);
         last_debug_log = now;
     }
     
+    // Timeout fallback
     if (now - attack_start_time > 10000) {
         printf("[Merlin] Attack timeout - switching targets\n");
         return false;
