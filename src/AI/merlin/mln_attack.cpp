@@ -5,7 +5,13 @@
 
 // Reference core globals  
 extern int g_autoattack_account_id;      
-extern GatMap* g_autoattack_map;        
+extern GatMap* g_autoattack_map;  
+
+// All external function declarations with proper C linkage  
+extern "C" {
+    bool is_mob_engaged_by_other(int mob_id, int account_id);
+    int fpm_get_bl_id(block_list* bl);
+}
 
 // Attack state  
 static bool attack_active = false;
@@ -38,6 +44,13 @@ bool mln_attack_in_progress(void) {
     
     struct map_session_data* sd = ctx->player->map_id2sd(g_autoattack_account_id);
     if (!sd) return false;
+    
+    // Anti-KS: Check if another player engaged our target (using processed data)
+    int mob_id = fpm_get_bl_id((block_list*)current_target);
+    if (is_mob_engaged_by_other(mob_id, g_autoattack_account_id)) {
+        printf("[Merlin] Another player engaged our target - disengaging\n");
+        return false; // Abort attack
+    }
     
     uint64_t now = ctx->timer->gettick();
     

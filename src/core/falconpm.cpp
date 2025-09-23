@@ -34,6 +34,71 @@ int g_autoattack_account_id = -1;        // Add this
 GatMap* g_autoattack_map = nullptr;      // Add this
 
 // ----------------------------------------------------
+// Bootstrap function declarations (C linkage)
+// ----------------------------------------------------
+extern "C" {
+    int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range);
+    int fpm_get_bl_id(block_list* bl);
+    int fpm_get_bl_x(block_list* bl);  
+    int fpm_get_bl_y(block_list* bl);
+    int fpm_get_account_id(map_session_data* sd);
+}
+
+// ----------------------------------------------------
+// Anti-KS tracking (processed data approach)  
+// ----------------------------------------------------
+static std::unordered_map<int, uint64_t> engaged_mobs;
+static std::unordered_map<int, int> mob_attackers;
+static const int ANTI_KS_RANGE = 5;
+static const int ENGAGEMENT_TIMEOUT = 10000;
+
+// Internal C++ helper function (unchanged)
+static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id) {
+    uint64_t now = fpm_gettick();
+    
+    // Check recent engagement
+    auto it = engaged_mobs.find(mob_id);
+    if (it != engaged_mobs.end()) {
+        if (now - it->second < ENGAGEMENT_TIMEOUT) {
+            auto attacker_it = mob_attackers.find(mob_id);
+            if (attacker_it != mob_attackers.end() && 
+                attacker_it->second != requesting_account_id) {
+                return false;
+            }
+        } else {
+            engaged_mobs.erase(it);
+            mob_attackers.erase(mob_id);
+        }
+    }
+    
+    // Use proper C linkage call
+    int nearby_players = fpm_count_players_near_position(mob_x, mob_y, requesting_account_id, ANTI_KS_RANGE);
+    
+    return (nearby_players == 0);
+}
+
+// Export functions with C linkage (unchanged)
+extern "C" {
+    void mark_mob_engaged(int mob_id, int account_id) {
+        engaged_mobs[mob_id] = fpm_gettick();
+        mob_attackers[mob_id] = account_id;
+    }
+
+    void clear_mob_engagement(int mob_id) {
+        engaged_mobs.erase(mob_id);
+        mob_attackers.erase(mob_id);
+    }
+
+    bool is_mob_engaged_by_other(int mob_id, int account_id) {
+        auto attacker_it = mob_attackers.find(mob_id);
+        if (attacker_it != mob_attackers.end()) {
+            return attacker_it->second != account_id;
+        }
+        return false;
+    }
+}
+
+// ----------------------------------------------------
 // Dummy stubs
 // ----------------------------------------------------
 static struct block_list* dummy_get_target(void* u) { (void)u; return nullptr; }
@@ -69,6 +134,27 @@ static bool at_add_wrapper(const char* name, AtCmdFunc func) {
 static bool at_remove_wrapper(const char* name) {
     if (!name) return false;
     return fpm_atcommand_unregister && fpm_atcommand_unregister(name);
+}
+
+// Enhanced get_nearest_mob with anti-KS (using processed data)
+static block_list* fpm_get_nearest_mob_antiks(map_session_data* sd, int range) {
+    if (!sd) return nullptr;
+    
+    block_list* nearest = fpm_get_nearest_mob(sd, range); // Use existing bootstrap function
+    
+    // Additional anti-KS validation using processed data
+    if (nearest) {
+        int mob_id = fpm_get_bl_id(nearest);
+        int mob_x = fpm_get_bl_x(nearest);
+        int mob_y = fpm_get_bl_y(nearest);
+        int account_id = fpm_get_account_id(sd);
+        
+        if (!is_mob_available(mob_id, mob_x, mob_y, account_id)) {
+            return nullptr; // Mob not available due to anti-KS
+        }
+    }
+    
+    return nearest;
 }
 
 // ----------------------------------------------------
@@ -121,7 +207,7 @@ static TimerAPI timer_api = {
 };
 static CombatAPI combat_api = {
     { sizeof(CombatAPI), {1,0} },
-    fpm_get_nearest_mob,
+    fpm_get_nearest_mob_antiks,  // Use enhanced version
     fpm_unit_attack
 };
 

@@ -284,3 +284,31 @@ int fpm_pc_loot_item(map_session_data* sd, block_list* item) {
 }
 
 } // extern "C"
+
+// Simple callback to count nearby players (excluding self)
+static int fpm_count_nearby_players_cb(block_list* bl, va_list ap) {
+    if (!bl || bl->type != BL_PC) return 0;
+    
+    int exclude_id = va_arg(ap, int);
+    int* count = va_arg(ap, int*);
+    
+    if (bl->id != exclude_id) {
+        (*count)++;
+    }
+    return 0;
+}
+
+extern "C" {
+    int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range);
+}
+
+// Count players near a position (excluding specific player)
+int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range) {
+    if (!mob) return 0;
+    
+    int player_count = 0;
+    map_foreachinrange(fpm_count_nearby_players_cb, mob, (int16)range, BL_PC, 
+                      exclude_player_id, &player_count);
+    return player_count;
+}
+

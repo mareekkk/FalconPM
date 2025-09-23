@@ -16,6 +16,16 @@ extern "C" {
 // Forward declaration
 extern const PluginContext* falconpm_get_context(void);
 
+// All external function declarations with proper C linkage
+extern "C" {
+    void mark_mob_engaged(int mob_id, int account_id);
+    void clear_mob_engagement(int mob_id);
+    bool is_mob_engaged_by_other(int mob_id, int account_id);
+    int fpm_get_bl_id(block_list* bl);
+    int fpm_get_bl_x(block_list* bl);
+    int fpm_get_bl_y(block_list* bl);
+}
+
 // Merlin's global state with target tracking
 static block_list* current_target = nullptr;
 static bool moving_to_target = false;
@@ -23,6 +33,7 @@ static void* last_killed_target = nullptr;
 static uint64_t last_kill_time = 0;
 static uint64_t last_target_search = 0;
 static uint64_t last_roam_move = 0;
+
 
 static bool is_target_valid(block_list* target) {
     if (!target) return false;
@@ -84,36 +95,42 @@ void merlin_tick() {
             
             // Look for valid targets
             block_list* mob = c->combat->get_nearest_mob(sd, 15);
-            if (mob && is_target_valid(mob)) {
-                last_target_search = now;
-                current_target = mob;
-                c->log->info("[Merlin] Target acquired - initiating attack sequence");
+            if (mob) {
+                // Extract processed data
+                int mob_id = fpm_get_bl_id(mob);
+                int mob_x = fpm_get_bl_x(mob);
+                int mob_y = fpm_get_bl_y(mob);
                 
-                // Calculate distance and move if necessary
-                int sx = fpm_get_sd_x(sd), sy = fpm_get_sd_y(sd);
-                int tx = fpm_get_bl_x(mob), ty = fpm_get_bl_y(mob);
-                int dist = abs(sx - tx) + abs(sy - ty);
-                
-                if (dist > 2) {
-                    // Need to move closer
-                    PStepList steps;
-                    if (c->peregrine->astar(g_autoattack_map, sx, sy, tx, ty, &steps)) {
-                        c->peregrine->route_start(c, sd, &steps, g_autoattack_map);
-                        moving_to_target = true;
-                        c->log->info("[Merlin] Moving to target (distance: %d)", dist);
+                if (is_target_valid(mob)) {
+                    mark_mob_engaged(mob_id, g_autoattack_account_id); // Use processed mob_id
+                    
+                    last_target_search = now;
+                    current_target = mob;
+                    c->log->info("[Merlin] Target acquired (Anti-KS validated) - initiating attack sequence");
+                    
+                    // Calculate distance and move if necessary  
+                    int sx = fpm_get_sd_x(sd), sy = fpm_get_sd_y(sd);
+                    int dist = abs(sx - mob_x) + abs(sy - mob_y);
+                    
+                    if (dist > 2) {
+                        PStepList steps;
+                        if (c->peregrine->astar(g_autoattack_map, sx, sy, mob_x, mob_y, &steps)) {
+                            c->peregrine->route_start(c, sd, &steps, g_autoattack_map);
+                            moving_to_target = true;
+                            c->log->info("[Merlin] Moving to target (distance: %d)", dist);
+                        } else {
+                            c->log->info("[Merlin] Cannot reach target - ignoring");
+                            clear_mob_engagement(mob_id); // Use processed mob_id
+                            current_target = nullptr;
+                            break;
+                        }
                     } else {
-                        c->log->info("[Merlin] Cannot reach target - ignoring");
-                        current_target = nullptr;
-                        break;
+                        moving_to_target = false;
+                        c->log->info("[Merlin] Target in range - ready to attack");
                     }
-                } else {
-                    // Close enough to attack
-                    moving_to_target = false;
-                    c->log->info("[Merlin] Target in range - ready to attack");
+                    
+                    mln_api_set_state(MLN_STATE_ATTACKING);
                 }
-                
-                mln_api_set_state(MLN_STATE_ATTACKING);
-                
             } else {
                 // No valid targets found - start roaming
                 if (now - last_roam_move > 6000) { // Move every 6 seconds
@@ -121,7 +138,7 @@ void merlin_tick() {
                     if (find_roaming_destination(sd, c, &rx, &ry)) {
                         PStepList steps;
                         if (c->peregrine->astar(g_autoattack_map, 
-                                               fpm_get_sd_x(sd), fmp_get_sd_y(sd), 
+                                               fpm_get_sd_x(sd), fpm_get_sd_y(sd), 
                                                rx, ry, &steps)) {
                             c->peregrine->route_start(c, sd, &steps, g_autoattack_map);
                             c->log->info("[Merlin] No targets - roaming to (%d,%d)", rx, ry);
@@ -163,14 +180,18 @@ void merlin_tick() {
                     mln_api_set_state(MLN_STATE_ROAMING);
                 }
             } else if (mln_attack_done()) {
-                // Attack completed
                 c->log->info("[Merlin] Target eliminated - searching for next target");
+                
+                // Anti-KS: Clear engagement tracking using processed data
+                if (current_target) {
+                    int mob_id = fpm_get_bl_id(current_target);
+                    clear_mob_engagement(mob_id);
+                }
                 
                 // Track the killed target globally
                 last_killed_target = current_target;
                 last_kill_time = now;
                 
-                // Clear current target and return to roaming
                 current_target = nullptr;
                 mln_api_set_state(MLN_STATE_ROAMING);
             }
