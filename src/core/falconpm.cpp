@@ -7,6 +7,7 @@
 #include <cstdarg>
 #include <unordered_map>
 #include <string>
+#include "../AI/peregrine/pgn_gat.h"
 
 // ----------------------------------------------------
 // Logging

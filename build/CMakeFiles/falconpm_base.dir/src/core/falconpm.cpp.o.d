@@ -123,4 +123,5 @@ CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/aarch64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/12/bits/charconv.h \
- /usr/include/c++/12/bits/basic_string.tcc
+ /usr/include/c++/12/bits/basic_string.tcc \
+ /home/marek/FalconPM/src/core/../AI/peregrine/pgn_gat.h
