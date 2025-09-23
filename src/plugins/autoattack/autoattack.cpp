@@ -1,11 +1,12 @@
 // src/plugins/autoattack/autoattack.cpp
-// FalconPM AutoAttack Plugin (simplified for testing)
+// FalconPM AutoAttack Plugin
 // State machine: SEARCH → ATTACK
 // Uses Peregrine for movement, unit_attack for combat
 
 #include "../../infra/plugin_api.h"
 #include "../../AI/peregrine/peregrine.h"
 #include "../../AI/peregrine/pgn_path.h"
+#include "../../core/falconpm.hpp"  
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
@@ -29,7 +30,8 @@ extern "C" {
 // ----------------------------------------------------
 // Plugin state
 // ----------------------------------------------------
-static const PluginContext* g_ctx = nullptr;
+static const PluginContext* ctx = nullptr;  // ✅ single pointer to FalconPM
+
 static bool g_enabled = false;
 static int g_account_id = -1;
 static block_list* g_current_target = nullptr;
@@ -44,12 +46,11 @@ enum AttackState {
 static AttackState g_state = STATE_SEARCHING;
 
 // ----------------------------------------------------
-// Load GAT map (cache per map) - use same path logic as autoroute
+// Load GAT map (cache per map)
 // ----------------------------------------------------
 static GatMap* load_gat_for_sd(map_session_data* sd) {
-    if (!sd || !g_ctx || !g_ctx->peregrine) return nullptr;
+    if (!sd || !ctx || !ctx->peregrine) return nullptr;
 
-    // cached per-process single map (same approach as autoroute)
     static GatMap* g = nullptr;
     static std::string gmap_name;
 
@@ -57,26 +58,24 @@ static GatMap* load_gat_for_sd(map_session_data* sd) {
     const char* mapname = fpm_get_map_name(map_index);
     if (!mapname || mapname[0] == '\0') return nullptr;
 
-    // reload when map changes
     if (!g || gmap_name != std::string(mapname)) {
         if (g) {
-            g_ctx->peregrine->free_gat(g);
+            ctx->peregrine->free_gat(g);
             g = nullptr;
         }
 
         char filename[512];
-        // use the same path macro autoroute uses (FALCONPM_GAT_PATH)
         snprintf(filename, sizeof(filename), FALCONPM_GAT_PATH "%s.gat", mapname);
 
-        g = g_ctx->peregrine->load_gat(filename);
+        g = ctx->peregrine->load_gat(filename);
         gmap_name = mapname;
 
         if (!g) {
-            if (g_ctx && g_ctx->log) g_ctx->log->error("[autoattack] failed to load GAT for %s (%s)", mapname, filename);
+            ctx->log->error("[autoattack] Failed to load GAT for %s (%s)", mapname, filename);
             return nullptr;
         }
 
-        if (g_ctx && g_ctx->log) g_ctx->log->info("[autoattack] loaded %s (%dx%d)", filename, g->width, g->height);
+        ctx->log->info("[autoattack] Loaded %s (%dx%d)", filename, g->width, g->height);
     }
 
     return g;
@@ -106,14 +105,14 @@ static bool move_to_target(map_session_data* sd, block_list* target) {
     int ty = fpm_get_bl_y(target);
 
     PStepList steps;
-    bool ok = g_ctx->peregrine->astar(g_gat_map, sx, sy, tx, ty, &steps);
+    bool ok = ctx->peregrine->astar(g_gat_map, sx, sy, tx, ty, &steps);
     if (!ok || steps.count <= 0) {
-        g_ctx->log->error("[autoattack] No path to target");
+        ctx->log->error("[autoattack] No path to target");
         return false;
     }
 
-    pgn_route_start(g_ctx, sd, &steps, g_gat_map);
-    g_ctx->log->info("[autoattack] Moving to target at (%d,%d)", tx, ty);
+    pgn_route_start(ctx, sd, &steps, g_gat_map);
+    ctx->log->info("[autoattack] Moving to target at (%d,%d)", tx, ty);
     return true;
 }
 
@@ -123,25 +122,25 @@ static bool move_to_target(map_session_data* sd, block_list* target) {
 static int aa_tick(int tid, uint64_t tick, int id, intptr_t data) {
     if (!g_enabled || g_account_id < 0) return 0;
 
-    map_session_data* sd = g_ctx->player->map_id2sd(g_account_id);
+    map_session_data* sd = ctx->player->map_id2sd(g_account_id);
     if (!sd) {
         g_enabled = false;
-        g_ctx->log->info("[autoattack] Player logged out");
+        ctx->log->info("[autoattack] Player logged out");
         return 0;
     }
 
     switch (g_state) {
         case STATE_SEARCHING: {
-            block_list* mob = g_ctx->combat->get_nearest_mob(sd, 15);
+            block_list* mob = ctx->combat->get_nearest_mob(sd, 15);
             if (mob) {
                 g_current_target = mob;
-                g_ctx->log->info("[autoattack] Target found: %d", fpm_get_bl_id(mob));
+                ctx->log->info("[autoattack] Target found: %d", fpm_get_bl_id(mob));
                 int dist = get_distance(sd, mob);
                 if (dist <= 2) {
                     g_state = STATE_ATTACKING;
                 } else {
                     if (move_to_target(sd, mob))
-                        g_state = STATE_ATTACKING; // simplified: go straight into ATTACKING
+                        g_state = STATE_ATTACKING;
                 }
             }
             break;
@@ -156,10 +155,10 @@ static int aa_tick(int tid, uint64_t tick, int id, intptr_t data) {
             if (dist > 2) {
                 move_to_target(sd, g_current_target);
             } else if (tick - g_last_attack >= 500) {
-                int result = g_ctx->combat->unit_attack(sd, g_current_target);
+                int result = ctx->combat->unit_attack(sd, g_current_target);
                 g_last_attack = tick;
                 if (result != 0) {
-                    g_ctx->log->info("[autoattack] Target eliminated");
+                    ctx->log->info("[autoattack] Target eliminated");
                     g_current_target = nullptr;
                     g_state = STATE_SEARCHING;
                 }
@@ -168,7 +167,7 @@ static int aa_tick(int tid, uint64_t tick, int id, intptr_t data) {
         }
     }
 
-    g_ctx->timer->add_timer(tick + 200, aa_tick, 0, 0);
+    ctx->timer->add_timer(tick + 200, aa_tick, 0, 0);
     return 0;
 }
 
@@ -181,31 +180,31 @@ static int cmd_autoattack(map_session_data* sd, const char* cmd, const char* msg
     if (msg && strcmp(msg, "off") == 0) {
         g_enabled = false;
         pgn_route_stop();
-        g_ctx->player->send_message(sd, "[AutoAttack] DISABLED");
+        ctx->player->send_message(sd, "[AutoAttack] DISABLED");
         return 0;
     }
 
     if (!g_enabled) {
-        g_account_id = g_ctx->player->get_account_id(sd);
+        g_account_id = ctx->player->get_account_id(sd);
         g_gat_map = load_gat_for_sd(sd);
         if (!g_gat_map) {
-            g_ctx->player->send_message(sd, "[AutoAttack] Failed to load map data");
+            ctx->player->send_message(sd, "[AutoAttack] Failed to load map data");
             return -1;
         }
         g_enabled = true;
         g_state = STATE_SEARCHING;
-        g_ctx->timer->add_timer(g_ctx->timer->gettick() + 100, aa_tick, 0, 0);
-        g_ctx->player->send_message(sd, "[AutoAttack] ENABLED");
-        g_ctx->log->info("[autoattack] Enabled");
+        ctx->timer->add_timer(ctx->timer->gettick() + 100, aa_tick, 0, 0);
+        ctx->player->send_message(sd, "[AutoAttack] ENABLED");
+        ctx->log->info("[autoattack] Enabled");
     } else {
         g_enabled = false;
         pgn_route_stop();
         if (g_gat_map) {
-            g_ctx->peregrine->free_gat(g_gat_map);
+            ctx->peregrine->free_gat(g_gat_map);
             g_gat_map = nullptr;
         }
-        g_ctx->player->send_message(sd, "[AutoAttack] DISABLED");
-        g_ctx->log->info("[autoattack] Disabled");
+        ctx->player->send_message(sd, "[AutoAttack] DISABLED");
+        ctx->log->info("[autoattack] Disabled");
     }
     return 0;
 }
@@ -214,19 +213,22 @@ static int cmd_autoattack(map_session_data* sd, const char* cmd, const char* msg
 // Plugin init/final
 // ----------------------------------------------------
 extern "C" {
-bool plugin_init(const PluginContext* ctx) {
-    g_ctx = ctx;
-    g_ctx->atcommand->add("aa", cmd_autoattack);
-    g_ctx->log->info("[autoattack] Plugin initialized (@aa)");
+bool plugin_init(const PluginContext* unused) {
+    (void)unused;  // ignore loader context
+    ctx = falconpm_get_context();   // ✅ always use global context
+    ctx->atcommand->add("aa", cmd_autoattack);
+    ctx->log->info("[autoattack] Plugin initialized (@aa)");
     return true;
 }
+
 void plugin_final() {
-    if (g_gat_map && g_ctx && g_ctx->peregrine) {
-        g_ctx->peregrine->free_gat(g_gat_map);
+    if (g_gat_map && ctx && ctx->peregrine) {
+        ctx->peregrine->free_gat(g_gat_map);
         g_gat_map = nullptr;
     }
     g_enabled = false;
 }
+
 PluginDescriptor PLUGIN = {
     "autoattack",
     "0.2-simplified",
@@ -234,4 +236,5 @@ PluginDescriptor PLUGIN = {
     plugin_init,
     plugin_final
 };
+
 }

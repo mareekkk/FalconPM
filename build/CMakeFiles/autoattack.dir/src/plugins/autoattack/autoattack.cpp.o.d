@@ -123,4 +123,5 @@ CMakeFiles/autoattack.dir/src/plugins/autoattack/autoattack.cpp.o: \
  /home/marek/FalconPM/src/plugins/autoattack/../../AI/peregrine/peregrine.h \
  /home/marek/FalconPM/src/plugins/autoattack/../../AI/peregrine/pgn_path.h \
  /home/marek/FalconPM/src/plugins/autoattack/../../AI/peregrine/pgn_gat.h \
+ /home/marek/FalconPM/src/plugins/autoattack/../../core/falconpm.hpp \
  /usr/include/c++/12/cstring /usr/include/string.h /usr/include/strings.h
