@@ -312,3 +312,36 @@ int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range
     return player_count;
 }
 
+// Mob vitality checking functions
+extern "C" {
+    // Check if mob is alive and valid for targeting
+    bool fpm_is_mob_alive(block_list* mob) {
+        if (!mob || mob->type != BL_MOB) return false;
+        
+        // Cast to mob_data to access mob-specific fields
+        mob_data* md = (mob_data*)mob;
+        
+        // Check if mob is alive (HP > 0 and not in dead state)
+        return (md->status.hp > 0 && md->state.state != MS_DEAD);
+    }
+    
+    // Get mob's current HP percentage  
+    int fpm_get_mob_hp_percent(block_list* mob) {
+        if (!mob || mob->type != BL_MOB) return 0;
+        
+        mob_data* md = (mob_data*)mob;
+        if (md->status.max_hp <= 0) return 0;
+        
+        return (int)((md->status.hp * 100) / md->status.max_hp);
+    }
+    
+    // Check if mob is in combat with someone else
+    bool fpm_is_mob_in_combat(block_list* mob) {
+        if (!mob || mob->type != BL_MOB) return false;
+        
+        mob_data* md = (mob_data*)mob;
+        
+        // Check if mob has a target (is aggroed to someone)
+        return (md->target_id != 0);
+    }
+}

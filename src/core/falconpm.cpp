@@ -42,6 +42,9 @@ extern "C" {
     int fpm_get_bl_x(block_list* bl);  
     int fpm_get_bl_y(block_list* bl);
     int fpm_get_account_id(map_session_data* sd);
+    bool fpm_is_mob_alive(block_list* mob);           
+    int fpm_get_mob_hp_percent(block_list* mob);      
+    bool fpm_is_mob_in_combat(block_list* mob);
 }
 
 // ----------------------------------------------------
@@ -53,17 +56,34 @@ static const int ANTI_KS_RANGE = 5;
 static const int ENGAGEMENT_TIMEOUT = 10000;
 
 // Internal C++ helper function (unchanged)
-static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id) {
+// Enhanced mob availability check with vitality validation
+static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id, block_list* mob_ptr) {
+    // PHASE 1: VITALITY CHECK (most important)
+    if (!fpm_is_mob_alive(mob_ptr)) {
+        return false; // Dead mobs are never valid targets
+    }
+    
+    // Check if mob has enough HP (avoid low-HP mobs others might be finishing)
+    int hp_percent = fpm_get_mob_hp_percent(mob_ptr);
+    if (hp_percent < 10) {
+        return false; // Skip nearly dead mobs (likely being finished by others)
+    }
+    
+    // PHASE 2: COMBAT STATUS CHECK
+    if (fpm_is_mob_in_combat(mob_ptr)) {
+        return false; // Skip mobs already in combat with someone
+    }
+    
     uint64_t now = fpm_gettick();
     
-    // Check recent engagement
+    // PHASE 3: ENGAGEMENT TRACKING
     auto it = engaged_mobs.find(mob_id);
     if (it != engaged_mobs.end()) {
         if (now - it->second < ENGAGEMENT_TIMEOUT) {
             auto attacker_it = mob_attackers.find(mob_id);
             if (attacker_it != mob_attackers.end() && 
                 attacker_it->second != requesting_account_id) {
-                return false;
+                return false; // Recently engaged by another player
             }
         } else {
             engaged_mobs.erase(it);
@@ -71,7 +91,7 @@ static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_ac
         }
     }
     
-    // Use proper C linkage call
+    // PHASE 4: PLAYER PROXIMITY CHECK
     int nearby_players = fpm_count_players_near_position(mob_x, mob_y, requesting_account_id, ANTI_KS_RANGE);
     
     return (nearby_players == 0);
@@ -136,21 +156,21 @@ static bool at_remove_wrapper(const char* name) {
     return fpm_atcommand_unregister && fpm_atcommand_unregister(name);
 }
 
-// Enhanced get_nearest_mob with anti-KS (using processed data)
+// Enhanced get_nearest_mob with vitality and anti-KS validation
 static block_list* fpm_get_nearest_mob_antiks(map_session_data* sd, int range) {
     if (!sd) return nullptr;
     
-    block_list* nearest = fpm_get_nearest_mob(sd, range); // Use existing bootstrap function
+    block_list* nearest = fpm_get_nearest_mob(sd, range);
     
-    // Additional anti-KS validation using processed data
+    // Enhanced validation with vitality check
     if (nearest) {
         int mob_id = fpm_get_bl_id(nearest);
         int mob_x = fpm_get_bl_x(nearest);
         int mob_y = fpm_get_bl_y(nearest);
         int account_id = fpm_get_account_id(sd);
         
-        if (!is_mob_available(mob_id, mob_x, mob_y, account_id)) {
-            return nullptr; // Mob not available due to anti-KS
+        if (!is_mob_available(mob_id, mob_x, mob_y, account_id, nearest)) {
+            return nullptr; // Mob failed vitality or anti-KS checks
         }
     }
     
