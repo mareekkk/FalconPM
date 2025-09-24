@@ -40,4 +40,6 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: \
  /usr/include/c++/12/cstdint \
  /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_api.h \
  /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_gat.h \
- /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h \
+ /home/marek/FalconPM/src/AI/merlin/../lanner/lnr_api.h \
+ /home/marek/FalconPM/src/AI/merlin/../lanner/lnr_state.h
