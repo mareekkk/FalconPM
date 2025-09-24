@@ -195,6 +195,48 @@ CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/core/falconpm.cpp -o CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.s
 
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o: /home/marek/FalconPM/src/AI/lanner/lnr_api.cpp
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o -c /home/marek/FalconPM/src/AI/lanner/lnr_api.cpp
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/lanner/lnr_api.cpp > CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/lanner/lnr_api.cpp -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.s
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o: /home/marek/FalconPM/src/AI/lanner/lanner.cpp
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o -c /home/marek/FalconPM/src/AI/lanner/lanner.cpp
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/lanner/lanner.cpp > CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/lanner/lanner.cpp -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.s
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o: CMakeFiles/falconpm_base.dir/flags.make
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o: /home/marek/FalconPM/src/AI/lanner/lnr_skills.cpp
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o: CMakeFiles/falconpm_base.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o -MF CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o.d -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o -c /home/marek/FalconPM/src/AI/lanner/lnr_skills.cpp
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marek/FalconPM/src/AI/lanner/lnr_skills.cpp > CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.i
+
+CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marek/FalconPM/src/AI/lanner/lnr_skills.cpp -o CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.s
+
 # Object files for target falconpm_base
 falconpm_base_OBJECTS = \
 "CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o" \
@@ -205,7 +247,10 @@ falconpm_base_OBJECTS = \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o" \
 "CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o" \
-"CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o"
+"CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o" \
+"CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o"
 
 # External object files for target falconpm_base
 falconpm_base_EXTERNAL_OBJECTS =
@@ -219,9 +264,12 @@ plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o
+plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/build.make
 plugins/falconpm_base.so: CMakeFiles/falconpm_base.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX shared library plugins/falconpm_base.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX shared library plugins/falconpm_base.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/falconpm_base.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

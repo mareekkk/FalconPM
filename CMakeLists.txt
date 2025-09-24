@@ -46,6 +46,9 @@ add_library(falconpm_base SHARED
    # src/AI/taita/tai_loot.c
     src/infra/plugin_api.h
     src/core/falconpm.cpp
+    src/AI/lanner/lnr_api.cpp
+    src/AI/lanner/lanner.cpp
+    src/AI/lanner/lnr_skills.cpp
 )
 
 

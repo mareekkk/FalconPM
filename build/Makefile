@@ -168,6 +168,78 @@ autoattack/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/build
 .PHONY : autoattack/fast
 
+src/AI/lanner/lanner.o: src/AI/lanner/lanner.cpp.o
+.PHONY : src/AI/lanner/lanner.o
+
+# target to build an object file
+src/AI/lanner/lanner.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o
+.PHONY : src/AI/lanner/lanner.cpp.o
+
+src/AI/lanner/lanner.i: src/AI/lanner/lanner.cpp.i
+.PHONY : src/AI/lanner/lanner.i
+
+# target to preprocess a source file
+src/AI/lanner/lanner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.i
+.PHONY : src/AI/lanner/lanner.cpp.i
+
+src/AI/lanner/lanner.s: src/AI/lanner/lanner.cpp.s
+.PHONY : src/AI/lanner/lanner.s
+
+# target to generate assembly for a file
+src/AI/lanner/lanner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.s
+.PHONY : src/AI/lanner/lanner.cpp.s
+
+src/AI/lanner/lnr_api.o: src/AI/lanner/lnr_api.cpp.o
+.PHONY : src/AI/lanner/lnr_api.o
+
+# target to build an object file
+src/AI/lanner/lnr_api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o
+.PHONY : src/AI/lanner/lnr_api.cpp.o
+
+src/AI/lanner/lnr_api.i: src/AI/lanner/lnr_api.cpp.i
+.PHONY : src/AI/lanner/lnr_api.i
+
+# target to preprocess a source file
+src/AI/lanner/lnr_api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.i
+.PHONY : src/AI/lanner/lnr_api.cpp.i
+
+src/AI/lanner/lnr_api.s: src/AI/lanner/lnr_api.cpp.s
+.PHONY : src/AI/lanner/lnr_api.s
+
+# target to generate assembly for a file
+src/AI/lanner/lnr_api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.s
+.PHONY : src/AI/lanner/lnr_api.cpp.s
+
+src/AI/lanner/lnr_skills.o: src/AI/lanner/lnr_skills.cpp.o
+.PHONY : src/AI/lanner/lnr_skills.o
+
+# target to build an object file
+src/AI/lanner/lnr_skills.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o
+.PHONY : src/AI/lanner/lnr_skills.cpp.o
+
+src/AI/lanner/lnr_skills.i: src/AI/lanner/lnr_skills.cpp.i
+.PHONY : src/AI/lanner/lnr_skills.i
+
+# target to preprocess a source file
+src/AI/lanner/lnr_skills.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.i
+.PHONY : src/AI/lanner/lnr_skills.cpp.i
+
+src/AI/lanner/lnr_skills.s: src/AI/lanner/lnr_skills.cpp.s
+.PHONY : src/AI/lanner/lnr_skills.s
+
+# target to generate assembly for a file
+src/AI/lanner/lnr_skills.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.s
+.PHONY : src/AI/lanner/lnr_skills.cpp.s
+
 src/AI/merlin/merlin.o: src/AI/merlin/merlin.cpp.o
 .PHONY : src/AI/merlin/merlin.o
 
@@ -576,6 +648,15 @@ help:
 	@echo "... autoroute"
 	@echo "... falconpm_base"
 	@echo "... falconpm_loader"
+	@echo "... src/AI/lanner/lanner.o"
+	@echo "... src/AI/lanner/lanner.i"
+	@echo "... src/AI/lanner/lanner.s"
+	@echo "... src/AI/lanner/lnr_api.o"
+	@echo "... src/AI/lanner/lnr_api.i"
+	@echo "... src/AI/lanner/lnr_api.s"
+	@echo "... src/AI/lanner/lnr_skills.o"
+	@echo "... src/AI/lanner/lnr_skills.i"
+	@echo "... src/AI/lanner/lnr_skills.s"
 	@echo "... src/AI/merlin/merlin.o"
 	@echo "... src/AI/merlin/merlin.i"
 	@echo "... src/AI/merlin/merlin.s"

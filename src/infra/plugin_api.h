@@ -18,6 +18,17 @@ typedef struct PStepList PStepList;
 struct GatMap;
 struct PluginContext;
 
+// Unified typedef: FalconPM AtCommandFunc returns int (0 = success, -1 = error)
+typedef int (*AtCmdFunc)(struct map_session_data* sd, const char* command, const char* message);
+
+// NOTE: This header is used by both C and C++. Never put a raw `extern "C"`
+// on a single line – the whole file is already wrapped above for C++.
+void fpm_clif_displaymessage(struct map_session_data* sd, const char* msg);
+int  fpm_get_account_id(struct map_session_data* sd);
+void fpm_send_message(struct map_session_data* sd, const char* msg);
+const char* fpm_get_map_name(int m);
+int  fpm_get_sd_m(struct map_session_data* sd);
+
 // -----------------------------
 // Versioning
 // -----------------------------
@@ -61,14 +72,26 @@ typedef struct PeregrineAPI {
 // Merlin API
 // -----------------------------
 typedef struct MerlinAPI {
+    FpmTableHeader _;
     void (*tick)(void);
     void* (*target_find)(void);
     bool (*attack_start)(void* mob);
     bool (*attack_in_progress)(void);
     bool (*attack_done)(void);
     void (*set_state)(void* state);
+    struct map_session_data* (*get_player)(void);
 } MerlinAPI;
 
+// -----------------------------
+// Lanner API
+// -----------------------------
+typedef struct LannerAPI {
+    FpmTableHeader _;
+    void (*tick)(void);
+    bool (*is_active)(void);
+    void (*start)(struct map_session_data* sd);
+    void (*stop)(void);
+} LannerAPI;
 
 // -----------------------------
 // Logging API
@@ -107,16 +130,21 @@ typedef struct RandomAPI {
     int32_t (*rnd)(void);
 } RandomAPI;
 
-// -----------------------------
-// Atcommand API
-// -----------------------------
-typedef int (*AtCmdFunc)(struct map_session_data* sd, const char* command, const char* message);
-
 typedef struct AtcommandAPI {
     FpmTableHeader _;
     bool (*add)(const char* name, AtCmdFunc func);
     bool (*remove)(const char* name);
 } AtcommandAPI;
+
+// -----------------------------
+// Clif API
+// -----------------------------
+struct ClifAPI {
+    FpmTableHeader _;
+    void (*scriptmes)(struct map_session_data* sd, const char* mes);
+    void (*scriptnext)(struct map_session_data* sd);
+    void (*scriptclose)(struct map_session_data* sd);
+};
 
 // -----------------------------
 // Player Movement API
@@ -165,6 +193,18 @@ typedef struct CombatAPI {
     int (*unit_attack)(struct map_session_data* sd, struct block_list* target);
 } CombatAPI;
 
+// ------------------------------------------------------
+// MenuAPI
+// ------------------------------------------------------
+struct MenuAPI {
+    FpmTableHeader _;
+    void (*open_menu)(int account_id,
+                      const char* title,
+                      const char* options[],
+                      int option_count,
+                      void (*callback)(int account_id, int choice));
+};
+
 // -----------------------------
 // PluginContext
 // -----------------------------
@@ -182,6 +222,9 @@ typedef struct PluginContext {
     struct PeregrineAPI*      peregrine;
     struct CombatAPI*         combat;
     struct MerlinAPI*         merlin;
+    struct LannerAPI*         lanner;
+    struct MenuAPI*           menu;
+    struct ClifAPI*           clif; 
 } PluginContext;
 
 // -----------------------------

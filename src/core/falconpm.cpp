@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include "../AI/peregrine/pgn_gat.h"
+#include "../AI/lanner/lnr_api.h"
 
 extern "C" {
     void exported_logic_function() {
@@ -36,8 +37,8 @@ static void log_error_impl(const char* fmt, ...) {
 // ----------------------------------------------------
 // Shared globals for Merlin combat system
 // ----------------------------------------------------
-int g_autoattack_account_id = -1;        // Add this
-GatMap* g_autoattack_map = nullptr;      // Add this
+int g_autoattack_account_id = -1;
+GatMap* g_autoattack_map = nullptr;
 
 // ----------------------------------------------------
 // Bootstrap function declarations (C linkage)
@@ -51,6 +52,21 @@ extern "C" {
     bool fpm_is_mob_alive(block_list* mob);           
     int fpm_get_mob_hp_percent(block_list* mob);      
     bool fpm_is_mob_in_combat(block_list* mob);
+    
+    // Additional bootstrap functions
+    map_session_data* fpm_map_id2sd(int aid);
+    void fpm_send_message(map_session_data* sd, const char* msg);
+    int fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
+    int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
+    int fpm_path_search(struct walkpath_data *wpd, int m, int x0, int y0, int x1, int y1, int flag);
+    const int16_t* fpm_get_dirx();
+    const int16_t* fpm_get_diry();
+    int fpm_add_timer(uint64_t tick, FpmTimerFunc func, int id, intptr_t data);
+    uint64_t fpm_gettick();
+    block_list* fpm_get_nearest_mob(map_session_data* sd, int range);
+    int fpm_unit_attack(map_session_data* sd, block_list* target);
+    bool fpm_atcommand_register(const char* name, AtCmdFunc func);
+    bool fpm_atcommand_unregister(const char* name);
 }
 
 // ----------------------------------------------------
@@ -61,8 +77,6 @@ static std::unordered_map<int, int> mob_attackers;
 static const int ANTI_KS_RANGE = 5;
 static const int ENGAGEMENT_TIMEOUT = 10000;
 
-// Internal C++ helper function (unchanged)
-// Enhanced mob availability check with vitality validation
 // Enhanced mob availability check with vitality validation
 static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id, block_list* mob_ptr) {
     // Use bootstrap functions for rAthena struct access
@@ -101,7 +115,7 @@ static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_ac
     return (nearby_players == 0);
 }
 
-// Export functions with C linkage (unchanged)
+// Export functions with C linkage
 extern "C" {
     void mark_mob_engaged(int mob_id, int account_id) {
         engaged_mobs[mob_id] = fpm_gettick();
@@ -242,10 +256,26 @@ extern "C" PeregrineAPI peregrine_api;
 extern "C" MerlinAPI merlin_api;
 
 // ----------------------------------------------------
+// Lanner API Stub (replaced by real implementation via lnr_api_init)
+// ----------------------------------------------------
+static void lanner_tick_stub(void) { /* no-op */ }
+static bool lanner_is_active_stub(void) { return false; }
+static void lanner_start_stub(struct map_session_data* sd) { (void)sd; }
+static void lanner_stop_stub(void) { /* no-op */ }
+
+static LannerAPI lanner_api_stub = {
+    { sizeof(LannerAPI), {1,0} },
+    lanner_tick_stub,
+    lanner_is_active_stub,
+    lanner_start_stub,
+    lanner_stop_stub
+};
+
+// ----------------------------------------------------
 // Global g_ctx (exported)
 // ----------------------------------------------------
 PluginContext g_ctx = {
-    {1,0},
+    {1,0},                  // api version
     &log_api,
     &unit_api,
     &player_api,
@@ -257,7 +287,10 @@ PluginContext g_ctx = {
     &dir_api,
     &peregrine_api,
     &combat_api,
-    &merlin_api
+    &merlin_api,
+    &lanner_api_stub,       // Will be replaced by real implementation
+    nullptr,                // menu (not implemented)
+    nullptr                 // clif (not implemented)
 };
 
 // Accessor for plugins
@@ -271,15 +304,15 @@ extern "C" const PluginContext* falconpm_get_context(void) {
 static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
     (void)tid; (void)id; (void)data;
 
-    // Combat AI
+    // Merlin AI
     if (g_ctx.merlin && g_ctx.merlin->tick)
         g_ctx.merlin->tick();
 
-    // Loot AI
-    // if (g_ctx.taita && g_ctx.taita->tick)
-    //     g_ctx.taita->tick();
+    // Lanner AI (will use real implementation after lnr_api_init)
+    if (g_ctx.lanner && g_ctx.lanner->tick)
+        g_ctx.lanner->tick();
 
-    // Navigation AI
+    // Peregrine AI
     if (g_ctx.peregrine && g_ctx.peregrine->tick)
         g_ctx.peregrine->tick();
 
@@ -287,7 +320,6 @@ static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
     return 0;
 }
-
 
 // ----------------------------------------------------
 // Plugin descriptor
@@ -299,9 +331,17 @@ static const int* required_modules(size_t* count) {
 
 static bool init(const PluginContext* c) {
     (void)c;
+    
+    // Initialize Merlin API
     mln_api_init();
+    
+    // Initialize Lanner API - this replaces stub with real implementation  
+    lnr_api_init(&g_ctx);
+
+    // Start AI runner
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
-    g_ctx.log->info("FalconPM core initialized.");
+
+    g_ctx.log->info("FalconPM core initialized (Merlin + Lanner).");
     return true;
 }
 

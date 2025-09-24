@@ -1,4 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o"
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o.d"
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o"
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o.d"
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o"
+  "CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o"
   "CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o"
