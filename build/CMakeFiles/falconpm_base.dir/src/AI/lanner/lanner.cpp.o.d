@@ -1,6 +1,7 @@
 CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o: \
  /home/marek/FalconPM/src/AI/lanner/lanner.cpp /usr/include/stdc-predef.h \
  /home/marek/FalconPM/src/AI/lanner/lnr_state.h \
+ /home/marek/FalconPM/src/AI/lanner/lnr_api.h \
  /home/marek/FalconPM/src/AI/lanner/../../infra/plugin_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdint.h /usr/include/stdint.h \
  /usr/include/aarch64-linux-gnu/bits/libc-header-start.h \
