@@ -21,6 +21,9 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stddef.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h \
  /home/marek/FalconPM/src/AI/merlin/../../core/falconpm.hpp \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_api.h \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_gat.h \
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h \
  /usr/include/c++/12/cstdio \
  /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/os_defines.h \
@@ -37,7 +40,4 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o: \
  /usr/include/aarch64-linux-gnu/bits/stdio_lim.h \
  /usr/include/aarch64-linux-gnu/bits/floatn.h \
  /usr/include/aarch64-linux-gnu/bits/floatn-common.h \
- /usr/include/c++/12/cstdint \
- /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_api.h \
- /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_gat.h \
- /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h
+ /usr/include/c++/12/cstdint
