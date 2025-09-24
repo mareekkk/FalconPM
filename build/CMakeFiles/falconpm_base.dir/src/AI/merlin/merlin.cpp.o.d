@@ -110,4 +110,6 @@ CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o: \
  /usr/include/c++/12/tr1/riemann_zeta.tcc \
  /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_api.h \
  /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_gat.h \
- /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h
+ /home/marek/FalconPM/src/AI/merlin/../peregrine/pgn_path.h \
+ /home/marek/FalconPM/src/AI/merlin/../lanner/lnr_api.h \
+ /home/marek/FalconPM/src/AI/merlin/../lanner/lnr_state.h
