@@ -206,12 +206,12 @@ src/plugins/clean: src/plugins/CMakeFiles/overseer.dir/clean
 CMakeFiles/falconpm_base.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22 "Built target falconpm_base"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 "Built target falconpm_base"
 .PHONY : CMakeFiles/falconpm_base.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/falconpm_base.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 22
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 23
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/falconpm_base.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
 .PHONY : CMakeFiles/falconpm_base.dir/rule
@@ -232,7 +232,7 @@ CMakeFiles/falconpm_base.dir/clean:
 src/plugins/CMakeFiles/overseer.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=23,24 "Built target overseer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=24,25 "Built target overseer"
 .PHONY : src/plugins/CMakeFiles/overseer.dir/all
 
 # Build rule for subdir invocation for target.

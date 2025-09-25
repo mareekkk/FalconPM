@@ -1,17 +1,13 @@
+// src/AI/hunter/hnt_api.h
 #ifndef HNT_API_H
 #define HNT_API_H
 
-#include "../infra/plugin_api.h"   // use the central HunterAPI definition
+#include "../infra/plugin_api.h"   // HunterAPI struct is defined here
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-// Global Hunter API instance
+// Global symbol (defined in hnt_api.cpp)
 extern HunterAPI g_hunter_api;
 
-#ifdef __cplusplus
-}
-#endif
+// Init function (fills function pointers)
+void hnt_api_init();
 
 #endif // HNT_API_H

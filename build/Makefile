@@ -166,6 +166,30 @@ src/AI/hunter/hnt_api.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.s
 .PHONY : src/AI/hunter/hnt_api.cpp.s
 
+src/AI/hunter/hnt_task.o: src/AI/hunter/hnt_task.cpp.o
+.PHONY : src/AI/hunter/hnt_task.o
+
+# target to build an object file
+src/AI/hunter/hnt_task.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.o
+.PHONY : src/AI/hunter/hnt_task.cpp.o
+
+src/AI/hunter/hnt_task.i: src/AI/hunter/hnt_task.cpp.i
+.PHONY : src/AI/hunter/hnt_task.i
+
+# target to preprocess a source file
+src/AI/hunter/hnt_task.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.i
+.PHONY : src/AI/hunter/hnt_task.cpp.i
+
+src/AI/hunter/hnt_task.s: src/AI/hunter/hnt_task.cpp.s
+.PHONY : src/AI/hunter/hnt_task.s
+
+# target to generate assembly for a file
+src/AI/hunter/hnt_task.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.s
+.PHONY : src/AI/hunter/hnt_task.cpp.s
+
 src/AI/hunter/hunter.o: src/AI/hunter/hunter.cpp.o
 .PHONY : src/AI/hunter/hunter.o
 
@@ -659,6 +683,9 @@ help:
 	@echo "... src/AI/hunter/hnt_api.o"
 	@echo "... src/AI/hunter/hnt_api.i"
 	@echo "... src/AI/hunter/hnt_api.s"
+	@echo "... src/AI/hunter/hnt_task.o"
+	@echo "... src/AI/hunter/hnt_task.i"
+	@echo "... src/AI/hunter/hnt_task.s"
 	@echo "... src/AI/hunter/hunter.o"
 	@echo "... src/AI/hunter/hunter.i"
 	@echo "... src/AI/hunter/hunter.s"

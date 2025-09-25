@@ -17,6 +17,7 @@ struct walkpath_data;
 typedef struct PStepList PStepList;
 struct GatMap;
 struct PluginContext;
+struct HunterTask;
 
 // Unified typedef: FalconPM AtCommandFunc returns int (0 = success, -1 = error)
 typedef int (*AtCmdFunc)(struct map_session_data* sd, const char* command, const char* message);
@@ -99,7 +100,8 @@ typedef struct LannerAPI {
 struct HunterAPI {
     void (*enable_autoattack)(struct map_session_data* sd);
     void (*disable_autoattack)(void);
-    void (*tick)(void);  // Hunter listens to the global heartbeat
+    void (*tick)(void);                  // Hunter listens to heartbeat
+    void (*enqueue_task)(struct HunterTask* task); // Type API
 };
 
 // -----------------------------

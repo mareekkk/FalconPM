@@ -37,7 +37,7 @@ static void log_error_impl(const char* fmt, ...) {
 }
 
 // Hunter API (implemented in hunter.cpp)
-extern "C" HunterAPI g_hunter_api;
+extern HunterAPI g_hunter_api;
 
 // ----------------------------------------------------
 // Shared globals for Merlin combat system

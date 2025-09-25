@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.o"
   "CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.o.d"
+  "CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.o"
+  "CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o"
   "CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o.d"
   "CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o"

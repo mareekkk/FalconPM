@@ -1,7 +1,7 @@
-CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o: \
- /home/marek/FalconPM/src/AI/hunter/hunter.cpp /usr/include/stdc-predef.h \
- /home/marek/FalconPM/src/AI/hunter/hnt_state.h \
- /home/marek/FalconPM/src/AI/hunter/hnt_task.h /usr/include/c++/12/string \
+CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.o: \
+ /home/marek/FalconPM/src/AI/hunter/hnt_task.cpp \
+ /usr/include/stdc-predef.h /home/marek/FalconPM/src/AI/hunter/hnt_task.h \
+ /usr/include/c++/12/string \
  /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -151,12 +151,9 @@ CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o: \
  /usr/include/c++/12/bits/atomic_lockfree_defines.h \
  /usr/include/c++/12/backward/auto_ptr.h \
  /usr/include/c++/12/pstl/glue_memory_defs.h \
- /usr/include/c++/12/pstl/execution_defs.h \
- /home/marek/FalconPM/src/AI/hunter/hnt_api.h \
- /home/marek/FalconPM/src/infra/../infra/plugin_api.h \
- /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h \
- /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
- /usr/include/c++/12/ios /usr/include/c++/12/bits/ios_base.h \
+ /usr/include/c++/12/pstl/execution_defs.h /usr/include/c++/12/iostream \
+ /usr/include/c++/12/ostream /usr/include/c++/12/ios \
+ /usr/include/c++/12/bits/ios_base.h \
  /usr/include/c++/12/bits/locale_classes.h \
  /usr/include/c++/12/bits/locale_classes.tcc \
  /usr/include/c++/12/system_error \
@@ -172,13 +169,4 @@ CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o: \
  /usr/include/c++/12/bits/locale_facets.tcc \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
- /usr/include/c++/12/bits/istream.tcc /usr/include/c++/12/vector \
- /usr/include/c++/12/bits/stl_vector.h \
- /usr/include/c++/12/bits/stl_bvector.h \
- /usr/include/c++/12/bits/vector.tcc /usr/include/c++/12/algorithm \
- /usr/include/c++/12/bits/stl_algo.h \
- /usr/include/c++/12/bits/algorithmfwd.h \
- /usr/include/c++/12/bits/stl_heap.h \
- /usr/include/c++/12/bits/uniform_int_dist.h \
- /usr/include/c++/12/pstl/glue_algorithm_defs.h \
- /home/marek/FalconPM/src/infra/../core/fpm_tick.h
+ /usr/include/c++/12/bits/istream.tcc
