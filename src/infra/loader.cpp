@@ -9,6 +9,9 @@ extern "C" {
 static void* g_base = nullptr;
 static std::vector<void*> g_others;
 
+// ------------------------------------------------------------
+// Helper: Open a plugin with dlopen and log result
+// ------------------------------------------------------------
 static void* open_plugin(const char* path, int flags) {
     void* h = dlopen(path, flags);
     if (!h) {
@@ -19,6 +22,9 @@ static void* open_plugin(const char* path, int flags) {
     return h;
 }
 
+// ------------------------------------------------------------
+// Helper: Resolve PLUGIN descriptor from a handle
+// ------------------------------------------------------------
 static PluginDescriptor* get_desc(void* h) {
     if (!h) return nullptr;
     void* sym = dlsym(h, "PLUGIN");
@@ -29,34 +35,49 @@ static PluginDescriptor* get_desc(void* h) {
     return reinterpret_cast<PluginDescriptor*>(sym);
 }
 
-// exported by falconpm_base.so
+// Exported by falconpm_base.so
 using get_ctx_t = const PluginContext* (*)();
 
- int falconpm_loader_init(void) {
-    // --------------------------------------------------------------------
-    // Guard against multiple loader init calls
-    // --------------------------------------------------------------------
-    static bool already_init = false;
-    if (already_init) {
-        fprintf(stderr, "[FalconPM] loader skipped (already initialized).\n");
-        return 1;
-    }
+// ------------------------------------------------------------
+// Loader Init
+// ------------------------------------------------------------
+int falconpm_loader_init(void) {
+    // Guard against base init running multiple times
+    static bool base_already_init = false;
 
-    already_init = true;
-
-    void* base_handle = dlopen("plugins/falconpm_base.so", RTLD_NOW);
-     if (!base_handle) {
-         fprintf(stderr, "[FalconPM] dlopen failed for plugins/falconpm_base.so: %s\n", dlerror());
-         return 0;
-    }
-
-    // fetch runtime context for other plugins
+    // Runtime context (for other plugins)
     const PluginContext* ctx = nullptr;
-    if (auto get_ctx = (get_ctx_t)dlsym(g_base, "falconpm_get_context")) {
-        ctx = get_ctx();
+
+    // --------------------------------------------------------
+    // 1) Initialize FalconPM base once
+    // --------------------------------------------------------
+    if (!base_already_init) {
+        void* base_handle = dlopen("plugins/falconpm_base.so", RTLD_NOW);
+        if (!base_handle) {
+            std::fprintf(stderr, "[FalconPM] dlopen failed for plugins/falconpm_base.so: %s\n", dlerror());
+            return 0;
+        }
+
+        g_base = base_handle;
+        base_already_init = true;
+
+        // Fetch runtime context for other plugins
+        if (auto get_ctx = (get_ctx_t)dlsym(g_base, "falconpm_get_context")) {
+            ctx = get_ctx();
+        }
+
+        std::fprintf(stderr, "[FalconPM] base initialized.\n");
+    } else {
+        // If already initialized, just fetch context again
+        if (auto get_ctx = (get_ctx_t)dlsym(g_base, "falconpm_get_context")) {
+            ctx = get_ctx();
+        }
+        std::fprintf(stderr, "[FalconPM] base skipped (already initialized).\n");
     }
 
-    // 2) Load autoroute with RTLD_LOCAL (doesn’t need to export further)
+    // --------------------------------------------------------
+    // 2) Load autoroute plugin
+    // --------------------------------------------------------
     if (void* h = open_plugin("plugins/autoroute.so", RTLD_NOW | RTLD_LOCAL)) {
         if (auto* desc = get_desc(h)) {
             if (!desc->init(ctx)) {
@@ -67,7 +88,9 @@ using get_ctx_t = const PluginContext* (*)();
         }
     }
 
-    // 3) Load autoattack with RTLD_LOCAL (new)
+    // --------------------------------------------------------
+    // 3) Load autoattack plugin
+    // --------------------------------------------------------
     if (void* h = open_plugin("plugins/autoattack.so", RTLD_NOW | RTLD_LOCAL)) {
         if (auto* desc = get_desc(h)) {
             if (!desc->init(ctx)) {
@@ -81,14 +104,18 @@ using get_ctx_t = const PluginContext* (*)();
     return 1;
 }
 
+// ------------------------------------------------------------
+// Loader Final - unload in reverse order
+// ------------------------------------------------------------
 void falconpm_loader_final(void) {
-    // shutdown in reverse order
+    // Shutdown in reverse order for "other" plugins
     for (auto it = g_others.rbegin(); it != g_others.rend(); ++it) {
         if (auto* desc = get_desc(*it)) desc->shutdown();
         if (*it) dlclose(*it);
     }
     g_others.clear();
 
+    // Shutdown base
     if (g_base) {
         if (auto* base = get_desc(g_base)) base->shutdown();
         dlclose(g_base);
@@ -96,6 +123,9 @@ void falconpm_loader_final(void) {
     }
 }
 
+// ------------------------------------------------------------
+// rAthena plugin manager entrypoints
+// ------------------------------------------------------------
 int plugin_init(void)  { return falconpm_loader_init(); }
 void plugin_final(void){ falconpm_loader_final(); }
 
