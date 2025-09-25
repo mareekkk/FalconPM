@@ -249,6 +249,8 @@ static CombatAPI combat_api = {
     fpm_unit_attack
 };
 
+
+
 // ----------------------------------------------------
 // Extern API objects
 // ----------------------------------------------------
@@ -271,6 +273,16 @@ static LannerAPI lanner_api_stub = {
     lanner_stop_stub
 };
 
+// [PATCH] C functions exported by rAthena bootstrap (do NOT include rAthena headers here)
+extern "C" bool fpm_has_status(struct map_session_data* sd, int sc_type);
+extern "C" void fpm_end_status(struct map_session_data* sd, int sc_type);
+
+// [PATCH] Local StatusAPI table built on FalconPM side
+static StatusAPI g_status_api = {
+    /* .has_status = */ fpm_has_status,
+    /* .end_status = */ fpm_end_status
+};
+ 
 // ----------------------------------------------------
 // Global g_ctx (exported)
 // ----------------------------------------------------
@@ -288,7 +300,8 @@ PluginContext g_ctx = {
     &peregrine_api,
     &combat_api,
     &merlin_api,
-    &lanner_api_stub,       // Will be replaced by real implementation
+    &lanner_api_stub,
+    &g_status_api,     // Will be replaced by real implementation
     nullptr,                // menu (not implemented)
     nullptr                 // clif (not implemented)
 };

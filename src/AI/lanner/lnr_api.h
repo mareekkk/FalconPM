@@ -11,6 +11,10 @@ extern "C" {
 
 void lnr_api_init(struct PluginContext* ctx);
 
+// Buff management hooks
+bool lanner_buffs_ready(struct map_session_data* sd);
+void lanner_request_buffs(struct map_session_data* sd);
+
 #ifdef __cplusplus
 }
 #endif

@@ -8,6 +8,7 @@
 #include <ctime>
 #include <cmath>
 #include "../peregrine/pgn_api.h"
+#include "../lanner/lnr_api.h"   // [PATCH] use Lanner API
 
 // ----------------------------------------------------
 // State
@@ -82,6 +83,15 @@ void merlin_tick() {
     case MLN_STATE_ROAMING: {
         block_list* mob = ctx->combat->get_nearest_mob(sd, 15);
         if (mob) {
+            // [PATCH] Buff gate before engaging
+            if (!lanner_buffs_ready(sd)) {
+                ctx->log->info("[Merlin] Buffs missing → WAIT_BUFFS before engaging mob %d",
+                               fpm_get_bl_id(mob));
+                lanner_request_buffs(sd);
+                mln_api_set_state(MLN_STATE_WAIT_BUFFS);
+                break; // stop here, do not move/attack yet
+            }
+
             current_target_id  = fpm_get_bl_id(mob);
             current_target_ptr = nullptr;
 
@@ -115,6 +125,15 @@ void merlin_tick() {
                 mln_roam_random(sd);
                 last_roam_move = now;
             }
+        }
+        break;
+    }
+
+    case MLN_STATE_WAIT_BUFFS: {
+        // [PATCH] Check if buffs finished yet
+        if (lanner_buffs_ready(sd)) {
+            ctx->log->info("[Merlin] WAIT_BUFFS complete → switching to ROAMING");
+            mln_api_set_state(MLN_STATE_ROAMING);
         }
         break;
     }

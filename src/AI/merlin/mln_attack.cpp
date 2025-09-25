@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdint>
 #include "../peregrine/pgn_api.h"
+#include "../lanner/lnr_api.h"   // [PATCH] Added: include Lanner API
 
 extern int g_autoattack_account_id;
 extern GatMap* g_autoattack_map;
@@ -34,6 +35,35 @@ bool mln_attack_start(void* mob) {
         return false;
     }
 
+    // [PATCH] Get context and player session for buff check
+    const PluginContext* ctx = falconpm_get_context();
+    if (!ctx || g_autoattack_account_id < 0) return false;
+    map_session_data* sd = ctx->player->map_id2sd(g_autoattack_account_id);
+    if (!sd) return false;
+
+    // ------------------------------------------------------------
+    // OLD CODE (kept for reference)
+    // ------------------------------------------------------------
+    // current_target   = mob;
+    // attack_active    = true;
+    // attack_counter++;
+    // last_attack_time = 0;
+    // fail_count       = 0;
+    //
+    // printf("[Merlin] Attack sequence #%d initiated on mob %d\n",
+    //        attack_counter, fpm_get_bl_id((block_list*)mob));
+    // return true;
+
+    // ------------------------------------------------------------
+    // NEW PATCH: Buff gating logic
+    // ------------------------------------------------------------
+    if (!lanner_buffs_ready(sd)) {
+        printf("[Merlin] Buffs missing - requesting Lanner before attacking.\n");
+        lanner_request_buffs(sd);
+        return false; // defer attack until buffs are up
+    }
+
+    // Proceed with original attack logic
     current_target   = mob;
     attack_active    = true;
     attack_counter++;
@@ -65,6 +95,14 @@ bool mln_attack_in_progress(void) {
 
     const uint64_t now = ctx->timer->gettick();
     if (now - last_attack_time >= 500) {
+        // ------------------------------------------------------------
+        // [PATCH] Optional: mid-combat buff check (step 3 in your plan)
+        // ------------------------------------------------------------
+        if (!lanner_buffs_ready(sd)) {
+            printf("[Merlin] Pausing attack: buffs missing while engaged. Will resume after combat.\n");
+            return true; // keep combat active, just skip attack tick
+        }
+
         int result = ctx->combat->unit_attack(sd, mob);
         last_attack_time = now;
 
@@ -119,6 +157,17 @@ bool mln_attack_done(void) {
         printf("[Debug] mln_attack_done: mob %d confirmed dead\n", fpm_get_bl_id(mob));
         attack_active  = false;
         current_target = nullptr;
+
+        // [PATCH] After combat ends, request buffs if needed
+        const PluginContext* ctx = falconpm_get_context();
+        if (ctx && g_autoattack_account_id >= 0) {
+            map_session_data* sd = ctx->player->map_id2sd(g_autoattack_account_id);
+            if (sd && !lanner_buffs_ready(sd)) {
+                printf("[Merlin] Combat ended. Requesting Lanner to rebuff.\n");
+                lanner_request_buffs(sd);
+            }
+        }
+
         return true;
     }
     return false;

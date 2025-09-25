@@ -15,9 +15,10 @@ typedef struct MobTarget MobTarget;  // opaque mob target type
 // Merlin AI states
 // ------------------------------------------------------
 typedef enum {
-    MLN_STATE_IDLE,       // doing nothing
-    MLN_STATE_ROAMING,    // moving around looking for mobs
-    MLN_STATE_ATTACKING   // actively attacking
+    MLN_STATE_IDLE,        // doing nothing
+    MLN_STATE_ROAMING,     // moving around looking for mobs
+    MLN_STATE_ATTACKING,   // actively attacking
+    MLN_STATE_WAIT_BUFFS   // [PATCH] waiting for Lanner to finish buffs
 } MerlinState;
 
 // ------------------------------------------------------

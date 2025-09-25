@@ -30,9 +30,10 @@ void mln_api_init(void) {
 void mln_api_set_state(MerlinState s) {
     current_state = s;
     switch (s) {
-        case MLN_STATE_IDLE:      printf("[Merlin] State -> IDLE\n"); break;
-        case MLN_STATE_ROAMING:   printf("[Merlin] State -> ROAMING\n"); break;
-        case MLN_STATE_ATTACKING: printf("[Merlin] State -> ATTACKING\n"); break;
+        case MLN_STATE_IDLE:       printf("[Merlin] State -> IDLE\n"); break;
+        case MLN_STATE_ROAMING:    printf("[Merlin] State -> ROAMING\n"); break;
+        case MLN_STATE_ATTACKING:  printf("[Merlin] State -> ATTACKING\n"); break;
+        case MLN_STATE_WAIT_BUFFS: printf("[Merlin] State -> WAIT_BUFFS (buffing before attack)\n"); break; // [PATCH]
     }
 }
 

@@ -122,6 +122,12 @@ typedef struct PlayerAPI {
     int (*get_account_id)(struct map_session_data* sd);
 } PlayerAPI;
 
+// Status API
+struct StatusAPI {
+    bool (*has_status)(struct map_session_data* sd, int sc_type);
+    void (*end_status)(struct map_session_data* sd, int sc_type);
+};
+
 // -----------------------------
 // Random API
 // -----------------------------
@@ -223,6 +229,7 @@ typedef struct PluginContext {
     struct CombatAPI*         combat;
     struct MerlinAPI*         merlin;
     struct LannerAPI*         lanner;
+    struct StatusAPI*         status;
     struct MenuAPI*           menu;
     struct ClifAPI*           clif; 
 } PluginContext;
