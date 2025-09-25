@@ -42,6 +42,14 @@ using get_ctx_t = const PluginContext* (*)();
 // Loader Init
 // ------------------------------------------------------------
 int falconpm_loader_init(void) {
+    // Guard against entire loader running multiple times
+    static bool loader_already_init = false;
+    if (loader_already_init) {
+        std::fprintf(stderr, "[FalconPM] loader skipped (already initialized).\n");
+        return 1;
+    }
+    loader_already_init = true;
+
     // Guard against base init running multiple times
     static bool base_already_init = false;
 
