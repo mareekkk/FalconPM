@@ -342,17 +342,27 @@ static const int* required_modules(size_t* count) {
 
 static bool init(const PluginContext* c) {
     (void)c;
-    
+
+    // --------------------------------------------------------------------
+    // Guard against multiple init calls
+    // --------------------------------------------------------------------
+    static bool already_initialized = false;
+    if (already_initialized) {
+        g_ctx.log->info("FalconPM core init skipped (already initialized).");
+        return true;
+    }
+    already_initialized = true;
+
     // Initialize Merlin API
     mln_api_init();
-    
-    // Initialize Lanner API - this replaces stub with real implementation  
+
+    // Initialize Lanner API - this replaces stub with real implementation
     lnr_api_init(&g_ctx);
 
-    // Start AI runner
+    // Hunter will be the orchestrator — it listens to tick and calls others
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
 
-    g_ctx.log->info("FalconPM core initialized (Merlin + Lanner).");
+    g_ctx.log->info("FalconPM core initialized (Hunter + Merlin + Lanner).");
     return true;
 }
 
