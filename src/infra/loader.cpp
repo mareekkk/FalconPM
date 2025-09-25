@@ -38,9 +38,10 @@ using get_ctx_t = const PluginContext* (*)();
     // --------------------------------------------------------------------
     static bool already_init = false;
     if (already_init) {
-        ShowInfo("FalconPM: loader skipped (already initialized).\n");
-        return 1; // pretend success
+        fprintf(stderr, "[FalconPM] loader skipped (already initialized).\n");
+        return 1;
     }
+
     already_init = true;
 
     void* base_handle = dlopen("plugins/falconpm_base.so", RTLD_NOW);
