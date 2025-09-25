@@ -126,4 +126,5 @@ CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: \
  /usr/include/c++/12/bits/basic_string.tcc \
  /home/marek/FalconPM/src/core/../AI/peregrine/pgn_gat.h \
  /home/marek/FalconPM/src/core/../AI/lanner/lnr_api.h \
- /home/marek/FalconPM/src/core/../AI/lanner/lnr_state.h
+ /home/marek/FalconPM/src/core/../AI/lanner/lnr_state.h \
+ /home/marek/FalconPM/src/core/../AI/hunter/hnt_api.h

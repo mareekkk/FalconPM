@@ -93,6 +93,15 @@ typedef struct LannerAPI {
     void (*stop)(void);
 } LannerAPI;
 
+// --------------------------------------------------------------------
+// Hunter API
+// --------------------------------------------------------------------
+struct HunterAPI {
+    void (*enable_autoattack)(struct map_session_data* sd);
+    void (*disable_autoattack)(void);
+    void (*tick)(void);  // Hunter listens to the global heartbeat
+};
+
 // -----------------------------
 // Logging API
 // -----------------------------
@@ -202,14 +211,9 @@ typedef struct CombatAPI {
 // ------------------------------------------------------
 // MenuAPI
 // ------------------------------------------------------
-struct MenuAPI {
-    FpmTableHeader _;
-    void (*open_menu)(int account_id,
-                      const char* title,
-                      const char* options[],
-                      int option_count,
-                      void (*callback)(int account_id, int choice));
-};
+typedef struct MenuAPI {
+    void (*open_menu)(int, const char*, const char**, int, void(*)(int,int));
+} MenuAPI;
 
 // -----------------------------
 // PluginContext
@@ -230,6 +234,7 @@ typedef struct PluginContext {
     struct MerlinAPI*         merlin;
     struct LannerAPI*         lanner;
     struct StatusAPI*         status;
+    struct HunterAPI*         hunter;
     struct MenuAPI*           menu;
     struct ClifAPI*           clif; 
 } PluginContext;

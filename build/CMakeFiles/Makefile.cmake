@@ -11,6 +11,13 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.25.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.25.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.25.1/CMakeSystem.cmake"
+  "/home/marek/FalconPM/src/AI/hunter/CMakeLists.txt"
+  "/home/marek/FalconPM/src/AI/lanner/CMakeLists.txt"
+  "/home/marek/FalconPM/src/AI/merlin/CMakeLists.txt"
+  "/home/marek/FalconPM/src/AI/peregrine/CMakeLists.txt"
+  "/home/marek/FalconPM/src/core/CMakeLists.txt"
+  "/home/marek/FalconPM/src/infra/CMakeLists.txt"
+  "/home/marek/FalconPM/src/plugins/CMakeLists.txt"
   "/usr/share/cmake-3.25/Modules/CMakeCCompiler.cmake.in"
   "/usr/share/cmake-3.25/Modules/CMakeCCompilerABI.c"
   "/usr/share/cmake-3.25/Modules/CMakeCInformation.cmake"
@@ -119,12 +126,17 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/3.25.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.25.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/core/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/infra/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/AI/peregrine/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/AI/merlin/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/AI/lanner/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/AI/hunter/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/plugins/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/falconpm_loader.dir/DependInfo.cmake"
   "CMakeFiles/falconpm_base.dir/DependInfo.cmake"
-  "CMakeFiles/autoroute.dir/DependInfo.cmake"
-  "CMakeFiles/autoattack.dir/DependInfo.cmake"
+  "src/plugins/CMakeFiles/overseer.dir/DependInfo.cmake"
   )

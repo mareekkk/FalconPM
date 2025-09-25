@@ -1,4 +1,4 @@
-#include "skr_conf.h"
+#include "../AI/saker/skr_conf.h"
 #include "../../infra/plugin_api.h"
 #include "../../core/falconpm.hpp"
 

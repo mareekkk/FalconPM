@@ -9,6 +9,8 @@
 #include <string>
 #include "../AI/peregrine/pgn_gat.h"
 #include "../AI/lanner/lnr_api.h"
+#include "../AI/hunter/hnt_api.h"
+
 
 extern "C" {
     void exported_logic_function() {
@@ -33,6 +35,9 @@ static void log_error_impl(const char* fmt, ...) {
     fprintf(stderr, "\n");
     va_end(args);
 }
+
+// Hunter API (implemented in hunter.cpp)
+extern "C" HunterAPI g_hunter_api;
 
 // ----------------------------------------------------
 // Shared globals for Merlin combat system
@@ -302,6 +307,7 @@ PluginContext g_ctx = {
     &merlin_api,
     &lanner_api_stub,
     &g_status_api,     // Will be replaced by real implementation
+    &g_hunter_api,
     nullptr,                // menu (not implemented)
     nullptr                 // clif (not implemented)
 };
@@ -314,24 +320,16 @@ extern "C" const PluginContext* falconpm_get_context(void) {
 // ----------------------------------------------------
 // AI runner
 // ----------------------------------------------------
-static int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
-    (void)tid; (void)id; (void)data;
+int falconpm_ai_runner(int tid, uint64_t tick, int id, intptr_t data) {
+    const PluginContext* ctx = falconpm_get_context();
+    if (!ctx) return 0;
 
-    // Merlin AI
-    if (g_ctx.merlin && g_ctx.merlin->tick)
-        g_ctx.merlin->tick();
+    // Only Hunter listens now
+    if (ctx->hunter) {
+        ctx->hunter->tick();
+    }
 
-    // Lanner AI (will use real implementation after lnr_api_init)
-    if (g_ctx.lanner && g_ctx.lanner->tick)
-        g_ctx.lanner->tick();
-
-    // Peregrine AI
-    if (g_ctx.peregrine && g_ctx.peregrine->tick)
-        g_ctx.peregrine->tick();
-
-    // Reschedule every 100ms
-    fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
-    return 0;
+    return 0; // <--- ensure return
 }
 
 // ----------------------------------------------------

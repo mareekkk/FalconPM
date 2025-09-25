@@ -63,48 +63,141 @@ CMAKE_BINARY_DIR = /home/marek/FalconPM/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/falconpm_loader.dir/all
 all: CMakeFiles/falconpm_base.dir/all
-all: CMakeFiles/autoroute.dir/all
-all: CMakeFiles/autoattack.dir/all
+all: src/core/all
+all: src/infra/all
+all: src/AI/peregrine/all
+all: src/AI/merlin/all
+all: src/AI/lanner/all
+all: src/AI/hunter/all
+all: src/plugins/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: src/core/preinstall
+preinstall: src/infra/preinstall
+preinstall: src/AI/peregrine/preinstall
+preinstall: src/AI/merlin/preinstall
+preinstall: src/AI/lanner/preinstall
+preinstall: src/AI/hunter/preinstall
+preinstall: src/plugins/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/falconpm_loader.dir/clean
 clean: CMakeFiles/falconpm_base.dir/clean
-clean: CMakeFiles/autoroute.dir/clean
-clean: CMakeFiles/autoattack.dir/clean
+clean: src/core/clean
+clean: src/infra/clean
+clean: src/AI/peregrine/clean
+clean: src/AI/merlin/clean
+clean: src/AI/lanner/clean
+clean: src/AI/hunter/clean
+clean: src/plugins/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/falconpm_loader.dir
+# Directory level rules for directory src/AI/hunter
 
-# All Build rule for target.
-CMakeFiles/falconpm_loader.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=26,27 "Built target falconpm_loader"
-.PHONY : CMakeFiles/falconpm_loader.dir/all
+# Recursive "all" directory target.
+src/AI/hunter/all:
+.PHONY : src/AI/hunter/all
 
-# Build rule for subdir invocation for target.
-CMakeFiles/falconpm_loader.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/falconpm_loader.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
-.PHONY : CMakeFiles/falconpm_loader.dir/rule
+# Recursive "preinstall" directory target.
+src/AI/hunter/preinstall:
+.PHONY : src/AI/hunter/preinstall
 
-# Convenience name for target.
-falconpm_loader: CMakeFiles/falconpm_loader.dir/rule
-.PHONY : falconpm_loader
+# Recursive "clean" directory target.
+src/AI/hunter/clean:
+.PHONY : src/AI/hunter/clean
 
-# clean rule for target.
-CMakeFiles/falconpm_loader.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_loader.dir/build.make CMakeFiles/falconpm_loader.dir/clean
-.PHONY : CMakeFiles/falconpm_loader.dir/clean
+#=============================================================================
+# Directory level rules for directory src/AI/lanner
+
+# Recursive "all" directory target.
+src/AI/lanner/all:
+.PHONY : src/AI/lanner/all
+
+# Recursive "preinstall" directory target.
+src/AI/lanner/preinstall:
+.PHONY : src/AI/lanner/preinstall
+
+# Recursive "clean" directory target.
+src/AI/lanner/clean:
+.PHONY : src/AI/lanner/clean
+
+#=============================================================================
+# Directory level rules for directory src/AI/merlin
+
+# Recursive "all" directory target.
+src/AI/merlin/all:
+.PHONY : src/AI/merlin/all
+
+# Recursive "preinstall" directory target.
+src/AI/merlin/preinstall:
+.PHONY : src/AI/merlin/preinstall
+
+# Recursive "clean" directory target.
+src/AI/merlin/clean:
+.PHONY : src/AI/merlin/clean
+
+#=============================================================================
+# Directory level rules for directory src/AI/peregrine
+
+# Recursive "all" directory target.
+src/AI/peregrine/all:
+.PHONY : src/AI/peregrine/all
+
+# Recursive "preinstall" directory target.
+src/AI/peregrine/preinstall:
+.PHONY : src/AI/peregrine/preinstall
+
+# Recursive "clean" directory target.
+src/AI/peregrine/clean:
+.PHONY : src/AI/peregrine/clean
+
+#=============================================================================
+# Directory level rules for directory src/core
+
+# Recursive "all" directory target.
+src/core/all:
+.PHONY : src/core/all
+
+# Recursive "preinstall" directory target.
+src/core/preinstall:
+.PHONY : src/core/preinstall
+
+# Recursive "clean" directory target.
+src/core/clean:
+.PHONY : src/core/clean
+
+#=============================================================================
+# Directory level rules for directory src/infra
+
+# Recursive "all" directory target.
+src/infra/all:
+.PHONY : src/infra/all
+
+# Recursive "preinstall" directory target.
+src/infra/preinstall:
+.PHONY : src/infra/preinstall
+
+# Recursive "clean" directory target.
+src/infra/clean:
+.PHONY : src/infra/clean
+
+#=============================================================================
+# Directory level rules for directory src/plugins
+
+# Recursive "all" directory target.
+src/plugins/all: src/plugins/CMakeFiles/overseer.dir/all
+.PHONY : src/plugins/all
+
+# Recursive "preinstall" directory target.
+src/plugins/preinstall:
+.PHONY : src/plugins/preinstall
+
+# Recursive "clean" directory target.
+src/plugins/clean: src/plugins/CMakeFiles/overseer.dir/clean
+.PHONY : src/plugins/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/falconpm_base.dir
@@ -113,12 +206,12 @@ CMakeFiles/falconpm_loader.dir/clean:
 CMakeFiles/falconpm_base.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=13,14,15,16,17,18,19,20,21,22,23,24,25 "Built target falconpm_base"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22 "Built target falconpm_base"
 .PHONY : CMakeFiles/falconpm_base.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/falconpm_base.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/falconpm_base.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
 .PHONY : CMakeFiles/falconpm_base.dir/rule
@@ -133,56 +226,30 @@ CMakeFiles/falconpm_base.dir/clean:
 .PHONY : CMakeFiles/falconpm_base.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/autoroute.dir
+# Target rules for target src/plugins/CMakeFiles/overseer.dir
 
 # All Build rule for target.
-CMakeFiles/autoroute.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=3,4,5,6,7,8,9,10,11,12 "Built target autoroute"
-.PHONY : CMakeFiles/autoroute.dir/all
+src/plugins/CMakeFiles/overseer.dir/all:
+	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/depend
+	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=23,24 "Built target overseer"
+.PHONY : src/plugins/CMakeFiles/overseer.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/autoroute.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 10
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/autoroute.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
-.PHONY : CMakeFiles/autoroute.dir/rule
-
-# Convenience name for target.
-autoroute: CMakeFiles/autoroute.dir/rule
-.PHONY : autoroute
-
-# clean rule for target.
-CMakeFiles/autoroute.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoroute.dir/build.make CMakeFiles/autoroute.dir/clean
-.PHONY : CMakeFiles/autoroute.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/autoattack.dir
-
-# All Build rule for target.
-CMakeFiles/autoattack.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marek/FalconPM/build/CMakeFiles --progress-num=1,2 "Built target autoattack"
-.PHONY : CMakeFiles/autoattack.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/autoattack.dir/rule: cmake_check_build_system
+src/plugins/CMakeFiles/overseer.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/autoattack.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/plugins/CMakeFiles/overseer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marek/FalconPM/build/CMakeFiles 0
-.PHONY : CMakeFiles/autoattack.dir/rule
+.PHONY : src/plugins/CMakeFiles/overseer.dir/rule
 
 # Convenience name for target.
-autoattack: CMakeFiles/autoattack.dir/rule
-.PHONY : autoattack
+overseer: src/plugins/CMakeFiles/overseer.dir/rule
+.PHONY : overseer
 
 # clean rule for target.
-CMakeFiles/autoattack.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/autoattack.dir/build.make CMakeFiles/autoattack.dir/clean
-.PHONY : CMakeFiles/autoattack.dir/clean
+src/plugins/CMakeFiles/overseer.dir/clean:
+	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/clean
+.PHONY : src/plugins/CMakeFiles/overseer.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

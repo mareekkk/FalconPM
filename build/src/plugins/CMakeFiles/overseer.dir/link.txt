@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o ../../plugins/overseer.so CMakeFiles/overseer.dir/overseer.cpp.o 
