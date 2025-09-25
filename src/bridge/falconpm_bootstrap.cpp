@@ -9,12 +9,14 @@
 #include "path.hpp"   // rAthena pathfinding (struct walkpath_data, path_search)
 #include <unordered_map>
 #include "falconpm_bootstrap.hpp"
-
 #include "pc.hpp"
 #include "unit.hpp"
 #include "map.hpp"
 #include <climits> // for INT_MAX
-
+#include "skill.hpp"
+#include "falconpm_bootstrap.hpp"  
+#include "status.hpp"    // rAthena status_change, sc_type
+#include "common/showmsg.hpp"
 
 extern "C" bool path_checkcell(int16 m, int16 x, int16 y, int32 flag);
 
@@ -38,11 +40,22 @@ int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag) {
 static void* falconpm_handle = nullptr;
 
 void falconpm_bootstrap(void) {
+    // --------------------------------------------------------------------
+    // Guard against multiple bootstrap calls (map.cpp invokes this twice)
+    // --------------------------------------------------------------------
+    static bool already_bootstrapped = false;
+    if (already_bootstrapped) {
+        ShowInfo("FalconPM: bootstrap skipped (already initialized).\n");
+        return;
+    }
+    already_bootstrapped = true;
+
     falconpm_handle = dlopen("plugins/falconpm_loader.so", RTLD_NOW | RTLD_LOCAL);
     if (!falconpm_handle) {
         ShowError("FalconPM: failed to load plugins/falconpm_loader.so: %s\n", dlerror());
         return;
     }
+
     using init_t = int(*)(void);
     dlerror();
     init_t init = (init_t)dlsym(falconpm_handle, "falconpm_loader_init");
@@ -312,20 +325,35 @@ int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range
     return player_count;
 }
 
-// Mob vitality checking functions
+// Count players near a specific position (for anti-KS)
+extern "C" int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range) {
+    // Find any map session data to get the map context
+    map_session_data* any_sd = map_id2sd(exclude_account_id);
+    if (!any_sd) return 0;
+    
+    // Create temporary block_list at the position
+    block_list temp_bl;
+    temp_bl.x = (int16)x;
+    temp_bl.y = (int16)y;
+    temp_bl.m = any_sd->m;  // Direct access to map, no .bl needed
+    
+    int player_count = 0;
+    map_foreachinrange(fpm_count_nearby_players_cb, &temp_bl, (int16)range, BL_PC, 
+                      exclude_account_id, &player_count);
+    return player_count;
+}
+
 extern "C" {
-    // Check if mob is alive and valid for targeting
+    // Mob vitality checking functions (corrected for this rAthena version)
     bool fpm_is_mob_alive(block_list* mob) {
         if (!mob || mob->type != BL_MOB) return false;
         
-        // Cast to mob_data to access mob-specific fields
         mob_data* md = (mob_data*)mob;
         
-        // Check if mob is alive (HP > 0 and not in dead state)
-        return (md->status.hp > 0 && md->state.state != MS_DEAD);
+        // Check HP and mob state using correct rAthena API
+        return (md->status.hp > 0 && md->state.skillstate != MSS_DEAD);
     }
     
-    // Get mob's current HP percentage  
     int fpm_get_mob_hp_percent(block_list* mob) {
         if (!mob || mob->type != BL_MOB) return 0;
         
@@ -335,13 +363,169 @@ extern "C" {
         return (int)((md->status.hp * 100) / md->status.max_hp);
     }
     
-    // Check if mob is in combat with someone else
     bool fpm_is_mob_in_combat(block_list* mob) {
         if (!mob || mob->type != BL_MOB) return false;
         
         mob_data* md = (mob_data*)mob;
         
-        // Check if mob has a target (is aggroed to someone)
-        return (md->target_id != 0);
+        // Check if mob has a target (is aggroed)
+        return (md->target_id > 0);
     }
 }
+
+extern "C" {
+
+// Wrapper: message dialog
+void fpm_clif_scriptmes(map_session_data* sd, int npcid, const char* mes) {
+    if (!sd) return;
+    clif_scriptmes(*sd, npcid, mes);
+}
+
+// Wrapper: [Next] button
+void fpm_clif_scriptnext(map_session_data* sd, int npcid) {
+    if (!sd) return;
+    clif_scriptnext(*sd, npcid);
+}
+
+// Wrapper: close dialog
+void fpm_clif_scriptclose(map_session_data* sd, int npcid) {
+    if (!sd) return;
+    clif_scriptclose(*sd, npcid);
+}
+
+}
+
+void fpm_clif_scriptmes(map_session_data* sd, const char* mes) {
+    if (!sd) return;
+    clif_scriptmes(*sd, 0, mes);
+}
+
+// ----------------------------------------------------
+// Local ClifAPI definition (matches plugin_api.h structure)
+// This allows bootstrap to export clif_api without including FalconPM headers
+// ----------------------------------------------------
+struct ClifAPI {
+    void (*scriptmes)(struct map_session_data* sd, const char* mes);
+    void (*scriptnext)(struct map_session_data* sd);
+    void (*scriptclose)(struct map_session_data* sd);
+};
+
+static void fpm_clif_scriptmes_wrapper(map_session_data* sd, const char* mes) {
+    if (!sd || !mes) return;
+    clif_scriptmes(*sd, 0, mes);
+}
+
+static void fpm_clif_scriptnext_wrapper(map_session_data* sd) {
+    if (!sd) return;
+    clif_scriptnext(*sd, 0);
+}
+
+static void fpm_clif_scriptclose_wrapper(map_session_data* sd) {
+    if (!sd) return;
+    clif_scriptclose(*sd, 0);
+}
+
+extern "C" {
+    ClifAPI clif_api = {
+        fpm_clif_scriptmes_wrapper,
+        fpm_clif_scriptnext_wrapper,
+        fpm_clif_scriptclose_wrapper
+    };
+}
+
+ // --------------------------------------------------------------------
+ // Execute an offensive skill on a target
+ // --------------------------------------------------------------------
+ extern "C" void fpm_unit_skilluse_damage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
+     if (!sd || !target) return;
+     ShowInfo("[Bootstrap] fpm_unit_skilluse_damage(skill=%d, lv=%d, target_id=%d)\n",
+              skill_id, skill_lv, target->id);
+    skill_castend_damage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
+ }
+ 
+ // --------------------------------------------------------------------
+ // Execute a supportive / non-damage skill
+ // --------------------------------------------------------------------
+ extern "C" void fpm_unit_skilluse_nodamage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
+     if (!sd || !target) return;
+     ShowInfo("[Bootstrap] fpm_unit_skilluse_nodamage(skill=%d, lv=%d, target_id=%d)\n",
+              skill_id, skill_lv, target->id);
+    skill_castend_nodamage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
+ }
+ 
+ // --------------------------------------------------------------------
+ // Check if a skill can be used (cooldowns, restrictions, etc.)
+ // Returns true if skill is usable
+ // --------------------------------------------------------------------
+ extern "C" bool fpm_skill_is_available(map_session_data* sd, uint16 skill_id) {
+     if (!sd) return false;
+    bool blocked = skill_isNotOk(skill_id, *sd); // declared in skill.hpp
+     ShowInfo("[Bootstrap] fpm_skill_is_available(skill=%d) -> %s\n",
+              skill_id, blocked ? "NO" : "YES");
+     return !blocked;
+ }
+ 
+ // --------------------------------------------------------------------
+ // Get raw cooldown value for a skill from DB
+ // --------------------------------------------------------------------
+ extern "C" int32_t fpm_skill_get_cooldown(uint16 skill_id, uint16 skill_lv) {
+    int32 cd = skill_get_cooldown(skill_id, skill_lv); // declared in skill.hpp
+     ShowInfo("[Bootstrap] fpm_skill_get_cooldown(skill=%d, lv=%d) -> %d\n",
+              skill_id, skill_lv, cd);
+     return cd;
+ }
+
+ extern "C" {
+
+/**
+ * Check if a given status effect (buff) is active on a player
+ * @param sd - player session
+ * @param type - sc_type enum (e.g., SC_BLESSING, SC_INCREASEAGI)
+ * @return true if buff active, false otherwise
+ */
+bool fpm_has_status(struct map_session_data* sd, enum sc_type type) {
+    if (!sd) {
+        ShowDebug("[Bootstrap] fpm_has_status(sd=NULL, type=%d)\n", type);
+        return false;
+    }
+    status_change* sc = status_get_sc(sd);
+    if (!sc) {
+        ShowDebug("[Bootstrap] fpm_has_status: no status data for account %d\n",
+                  sd->status.account_id);
+        return false;
+    }
+
+    bool active = (sc->getSCE(type) != nullptr);
+    ShowDebug("[Bootstrap] fpm_has_status(account=%d, type=%d) -> %s\n",
+              sd->status.account_id, type, active ? "true" : "false");
+    return active;
+}
+
+/**
+ * End a status (remove buff) manually if needed
+ */
+void fpm_end_status(struct map_session_data* sd, enum sc_type type) {
+    if (!sd) return;
+    status_change* sc = status_get_sc(sd);
+    if (!sc) return;
+
+    if (sc->getSCE(type)) {
+        ShowDebug("[Bootstrap] fpm_end_status(account=%d, type=%d) -> removed\n",
+                  sd->status.account_id, type);
+        status_change_end(sd, type);
+    }
+}
+
+/**
+ * Convenience: check if *any* buff is missing from a list
+ */
+bool fpm_any_missing_status(struct map_session_data* sd, const enum sc_type* list, size_t count) {
+    if (!sd || !list) return false;
+    for (size_t i = 0; i < count; ++i) {
+        if (!fpm_has_status(sd, list[i]))
+            return true; // found a missing buff
+    }
+    return false;
+}
+
+} // extern "C"
