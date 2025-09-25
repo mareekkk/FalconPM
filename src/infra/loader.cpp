@@ -32,17 +32,21 @@ static PluginDescriptor* get_desc(void* h) {
 // exported by falconpm_base.so
 using get_ctx_t = const PluginContext* (*)();
 
-int falconpm_loader_init(void) {
-    // 1) Load base with RTLD_GLOBAL so its symbols are visible to others
-    g_base = open_plugin("plugins/falconpm_base.so", RTLD_NOW | RTLD_GLOBAL);
-    if (!g_base) return 0;
+ int falconpm_loader_init(void) {
+    // --------------------------------------------------------------------
+    // Guard against multiple loader init calls
+    // --------------------------------------------------------------------
+    static bool already_init = false;
+    if (already_init) {
+        ShowInfo("FalconPM: loader skipped (already initialized).\n");
+        return 1; // pretend success
+    }
+    already_init = true;
 
-    auto* base = get_desc(g_base);
-    if (!base) return 0;
-
-    if (!base->init(nullptr)) {
-        std::fprintf(stderr, "[FalconPM] base init failed\n");
-        return 0;
+    void* base_handle = dlopen("plugins/falconpm_base.so", RTLD_NOW);
+     if (!base_handle) {
+         fprintf(stderr, "[FalconPM] dlopen failed for plugins/falconpm_base.so: %s\n", dlerror());
+         return 0;
     }
 
     // fetch runtime context for other plugins
