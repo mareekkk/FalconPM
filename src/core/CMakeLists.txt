@@ -7,4 +7,6 @@ target_sources(falconpm_base PRIVATE
     fpm_portals.c
     fpm_route.c
     fpm_tick.cpp
+    ../AI/peregrine/pgn_api.c
+    ../AI/merlin/mln_api.c
 )
