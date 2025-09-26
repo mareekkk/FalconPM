@@ -9,16 +9,23 @@
 #include "path.hpp"   // rAthena pathfinding (struct walkpath_data, path_search)
 #include <unordered_map>
 #include "falconpm_bootstrap.hpp"
-#include "pc.hpp"
-#include "unit.hpp"
 #include "map.hpp"
 #include <climits> // for INT_MAX
 #include "skill.hpp"
-#include "falconpm_bootstrap.hpp"  
 #include "status.hpp"    // rAthena status_change, sc_type
-#include "common/showmsg.hpp"
+#include "atcommand.hpp"
+#include "clif.hpp"      // for clif_displaymessage, clif_scriptmes, etc.
+#include <string>
+#include <mutex>
 
 extern "C" bool path_checkcell(int16 m, int16 x, int16 y, int32 flag);
+
+// Forward declarations
+extern const int16 dirx[DIR_MAX];
+extern const int16 diry[DIR_MAX];
+
+// Single AtCmdFunc definition
+typedef int (*AtCmdFunc)(struct map_session_data*, const char*, const char*);
 
 extern "C" {
 
@@ -82,7 +89,6 @@ void falconpm_shutdown(void) {
 }
 
 // ----- Timer
-
 extern "C" {
     int fpm_add_timer(uint64_t tick, TimerFunc func, int id, intptr_t data) {
         return add_timer(tick, func, id, data); // forward to rAthena
@@ -94,7 +100,6 @@ extern "C" {
 }
 
 //  ----- Pathing
-
 extern "C" {
 int fpm_path_search(struct walkpath_data *wpd, int m,
                     int x0, int y0, int x1, int y1, int flag) {
@@ -102,15 +107,9 @@ int fpm_path_search(struct walkpath_data *wpd, int m,
                        (int16)m, (int16)x0, (int16)y0,
                        (int16)x1, (int16)y1,
                        (int32)flag,
-                       (cell_chk)0); // ✅ "0" usually means default walkable check
-}
+                       (cell_chk)0); // "0" usually means default walkable check
 }
 
-// Direction arrays from rAthena core
-extern const int16 dirx[DIR_MAX];
-extern const int16 diry[DIR_MAX];
-
-extern "C" {
     const int16* fpm_get_dirx() { return dirx; }
     const int16* fpm_get_diry() { return diry; }
 }
@@ -134,12 +133,6 @@ void fpm_set_basicattack_active(int account_id, bool active) {
 void fpm_clear_basicattack_state(int account_id) {
     basicattack_state.erase(account_id);
 }
-}
-
-// ----------------------------------------------------
-// Combat helpers
-// ----------------------------------------------------
-extern "C" {
 
 // Static storage for nearest mob search
 static block_list* fpm_best_mob = nullptr;
@@ -178,12 +171,12 @@ block_list* fpm_get_nearest_mob(map_session_data* sd, int range) {
     return fpm_best_mob;
 }
 
-extern "C" int fpm_get_account_id(map_session_data* sd) {
+int fpm_get_account_id(map_session_data* sd) {
     if (!sd) return -1;
     return sd->status.account_id;
 }
 
-extern "C" void fpm_send_message(map_session_data* sd, const char* msg) {
+void fpm_send_message(map_session_data* sd, const char* msg) {
     if (!sd || !msg) return;
     clif_displaymessage(sd->fd, msg);
 }
@@ -196,13 +189,7 @@ int fpm_unit_attack(map_session_data* sd, block_list* target) {
     return unit_attack(src, static_cast<int32>(target->id), /*continuous=*/1);
 }
 
-} // extern "C"
-
-// ----------------------------------------------------
-// Map helpers (exposed to FalconPM plugins)
-// ----------------------------------------------------
-extern "C" {
-
+// Map helpers
 int fpm_get_map_width(int m) {
     if (m < 0 || m >= map_num) return 0;
     return map[m].xs;
@@ -218,10 +205,7 @@ const char* fpm_get_map_name(int m) {
     return map[m].name;
 }
 
-}
-
-extern "C" {
-
+// Session data helpers
 int fpm_get_sd_x(map_session_data* sd) {
     return sd ? sd->x : 0;
 }
@@ -246,11 +230,11 @@ int fpm_get_bl_id(block_list* bl) {
     return bl ? bl->id : 0;
 }
 
+map_session_data* fpm_map_id2sd(int account_id) {
+    return map_id2sd(account_id); // call rAthena's native function
 }
 
-extern "C" map_session_data* fpm_map_id2sd(int account_id) {
-    return map_id2sd(account_id); // call rAthena’s native function
-}
+} // extern "C"
 
 // State for nearest item search
 static block_list* fpm_best_item = nullptr;
@@ -273,7 +257,6 @@ static int fpm_nearest_item_cb(block_list* bl, va_list ap) {
     return 0;
 }
 
-// Extern C wrappers for FalconPM
 extern "C" {
 
 // Find nearest item around a player
@@ -293,7 +276,7 @@ block_list* fpm_get_nearest_item(map_session_data* sd, int range) {
 // Make player pick up a floor item
 int fpm_pc_loot_item(map_session_data* sd, block_list* item) {
     if (!sd || !item) return 0;
-    return pc_takeitem(sd, (flooritem_data*)item); // ✅ cast is required
+    return pc_takeitem(sd, (flooritem_data*)item);
 }
 
 } // extern "C"
@@ -313,6 +296,7 @@ static int fpm_count_nearby_players_cb(block_list* bl, va_list ap) {
 
 extern "C" {
     int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range);
+    int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range);
 }
 
 // Count players near a position (excluding specific player)
@@ -326,7 +310,7 @@ int fpm_count_players_near_mob(block_list* mob, int exclude_player_id, int range
 }
 
 // Count players near a specific position (for anti-KS)
-extern "C" int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range) {
+int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range) {
     // Find any map session data to get the map context
     map_session_data* any_sd = map_id2sd(exclude_account_id);
     if (!any_sd) return 0;
@@ -373,33 +357,6 @@ extern "C" {
     }
 }
 
-extern "C" {
-
-// Wrapper: message dialog
-void fpm_clif_scriptmes(map_session_data* sd, int npcid, const char* mes) {
-    if (!sd) return;
-    clif_scriptmes(*sd, npcid, mes);
-}
-
-// Wrapper: [Next] button
-void fpm_clif_scriptnext(map_session_data* sd, int npcid) {
-    if (!sd) return;
-    clif_scriptnext(*sd, npcid);
-}
-
-// Wrapper: close dialog
-void fpm_clif_scriptclose(map_session_data* sd, int npcid) {
-    if (!sd) return;
-    clif_scriptclose(*sd, npcid);
-}
-
-}
-
-void fpm_clif_scriptmes(map_session_data* sd, const char* mes) {
-    if (!sd) return;
-    clif_scriptmes(*sd, 0, mes);
-}
-
 // ----------------------------------------------------
 // Local ClifAPI definition (matches plugin_api.h structure)
 // This allows bootstrap to export clif_api without including FalconPM headers
@@ -431,51 +388,69 @@ extern "C" {
         fpm_clif_scriptnext_wrapper,
         fpm_clif_scriptclose_wrapper
     };
+
+    // Wrapper: message dialog
+    void fpm_clif_scriptmes(map_session_data* sd, int npcid, const char* mes) {
+        if (!sd) return;
+        clif_scriptmes(*sd, npcid, mes);
+    }
+
+    // Wrapper: [Next] button
+    void fpm_clif_scriptnext(map_session_data* sd, int npcid) {
+        if (!sd) return;
+        clif_scriptnext(*sd, npcid);
+    }
+
+    // Wrapper: close dialog
+    void fpm_clif_scriptclose(map_session_data* sd, int npcid) {
+        if (!sd) return;
+        clif_scriptclose(*sd, npcid);
+    }
 }
 
- // --------------------------------------------------------------------
- // Execute an offensive skill on a target
- // --------------------------------------------------------------------
- extern "C" void fpm_unit_skilluse_damage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
-     if (!sd || !target) return;
-     ShowInfo("[Bootstrap] fpm_unit_skilluse_damage(skill=%d, lv=%d, target_id=%d)\n",
-              skill_id, skill_lv, target->id);
-    skill_castend_damage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
- }
- 
- // --------------------------------------------------------------------
- // Execute a supportive / non-damage skill
- // --------------------------------------------------------------------
- extern "C" void fpm_unit_skilluse_nodamage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
-     if (!sd || !target) return;
-     ShowInfo("[Bootstrap] fpm_unit_skilluse_nodamage(skill=%d, lv=%d, target_id=%d)\n",
-              skill_id, skill_lv, target->id);
-    skill_castend_nodamage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
- }
- 
- // --------------------------------------------------------------------
- // Check if a skill can be used (cooldowns, restrictions, etc.)
- // Returns true if skill is usable
- // --------------------------------------------------------------------
- extern "C" bool fpm_skill_is_available(map_session_data* sd, uint16 skill_id) {
-     if (!sd) return false;
-    bool blocked = skill_isNotOk(skill_id, *sd); // declared in skill.hpp
-     ShowInfo("[Bootstrap] fpm_skill_is_available(skill=%d) -> %s\n",
-              skill_id, blocked ? "NO" : "YES");
-     return !blocked;
- }
- 
- // --------------------------------------------------------------------
- // Get raw cooldown value for a skill from DB
- // --------------------------------------------------------------------
- extern "C" int32_t fpm_skill_get_cooldown(uint16 skill_id, uint16 skill_lv) {
-    int32 cd = skill_get_cooldown(skill_id, skill_lv); // declared in skill.hpp
-     ShowInfo("[Bootstrap] fpm_skill_get_cooldown(skill=%d, lv=%d) -> %d\n",
-              skill_id, skill_lv, cd);
-     return cd;
- }
+// --------------------------------------------------------------------
+// Execute an offensive skill on a target
+// --------------------------------------------------------------------
+extern "C" void fpm_unit_skilluse_damage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
+    if (!sd || !target) return;
+    ShowInfo("[Bootstrap] fpm_unit_skilluse_damage(skill=%d, lv=%d, target_id=%d)\n",
+             skill_id, skill_lv, target->id);
+   skill_castend_damage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
+}
 
- extern "C" {
+// --------------------------------------------------------------------
+// Execute a supportive / non-damage skill
+// --------------------------------------------------------------------
+extern "C" void fpm_unit_skilluse_nodamage(map_session_data* sd, block_list* target, uint16 skill_id, uint16 skill_lv) {
+    if (!sd || !target) return;
+    ShowInfo("[Bootstrap] fpm_unit_skilluse_nodamage(skill=%d, lv=%d, target_id=%d)\n",
+             skill_id, skill_lv, target->id);
+   skill_castend_nodamage_id((block_list*)sd, target, skill_id, skill_lv, gettick(), 0);
+}
+
+// --------------------------------------------------------------------
+// Check if a skill can be used (cooldowns, restrictions, etc.)
+// Returns true if skill is usable
+// --------------------------------------------------------------------
+extern "C" bool fpm_skill_is_available(map_session_data* sd, uint16 skill_id) {
+    if (!sd) return false;
+   bool blocked = skill_isNotOk(skill_id, *sd); // declared in skill.hpp
+    ShowInfo("[Bootstrap] fpm_skill_is_available(skill=%d) -> %s\n",
+             skill_id, blocked ? "NO" : "YES");
+    return !blocked;
+}
+
+// --------------------------------------------------------------------
+// Get raw cooldown value for a skill from DB
+// --------------------------------------------------------------------
+extern "C" int32_t fpm_skill_get_cooldown(uint16 skill_id, uint16 skill_lv) {
+   int32 cd = skill_get_cooldown(skill_id, skill_lv); // declared in skill.hpp
+    ShowInfo("[Bootstrap] fpm_skill_get_cooldown(skill=%d, lv=%d) -> %d\n",
+             skill_id, skill_lv, cd);
+    return cd;
+}
+
+extern "C" {
 
 /**
  * Check if a given status effect (buff) is active on a player
@@ -529,3 +504,67 @@ bool fpm_any_missing_status(struct map_session_data* sd, const enum sc_type* lis
 }
 
 } // extern "C"
+
+// ----------------------------------------------------
+// FalconPM AtCommand Bridge System  
+// ----------------------------------------------------
+
+// Command storage (bridge between rAthena and FalconPM)
+static std::unordered_map<std::string, AtCmdFunc> falconpm_commands;
+static std::mutex falconpm_cmd_mutex;
+
+// FalconPM command dispatcher
+static bool falconpm_dispatch_command(map_session_data* sd, const char* message) {
+    if (!message || (message[0] != '@' && message[0] != '#')) return false;
+
+    // Parse command name
+    std::string cmd;
+    const char* p = message + 1;
+    while (*p && *p != ' ' && *p != '\t') {
+        cmd.push_back(*p++);
+    }
+    while (*p == ' ' || *p == '\t') ++p; // skip whitespace
+
+    // Look up command in FalconPM registry
+    std::lock_guard<std::mutex> lock(falconpm_cmd_mutex);
+    auto it = falconpm_commands.find(cmd);
+    if (it != falconpm_commands.end()) {
+        const char* args = *p ? p : "";
+        ShowInfo("[FalconPM Bridge] Dispatching command: @%s\n", cmd.c_str());
+        int result = it->second(sd, cmd.c_str(), args);
+        return (result == 0); // 0 = success in FalconPM
+    }
+    return false;
+}
+extern "C" {
+
+// Registration functions (called by FalconPM)
+bool fpm_atcommand_register(const char* name, AtCmdFunc func) {
+    if (!name || !func) return false;
+    std::lock_guard<std::mutex> lock(falconpm_cmd_mutex);
+    if (falconpm_commands.count(name) > 0) return false;
+    falconpm_commands[name] = func;
+    ShowInfo("[FalconPM Bridge] Registered command: @%s\n", name);
+    return true;
+}
+
+bool fpm_atcommand_unregister(const char* name) {
+    if (!name) return false;
+    std::lock_guard<std::mutex> lock(falconpm_cmd_mutex);
+    bool removed = falconpm_commands.erase(name) > 0;
+    if (removed) {
+        ShowInfo("[FalconPM Bridge] Unregistered command: @%s\n", name);
+    }
+    return removed;
+}
+
+bool fpm_handle_atcommand(map_session_data* sd, const char* message) {
+    return falconpm_dispatch_command(sd, message);
+}
+
+} // extern "C"
+
+// CRITICAL: This function MUST match rAthena's expected signature (C++ linkage).
+bool atcommand_runtime_dispatch(map_session_data* sd, const char* message) {
+    return falconpm_dispatch_command(sd, message);
+}
