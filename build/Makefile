@@ -142,6 +142,342 @@ overseer/fast:
 	$(MAKE) $(MAKESILENT) -f src/plugins/CMakeFiles/overseer.dir/build.make src/plugins/CMakeFiles/overseer.dir/build
 .PHONY : overseer/fast
 
+src/AI/hunter/hnt_api.o: src/AI/hunter/hnt_api.cpp.o
+.PHONY : src/AI/hunter/hnt_api.o
+
+# target to build an object file
+src/AI/hunter/hnt_api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.o
+.PHONY : src/AI/hunter/hnt_api.cpp.o
+
+src/AI/hunter/hnt_api.i: src/AI/hunter/hnt_api.cpp.i
+.PHONY : src/AI/hunter/hnt_api.i
+
+# target to preprocess a source file
+src/AI/hunter/hnt_api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.i
+.PHONY : src/AI/hunter/hnt_api.cpp.i
+
+src/AI/hunter/hnt_api.s: src/AI/hunter/hnt_api.cpp.s
+.PHONY : src/AI/hunter/hnt_api.s
+
+# target to generate assembly for a file
+src/AI/hunter/hnt_api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_api.cpp.s
+.PHONY : src/AI/hunter/hnt_api.cpp.s
+
+src/AI/hunter/hnt_task.o: src/AI/hunter/hnt_task.cpp.o
+.PHONY : src/AI/hunter/hnt_task.o
+
+# target to build an object file
+src/AI/hunter/hnt_task.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.o
+.PHONY : src/AI/hunter/hnt_task.cpp.o
+
+src/AI/hunter/hnt_task.i: src/AI/hunter/hnt_task.cpp.i
+.PHONY : src/AI/hunter/hnt_task.i
+
+# target to preprocess a source file
+src/AI/hunter/hnt_task.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.i
+.PHONY : src/AI/hunter/hnt_task.cpp.i
+
+src/AI/hunter/hnt_task.s: src/AI/hunter/hnt_task.cpp.s
+.PHONY : src/AI/hunter/hnt_task.s
+
+# target to generate assembly for a file
+src/AI/hunter/hnt_task.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hnt_task.cpp.s
+.PHONY : src/AI/hunter/hnt_task.cpp.s
+
+src/AI/hunter/hunter.o: src/AI/hunter/hunter.cpp.o
+.PHONY : src/AI/hunter/hunter.o
+
+# target to build an object file
+src/AI/hunter/hunter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o
+.PHONY : src/AI/hunter/hunter.cpp.o
+
+src/AI/hunter/hunter.i: src/AI/hunter/hunter.cpp.i
+.PHONY : src/AI/hunter/hunter.i
+
+# target to preprocess a source file
+src/AI/hunter/hunter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.i
+.PHONY : src/AI/hunter/hunter.cpp.i
+
+src/AI/hunter/hunter.s: src/AI/hunter/hunter.cpp.s
+.PHONY : src/AI/hunter/hunter.s
+
+# target to generate assembly for a file
+src/AI/hunter/hunter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.s
+.PHONY : src/AI/hunter/hunter.cpp.s
+
+src/AI/lanner/lanner.o: src/AI/lanner/lanner.cpp.o
+.PHONY : src/AI/lanner/lanner.o
+
+# target to build an object file
+src/AI/lanner/lanner.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.o
+.PHONY : src/AI/lanner/lanner.cpp.o
+
+src/AI/lanner/lanner.i: src/AI/lanner/lanner.cpp.i
+.PHONY : src/AI/lanner/lanner.i
+
+# target to preprocess a source file
+src/AI/lanner/lanner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.i
+.PHONY : src/AI/lanner/lanner.cpp.i
+
+src/AI/lanner/lanner.s: src/AI/lanner/lanner.cpp.s
+.PHONY : src/AI/lanner/lanner.s
+
+# target to generate assembly for a file
+src/AI/lanner/lanner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lanner.cpp.s
+.PHONY : src/AI/lanner/lanner.cpp.s
+
+src/AI/lanner/lnr_api.o: src/AI/lanner/lnr_api.cpp.o
+.PHONY : src/AI/lanner/lnr_api.o
+
+# target to build an object file
+src/AI/lanner/lnr_api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.o
+.PHONY : src/AI/lanner/lnr_api.cpp.o
+
+src/AI/lanner/lnr_api.i: src/AI/lanner/lnr_api.cpp.i
+.PHONY : src/AI/lanner/lnr_api.i
+
+# target to preprocess a source file
+src/AI/lanner/lnr_api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.i
+.PHONY : src/AI/lanner/lnr_api.cpp.i
+
+src/AI/lanner/lnr_api.s: src/AI/lanner/lnr_api.cpp.s
+.PHONY : src/AI/lanner/lnr_api.s
+
+# target to generate assembly for a file
+src/AI/lanner/lnr_api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_api.cpp.s
+.PHONY : src/AI/lanner/lnr_api.cpp.s
+
+src/AI/lanner/lnr_skills.o: src/AI/lanner/lnr_skills.cpp.o
+.PHONY : src/AI/lanner/lnr_skills.o
+
+# target to build an object file
+src/AI/lanner/lnr_skills.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.o
+.PHONY : src/AI/lanner/lnr_skills.cpp.o
+
+src/AI/lanner/lnr_skills.i: src/AI/lanner/lnr_skills.cpp.i
+.PHONY : src/AI/lanner/lnr_skills.i
+
+# target to preprocess a source file
+src/AI/lanner/lnr_skills.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.i
+.PHONY : src/AI/lanner/lnr_skills.cpp.i
+
+src/AI/lanner/lnr_skills.s: src/AI/lanner/lnr_skills.cpp.s
+.PHONY : src/AI/lanner/lnr_skills.s
+
+# target to generate assembly for a file
+src/AI/lanner/lnr_skills.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/lanner/lnr_skills.cpp.s
+.PHONY : src/AI/lanner/lnr_skills.cpp.s
+
+src/AI/merlin/merlin.o: src/AI/merlin/merlin.cpp.o
+.PHONY : src/AI/merlin/merlin.o
+
+# target to build an object file
+src/AI/merlin/merlin.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.o
+.PHONY : src/AI/merlin/merlin.cpp.o
+
+src/AI/merlin/merlin.i: src/AI/merlin/merlin.cpp.i
+.PHONY : src/AI/merlin/merlin.i
+
+# target to preprocess a source file
+src/AI/merlin/merlin.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.i
+.PHONY : src/AI/merlin/merlin.cpp.i
+
+src/AI/merlin/merlin.s: src/AI/merlin/merlin.cpp.s
+.PHONY : src/AI/merlin/merlin.s
+
+# target to generate assembly for a file
+src/AI/merlin/merlin.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/merlin.cpp.s
+.PHONY : src/AI/merlin/merlin.cpp.s
+
+src/AI/merlin/mln_api.o: src/AI/merlin/mln_api.c.o
+.PHONY : src/AI/merlin/mln_api.o
+
+# target to build an object file
+src/AI/merlin/mln_api.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.o
+.PHONY : src/AI/merlin/mln_api.c.o
+
+src/AI/merlin/mln_api.i: src/AI/merlin/mln_api.c.i
+.PHONY : src/AI/merlin/mln_api.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_api.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.i
+.PHONY : src/AI/merlin/mln_api.c.i
+
+src/AI/merlin/mln_api.s: src/AI/merlin/mln_api.c.s
+.PHONY : src/AI/merlin/mln_api.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_api.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_api.c.s
+.PHONY : src/AI/merlin/mln_api.c.s
+
+src/AI/merlin/mln_attack.o: src/AI/merlin/mln_attack.cpp.o
+.PHONY : src/AI/merlin/mln_attack.o
+
+# target to build an object file
+src/AI/merlin/mln_attack.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.o
+.PHONY : src/AI/merlin/mln_attack.cpp.o
+
+src/AI/merlin/mln_attack.i: src/AI/merlin/mln_attack.cpp.i
+.PHONY : src/AI/merlin/mln_attack.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_attack.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.i
+.PHONY : src/AI/merlin/mln_attack.cpp.i
+
+src/AI/merlin/mln_attack.s: src/AI/merlin/mln_attack.cpp.s
+.PHONY : src/AI/merlin/mln_attack.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_attack.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_attack.cpp.s
+.PHONY : src/AI/merlin/mln_attack.cpp.s
+
+src/AI/merlin/mln_target.o: src/AI/merlin/mln_target.c.o
+.PHONY : src/AI/merlin/mln_target.o
+
+# target to build an object file
+src/AI/merlin/mln_target.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.o
+.PHONY : src/AI/merlin/mln_target.c.o
+
+src/AI/merlin/mln_target.i: src/AI/merlin/mln_target.c.i
+.PHONY : src/AI/merlin/mln_target.i
+
+# target to preprocess a source file
+src/AI/merlin/mln_target.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.i
+.PHONY : src/AI/merlin/mln_target.c.i
+
+src/AI/merlin/mln_target.s: src/AI/merlin/mln_target.c.s
+.PHONY : src/AI/merlin/mln_target.s
+
+# target to generate assembly for a file
+src/AI/merlin/mln_target.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/merlin/mln_target.c.s
+.PHONY : src/AI/merlin/mln_target.c.s
+
+src/AI/peregrine/peregrine.o: src/AI/peregrine/peregrine.cpp.o
+.PHONY : src/AI/peregrine/peregrine.o
+
+# target to build an object file
+src/AI/peregrine/peregrine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.o
+.PHONY : src/AI/peregrine/peregrine.cpp.o
+
+src/AI/peregrine/peregrine.i: src/AI/peregrine/peregrine.cpp.i
+.PHONY : src/AI/peregrine/peregrine.i
+
+# target to preprocess a source file
+src/AI/peregrine/peregrine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.i
+.PHONY : src/AI/peregrine/peregrine.cpp.i
+
+src/AI/peregrine/peregrine.s: src/AI/peregrine/peregrine.cpp.s
+.PHONY : src/AI/peregrine/peregrine.s
+
+# target to generate assembly for a file
+src/AI/peregrine/peregrine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/peregrine.cpp.s
+.PHONY : src/AI/peregrine/peregrine.cpp.s
+
+src/AI/peregrine/pgn_api.o: src/AI/peregrine/pgn_api.c.o
+.PHONY : src/AI/peregrine/pgn_api.o
+
+# target to build an object file
+src/AI/peregrine/pgn_api.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.o
+.PHONY : src/AI/peregrine/pgn_api.c.o
+
+src/AI/peregrine/pgn_api.i: src/AI/peregrine/pgn_api.c.i
+.PHONY : src/AI/peregrine/pgn_api.i
+
+# target to preprocess a source file
+src/AI/peregrine/pgn_api.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.i
+.PHONY : src/AI/peregrine/pgn_api.c.i
+
+src/AI/peregrine/pgn_api.s: src/AI/peregrine/pgn_api.c.s
+.PHONY : src/AI/peregrine/pgn_api.s
+
+# target to generate assembly for a file
+src/AI/peregrine/pgn_api.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_api.c.s
+.PHONY : src/AI/peregrine/pgn_api.c.s
+
+src/AI/peregrine/pgn_gat.o: src/AI/peregrine/pgn_gat.c.o
+.PHONY : src/AI/peregrine/pgn_gat.o
+
+# target to build an object file
+src/AI/peregrine/pgn_gat.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.o
+.PHONY : src/AI/peregrine/pgn_gat.c.o
+
+src/AI/peregrine/pgn_gat.i: src/AI/peregrine/pgn_gat.c.i
+.PHONY : src/AI/peregrine/pgn_gat.i
+
+# target to preprocess a source file
+src/AI/peregrine/pgn_gat.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.i
+.PHONY : src/AI/peregrine/pgn_gat.c.i
+
+src/AI/peregrine/pgn_gat.s: src/AI/peregrine/pgn_gat.c.s
+.PHONY : src/AI/peregrine/pgn_gat.s
+
+# target to generate assembly for a file
+src/AI/peregrine/pgn_gat.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_gat.c.s
+.PHONY : src/AI/peregrine/pgn_gat.c.s
+
+src/AI/peregrine/pgn_path.o: src/AI/peregrine/pgn_path.c.o
+.PHONY : src/AI/peregrine/pgn_path.o
+
+# target to build an object file
+src/AI/peregrine/pgn_path.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.o
+.PHONY : src/AI/peregrine/pgn_path.c.o
+
+src/AI/peregrine/pgn_path.i: src/AI/peregrine/pgn_path.c.i
+.PHONY : src/AI/peregrine/pgn_path.i
+
+# target to preprocess a source file
+src/AI/peregrine/pgn_path.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.i
+.PHONY : src/AI/peregrine/pgn_path.c.i
+
+src/AI/peregrine/pgn_path.s: src/AI/peregrine/pgn_path.c.s
+.PHONY : src/AI/peregrine/pgn_path.s
+
+# target to generate assembly for a file
+src/AI/peregrine/pgn_path.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/falconpm_base.dir/build.make CMakeFiles/falconpm_base.dir/src/AI/peregrine/pgn_path.c.s
+.PHONY : src/AI/peregrine/pgn_path.c.s
+
 src/core/falconpm.o: src/core/falconpm.cpp.o
 .PHONY : src/core/falconpm.o
 
@@ -320,6 +656,48 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... falconpm_base"
 	@echo "... overseer"
+	@echo "... src/AI/hunter/hnt_api.o"
+	@echo "... src/AI/hunter/hnt_api.i"
+	@echo "... src/AI/hunter/hnt_api.s"
+	@echo "... src/AI/hunter/hnt_task.o"
+	@echo "... src/AI/hunter/hnt_task.i"
+	@echo "... src/AI/hunter/hnt_task.s"
+	@echo "... src/AI/hunter/hunter.o"
+	@echo "... src/AI/hunter/hunter.i"
+	@echo "... src/AI/hunter/hunter.s"
+	@echo "... src/AI/lanner/lanner.o"
+	@echo "... src/AI/lanner/lanner.i"
+	@echo "... src/AI/lanner/lanner.s"
+	@echo "... src/AI/lanner/lnr_api.o"
+	@echo "... src/AI/lanner/lnr_api.i"
+	@echo "... src/AI/lanner/lnr_api.s"
+	@echo "... src/AI/lanner/lnr_skills.o"
+	@echo "... src/AI/lanner/lnr_skills.i"
+	@echo "... src/AI/lanner/lnr_skills.s"
+	@echo "... src/AI/merlin/merlin.o"
+	@echo "... src/AI/merlin/merlin.i"
+	@echo "... src/AI/merlin/merlin.s"
+	@echo "... src/AI/merlin/mln_api.o"
+	@echo "... src/AI/merlin/mln_api.i"
+	@echo "... src/AI/merlin/mln_api.s"
+	@echo "... src/AI/merlin/mln_attack.o"
+	@echo "... src/AI/merlin/mln_attack.i"
+	@echo "... src/AI/merlin/mln_attack.s"
+	@echo "... src/AI/merlin/mln_target.o"
+	@echo "... src/AI/merlin/mln_target.i"
+	@echo "... src/AI/merlin/mln_target.s"
+	@echo "... src/AI/peregrine/peregrine.o"
+	@echo "... src/AI/peregrine/peregrine.i"
+	@echo "... src/AI/peregrine/peregrine.s"
+	@echo "... src/AI/peregrine/pgn_api.o"
+	@echo "... src/AI/peregrine/pgn_api.i"
+	@echo "... src/AI/peregrine/pgn_api.s"
+	@echo "... src/AI/peregrine/pgn_gat.o"
+	@echo "... src/AI/peregrine/pgn_gat.i"
+	@echo "... src/AI/peregrine/pgn_gat.s"
+	@echo "... src/AI/peregrine/pgn_path.o"
+	@echo "... src/AI/peregrine/pgn_path.i"
+	@echo "... src/AI/peregrine/pgn_path.s"
 	@echo "... src/core/falconpm.o"
 	@echo "... src/core/falconpm.i"
 	@echo "... src/core/falconpm.s"
