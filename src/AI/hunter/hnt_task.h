@@ -1,10 +1,20 @@
-// src/AI/hunter/hnt_task.h
 #ifndef HNT_TASK_H
 #define HNT_TASK_H
 
 #include <string>
 #include <memory>
 #include <cstdint>
+#include "../core/falconpm.hpp"   // PluginContext, API tables
+
+// Forward declare rAthena structs
+struct map_session_data;
+
+// Bootstrap functions we call from tasks
+extern "C" {
+    const PluginContext* falconpm_get_context(void);
+    // Return type is not critical for us; use int to match common rA style.
+    int fpm_unit_skilluse(map_session_data* sd, int skill_id, int target_id);
+}
 
 // Task categories
 enum class HunterTaskType {
@@ -40,7 +50,7 @@ struct BuffTask : public HunterTask {
           skill_id(skill), target_id(target) {}
 
     std::string name() const override { return "BuffTask"; }
-    bool execute() override;
+    bool execute() override; // implemented in hnt_task.cpp
 };
 
 // Attack Task
@@ -52,7 +62,7 @@ struct AttackTask : public HunterTask {
           target_id(target) {}
 
     std::string name() const override { return "AttackTask"; }
-    bool execute() override;
+    bool execute() override; // (todo)
 };
 
 // Move Task
@@ -65,7 +75,7 @@ struct MoveTask : public HunterTask {
           map(std::move(m)), x(px), y(py) {}
 
     std::string name() const override { return "MoveTask"; }
-    bool execute() override;
+    bool execute() override; // (todo)
 };
 
 // Heal Task
@@ -78,7 +88,7 @@ struct HealTask : public HunterTask {
           item_id(item), amount(amt) {}
 
     std::string name() const override { return "HealTask"; }
-    bool execute() override;
+    bool execute() override; // (todo)
 };
 
 #endif // HNT_TASK_H

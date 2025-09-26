@@ -127,4 +127,40 @@ CMakeFiles/falconpm_base.dir/src/core/falconpm.cpp.o: \
  /home/marek/FalconPM/src/core/../AI/peregrine/pgn_gat.h \
  /home/marek/FalconPM/src/core/../AI/lanner/lnr_api.h \
  /home/marek/FalconPM/src/core/../AI/lanner/lnr_state.h \
- /home/marek/FalconPM/src/core/../AI/hunter/hnt_api.h
+ /home/marek/FalconPM/src/core/../AI/hunter/hnt_api.h \
+ /home/marek/FalconPM/src/core/../AI/hunter/hunter.h \
+ /usr/include/c++/12/memory /usr/include/c++/12/bits/stl_uninitialized.h \
+ /usr/include/c++/12/bits/stl_tempbuf.h \
+ /usr/include/c++/12/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/12/bits/align.h /usr/include/c++/12/bit \
+ /usr/include/c++/12/bits/unique_ptr.h \
+ /usr/include/c++/12/bits/shared_ptr.h \
+ /usr/include/c++/12/bits/shared_ptr_base.h /usr/include/c++/12/typeinfo \
+ /usr/include/c++/12/bits/allocated_ptr.h \
+ /usr/include/c++/12/ext/atomicity.h \
+ /usr/include/aarch64-linux-gnu/c++/12/bits/gthr.h \
+ /usr/include/aarch64-linux-gnu/c++/12/bits/gthr-default.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/aarch64-linux-gnu/bits/sched.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/aarch64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/aarch64-linux-gnu/bits/time.h \
+ /usr/include/aarch64-linux-gnu/bits/timex.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/aarch64-linux-gnu/bits/setjmp.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/aarch64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/aarch64-linux-gnu/c++/12/bits/atomic_word.h \
+ /usr/include/aarch64-linux-gnu/sys/single_threaded.h \
+ /usr/include/c++/12/ext/concurrence.h /usr/include/c++/12/exception \
+ /usr/include/c++/12/bits/exception_ptr.h \
+ /usr/include/c++/12/bits/cxxabi_init_exception.h \
+ /usr/include/c++/12/bits/nested_exception.h \
+ /usr/include/c++/12/bits/shared_ptr_atomic.h \
+ /usr/include/c++/12/bits/atomic_base.h \
+ /usr/include/c++/12/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/12/backward/auto_ptr.h \
+ /usr/include/c++/12/pstl/glue_memory_defs.h \
+ /usr/include/c++/12/pstl/execution_defs.h \
+ /home/marek/FalconPM/src/core/../AI/hunter/hnt_task.h

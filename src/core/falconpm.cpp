@@ -10,7 +10,9 @@
 #include "../AI/peregrine/pgn_gat.h"
 #include "../AI/lanner/lnr_api.h"
 #include "../AI/hunter/hnt_api.h"
-
+#include "../AI/hunter/hunter.h"     // hunter_enqueue / hunter_tick
+#include "../AI/hunter/hnt_task.h"    // HunterTask base
+#include <memory>
 
 extern "C" {
     void exported_logic_function() {
@@ -51,61 +53,52 @@ GatMap* g_autoattack_map = nullptr;
 extern "C" {
     int fpm_count_players_near_position(int x, int y, int exclude_account_id, int range);
     int fpm_get_bl_id(block_list* bl);
-    int fpm_get_bl_x(block_list* bl);  
+    int fpm_get_bl_x(block_list* bl);
     int fpm_get_bl_y(block_list* bl);
     int fpm_get_account_id(map_session_data* sd);
-    bool fpm_is_mob_alive(block_list* mob);           
-    int fpm_get_mob_hp_percent(block_list* mob);      
+    bool fpm_is_mob_alive(block_list* mob);
+    int  fpm_get_mob_hp_percent(block_list* mob);
     bool fpm_is_mob_in_combat(block_list* mob);
-    
+
     // Additional bootstrap functions
     map_session_data* fpm_map_id2sd(int aid);
     void fpm_send_message(map_session_data* sd, const char* msg);
-    int fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
-    int fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
-    int fpm_path_search(struct walkpath_data *wpd, int m, int x0, int y0, int x1, int y1, int flag);
+    int  fpm_pc_walktoxy(map_session_data* sd, short x, short y, int type);
+    int  fpm_unit_walktoxy(block_list* bl, short x, short y, unsigned char flag);
+    int  fpm_path_search(struct walkpath_data *wpd, int m, int x0, int y0, int x1, int y1, int flag);
     const int16_t* fpm_get_dirx();
     const int16_t* fpm_get_diry();
-    int fpm_add_timer(uint64_t tick, FpmTimerFunc func, int id, intptr_t data);
+    int  fpm_add_timer(uint64_t tick, FpmTimerFunc func, int id, intptr_t data);
     uint64_t fpm_gettick();
     block_list* fpm_get_nearest_mob(map_session_data* sd, int range);
-    int fpm_unit_attack(map_session_data* sd, block_list* target);
+    int  fpm_unit_attack(map_session_data* sd, block_list* target);
     bool fpm_atcommand_register(const char* name, AtCmdFunc func);
     bool fpm_atcommand_unregister(const char* name);
 }
 
 // ----------------------------------------------------
-// Anti-KS tracking (processed data approach)  
+// Anti-KS tracking (processed data approach)
 // ----------------------------------------------------
 static std::unordered_map<int, uint64_t> engaged_mobs;
 static std::unordered_map<int, int> mob_attackers;
 static const int ANTI_KS_RANGE = 5;
 static const int ENGAGEMENT_TIMEOUT = 10000;
 
-// Enhanced mob availability check with vitality validation
 static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_account_id, block_list* mob_ptr) {
-    // Use bootstrap functions for rAthena struct access
-    if (!fpm_is_mob_alive(mob_ptr)) {
-        return false;
-    }
-    
+    if (!fpm_is_mob_alive(mob_ptr)) return false;
+
     int hp_percent = fpm_get_mob_hp_percent(mob_ptr);
-    if (hp_percent < 10) {
-        return false;
-    }
-    
-    if (fpm_is_mob_in_combat(mob_ptr)) {
-        return false;
-    }
-    
-    // Rest of function unchanged...
+    if (hp_percent < 10) return false;
+
+    if (fpm_is_mob_in_combat(mob_ptr)) return false;
+
     uint64_t now = fpm_gettick();
-    
+
     auto it = engaged_mobs.find(mob_id);
     if (it != engaged_mobs.end()) {
         if (now - it->second < ENGAGEMENT_TIMEOUT) {
             auto attacker_it = mob_attackers.find(mob_id);
-            if (attacker_it != mob_attackers.end() && 
+            if (attacker_it != mob_attackers.end() &&
                 attacker_it->second != requesting_account_id) {
                 return false;
             }
@@ -114,9 +107,9 @@ static bool is_mob_available(int mob_id, int mob_x, int mob_y, int requesting_ac
             mob_attackers.erase(mob_id);
         }
     }
-    
+
     int nearby_players = fpm_count_players_near_position(mob_x, mob_y, requesting_account_id, ANTI_KS_RANGE);
-    
+
     return (nearby_players == 0);
 }
 
@@ -179,24 +172,50 @@ static bool at_remove_wrapper(const char* name) {
     return fpm_atcommand_unregister && fpm_atcommand_unregister(name);
 }
 
+// ----------------------------------------------------
+// Local Dummy Task for @hntest (log-only)
+// ----------------------------------------------------
+static void hunter_log_test(const char* msg) {
+    fprintf(stdout, "[Hunter] %s\n", msg);
+    fflush(stdout);
+}
+
+// TU-local class → complete type at callsite (no incomplete-type issues)
+struct HntestDummyTask final : public HunterTask {
+    HntestDummyTask() : HunterTask(static_cast<HunterTaskType>(0), 1, 500) {}
+    std::string name() const override { return "DummyTask"; }
+    bool execute() override {
+        hunter_log_test("Executing DummyTask (via @hntest)");
+        return true;
+    }
+};
+
+// Signature MUST match AtCmdFunc in this build: int(map_session_data*, const char*, const char*)
+static int atcmd_hntest(map_session_data* sd, const char* cmd, const char* message) {
+    (void)sd; (void)cmd; (void)message;
+    hunter_enqueue(std::make_shared<HntestDummyTask>());
+    return 1; // success
+}
+
+// ----------------------------------------------------
 // Enhanced get_nearest_mob with vitality and anti-KS validation
+// ----------------------------------------------------
 static block_list* fpm_get_nearest_mob_antiks(map_session_data* sd, int range) {
     if (!sd) return nullptr;
-    
+
     block_list* nearest = fpm_get_nearest_mob(sd, range);
-    
-    // Enhanced validation with vitality check
+
     if (nearest) {
         int mob_id = fpm_get_bl_id(nearest);
         int mob_x = fpm_get_bl_x(nearest);
         int mob_y = fpm_get_bl_y(nearest);
         int account_id = fpm_get_account_id(sd);
-        
+
         if (!is_mob_available(mob_id, mob_x, mob_y, account_id, nearest)) {
             return nullptr; // Mob failed vitality or anti-KS checks
         }
     }
-    
+
     return nearest;
 }
 
@@ -254,8 +273,6 @@ static CombatAPI combat_api = {
     fpm_unit_attack
 };
 
-
-
 // ----------------------------------------------------
 // Extern API objects
 // ----------------------------------------------------
@@ -285,9 +302,9 @@ extern "C" void fpm_end_status(struct map_session_data* sd, int sc_type);
 // [PATCH] Local StatusAPI table built on FalconPM side
 static StatusAPI g_status_api = {
     /* .has_status = */ fpm_has_status,
-    /* .end_status = */ fpm_end_status
+    /* .end_status  = */ fpm_end_status
 };
- 
+
 // ----------------------------------------------------
 // Global g_ctx (exported)
 // ----------------------------------------------------
@@ -361,6 +378,9 @@ static bool init(const PluginContext* c) {
 
     // Hunter will be the orchestrator — it listens to tick and calls others
     fpm_add_timer(fpm_gettick() + 100, falconpm_ai_runner, 0, 0);
+
+    // Register @hntest: enqueues a log-only DummyTask via Hunter queue
+    fpm_atcommand_register("hntest", atcmd_hntest);
 
     g_ctx.log->info("FalconPM core initialized (Hunter + Merlin + Lanner).");
     return true;

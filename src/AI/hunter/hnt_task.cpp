@@ -1,33 +1,20 @@
 // src/AI/hunter/hnt_task.cpp
 #include "hnt_task.h"
-#include <iostream>
+#include <cstdio>
 
-#define COLOR_RESET  "\033[0m"
-#define COLOR_HUNTER "\033[36m"
-
+// BuffTask: call bootstrap to cast a skill on target
 bool BuffTask::execute() {
-    std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
-              << " Executing BuffTask (skill=" << skill_id
-              << " target=" << target_id << ")" << std::endl;
-    return true; // placeholder
-}
+    const PluginContext* ctx = falconpm_get_context();
+    if (!ctx || !ctx->player) return false;
 
-bool AttackTask::execute() {
-    std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
-              << " Executing AttackTask (target=" << target_id << ")" << std::endl;
-    return true;
-}
+    map_session_data* sd = ctx->player->map_id2sd(target_id);
+    if (!sd) return false;
 
-bool MoveTask::execute() {
-    std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
-              << " Executing MoveTask (" << map
-              << " " << x << "," << y << ")" << std::endl;
-    return true;
-}
+    // Log shim usage for traceability
+    std::fprintf(stdout, "[Bootstrap] fpm_unit_skilluse(skill=%d, target=%d)\n",
+                 skill_id, target_id);
+    std::fflush(stdout);
 
-bool HealTask::execute() {
-    std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
-              << " Executing HealTask (item=" << item_id
-              << " amount=" << amount << ")" << std::endl;
+    fpm_unit_skilluse(sd, skill_id, target_id);
     return true;
 }

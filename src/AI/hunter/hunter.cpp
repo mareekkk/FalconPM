@@ -7,14 +7,13 @@
 #include <algorithm>
 #include <memory>
 #include "../core/fpm_tick.h"
+#include "../core/falconpm.hpp" // for PluginContext, APIs
 
 // ANSI color codes
 #define COLOR_RESET   "\033[0m"
 #define COLOR_HUNTER  "\033[36m"  // Cyan
 
-// ----------------------------------------------------
-// DummyTask (log-only test task)
-// ----------------------------------------------------
+// Simple DummyTask (kept for fallback testing; not used in Blessing path)
 class DummyTask : public HunterTask {
 public:
     DummyTask() : HunterTask(static_cast<HunterTaskType>(0), 1, 500) {}
@@ -26,18 +25,13 @@ public:
     }
 };
 
-// ----------------------------------------------------
-// Hunter State Machine
-// ----------------------------------------------------
+// State machine vars
 static HunterState hunter_state = HunterState::IDLE;
 static unsigned int last_tick = 0;
 static unsigned int cooldown_ms = 500;
 
 static std::vector<std::shared_ptr<HunterTask>> task_queue;
 static std::shared_ptr<HunterTask> current_task = nullptr;
-
-// Boot test flag
-static bool boot_test_injected = false;
 
 // Public API: enqueue a task
 void hunter_enqueue(std::shared_ptr<HunterTask> task) {
@@ -56,20 +50,22 @@ void hunter_tick() {
     unsigned int now = fpm_gettick();
 
     switch (hunter_state) {
-        case HunterState::IDLE:
+        case HunterState::IDLE: {
             std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
                       << " State=IDLE" << std::endl;
 
-            // Inject dummy task on first tick only
-            if (!boot_test_injected) {
+            // Auto-enqueue Blessing when AutoAttack is enabled and queue is empty
+            extern int g_autoattack_account_id; // defined in falconpm.cpp
+            if (g_autoattack_account_id != -1 && task_queue.empty()) {
                 std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
-                          << " Test inject: queueing DummyTask" << std::endl;
-                hunter_enqueue(std::make_shared<DummyTask>());
-                boot_test_injected = true;
+                          << " AutoAttack active → queuing Blessing" << std::endl;
+                // Blessing skill ID is 34 (RO)
+                hunter_enqueue(std::make_shared<BuffTask>(34, g_autoattack_account_id));
             }
             break;
+        }
 
-        case HunterState::QUEUED:
+        case HunterState::QUEUED: {
             std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
                       << " State=QUEUED (queued=" << task_queue.size() << ")"
                       << std::endl;
@@ -77,7 +73,10 @@ void hunter_tick() {
             if (!task_queue.empty()) {
                 // Pick highest priority
                 auto it = std::max_element(task_queue.begin(), task_queue.end(),
-                    [](auto &a, auto &b) { return a->priority < b->priority; });
+                    [](const std::shared_ptr<HunterTask>& a,
+                       const std::shared_ptr<HunterTask>& b) {
+                        return a->priority < b->priority;
+                    });
 
                 current_task = *it;
                 task_queue.erase(it);
@@ -93,8 +92,9 @@ void hunter_tick() {
                 hunter_state = HunterState::IDLE;
             }
             break;
+        }
 
-        case HunterState::RUNNING:
+        case HunterState::RUNNING: {
             if (current_task) {
                 if (current_task->execute()) {
                     std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
@@ -113,8 +113,9 @@ void hunter_tick() {
                 hunter_state = HunterState::IDLE;
             }
             break;
+        }
 
-        case HunterState::COOLDOWN:
+        case HunterState::COOLDOWN: {
             if (now - last_tick >= cooldown_ms) {
                 std::cout << COLOR_HUNTER << "[Hunter]" << COLOR_RESET
                           << " Cooldown finished → IDLE" << std::endl;
@@ -124,6 +125,7 @@ void hunter_tick() {
                           << " State=COOLDOWN (waiting)" << std::endl;
             }
             break;
+        }
     }
 }
 

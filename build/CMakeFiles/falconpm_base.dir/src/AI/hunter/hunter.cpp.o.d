@@ -152,9 +152,10 @@ CMakeFiles/falconpm_base.dir/src/AI/hunter/hunter.cpp.o: \
  /usr/include/c++/12/backward/auto_ptr.h \
  /usr/include/c++/12/pstl/glue_memory_defs.h \
  /usr/include/c++/12/pstl/execution_defs.h \
- /home/marek/FalconPM/src/AI/hunter/hnt_api.h \
- /home/marek/FalconPM/src/infra/../infra/plugin_api.h \
+ /home/marek/FalconPM/src/infra/../core/falconpm.hpp \
+ /home/marek/FalconPM/src/infra/../core/../infra/plugin_api.h \
  /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h \
+ /home/marek/FalconPM/src/AI/hunter/hnt_api.h \
  /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
  /usr/include/c++/12/ios /usr/include/c++/12/bits/ios_base.h \
  /usr/include/c++/12/bits/locale_classes.h \
